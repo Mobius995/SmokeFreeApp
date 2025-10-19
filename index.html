@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <title>Smoke Free</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1f2f1f 0%, #2d4a2d 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .emoji {
+            font-size: 3em;
+        }
+        
+        .setup-screen, .main-screen {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .setup-screen h2 {
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .edit-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .edit-toggle {
+            background: rgba(16, 185, 129, 0.3);
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        
+        .edit-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .edit-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .edit-form input {
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .edit-form button {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .stat-subtext {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .stat-unit {
+            font-size: 0.6em;
+            opacity: 0.7;
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .milestone h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #fff;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .health-section {
+            margin-top: 30px;
+        }
+        
+        .health-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .health-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .health-text {
+            flex: 1;
+        }
+        
+        .health-text strong {
+            display: block;
+            color: #10b981;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .days-counter {
+            text-align: center;
+            padding: 30px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .days-number {
+            font-size: 4em;
+            font-weight: 700;
+            color: #10b981;
+            line-height: 1;
+        }
+        
+        .days-label {
+            font-size: 1.2em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        .time-details {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .time-unit {
+            text-align: center;
+        }
+        
+        .time-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .time-label {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+            padding-left: 10px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mini-stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .mini-stat-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .mini-stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #10b981;
+            margin: 5px 0;
+        }
+        
+        .mini-stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="emoji">🚭</div>
+            <h1>Smoke Free</h1>
+        </header>
+
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <h2>Inizia il tuo viaggio</h2>
+            <form id="setupForm">
+                <div class="form-group">
+                    <label for="quitDate">Data in cui hai smesso:</label>
+                    <input type="date" id="quitDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="quitTime">Ora:</label>
+                    <input type="time" id="quitTime" value="00:00" required>
+                </div>
+                <div class="form-group">
+                    <label for="cigarettesPerDay">Sigarette al giorno (prima):</label>
+                    <input type="number" id="cigarettesPerDay" min="1" placeholder="es. 20" required>
+                </div>
+                <div class="form-group">
+                    <label for="packCost">Costo pacchetto (€):</label>
+                    <input type="number" id="packCost" step="0.01" min="0" placeholder="es. 6.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="cigarettesPerPack">Sigarette per pacchetto:</label>
+                    <input type="number" id="cigarettesPerPack" value="20" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="minutesPerCigarette">Minuti per fumare una sigaretta:</label>
+                    <input type="number" id="minutesPerCigarette" value="5" min="1" max="30" step="0.5" required>
+                </div>
+                <button type="submit">Inizia 🚀</button>
+            </form>
+        </div>
+
+        <!-- Main Screen -->
+        <div class="main-screen hidden" id="mainScreen">
+            <!-- Edit Section -->
+            <div class="edit-section">
+                <button class="edit-toggle" onclick="toggleEdit()">⚙️ Modifica dati iniziali</button>
+                <div class="edit-form hidden" id="editForm">
+                    <div class="form-group">
+                        <label for="editQuitDate">Data in cui hai smesso:</label>
+                        <input type="date" id="editQuitDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuitTime">Ora:</label>
+                        <input type="time" id="editQuitTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCigarettesPerDay">Sigarette al giorno (prima):</label>
+                        <input type="number" id="editCigarettesPerDay" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPackCost">Costo pacchetto (€):</label>
+                        <input type="number" id="editPackCost" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCigarettesPerPack">Sigarette per pacchetto:</label>
+                        <input type="number" id="editCigarettesPerPack" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editMinutesPerCigarette">Minuti per fumare una sigaretta:</label>
+                        <input type="number" id="editMinutesPerCigarette" min="1" max="30" step="0.5">
+                    </div>
+                    <button onclick="saveEdit()">💾 Salva modifiche</button>
+                </div>
+            </div>
+            
+            <!-- Timer Counter -->
+            <div class="days-counter">
+                <div class="days-number" id="daysCounter">0</div>
+                <div class="days-label">giorni senza fumare</div>
+                <div class="time-details">
+                    <div class="time-unit">
+                        <div class="time-number" id="hoursCounter">00</div>
+                        <div class="time-label">ore</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number" id="minutesCounter">00</div>
+                        <div class="time-label">minuti</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number" id="secondsCounter">00</div>
+                        <div class="time-label">secondi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stat-card">
+                <div class="stat-label">💰 Denaro risparmiato <span class="live-indicator"></span></div>
+                <div class="stat-value">€<span id="moneySaved">0.00000</span></div>
+                <div class="stat-subtext">
+                    Stai risparmiando:<br>
+                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> • 
+                    €<span id="savingsPerHour">0.00</span>/ora • 
+                    €<span id="savingsPerMinute">0.000</span>/min • 
+                    €<span id="savingsPerSecond">0.00000</span>/sec
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">🚬 Sigarette NON fumate <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="cigarettesAvoided">0.00000</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">⏱️ Tempo guadagnato <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="timeGainedDisplay">0h 0m 0s</span></div>
+                <div class="stat-subtext">
+                    Tempo che avresti speso fumando (<span id="minutesPerCigDisplay">5</span> min/sigaretta)
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">❤️ Giorni di vita guadagnati <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="lifeDays">0.0000</span> <span class="stat-unit">giorni</span></div>
+            </div>
+
+            <!-- Advanced Health Metrics -->
+            <div class="section-title">📊 Metriche Salute Avanzate</div>
+            <div class="grid-3">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🫁</div>
+                    <div class="mini-stat-value"><span id="tarAvoided">0</span>g</div>
+                    <div class="mini-stat-label">Catrame evitato</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">💨</div>
+                    <div class="mini-stat-value"><span id="co2Avoided">0</span>g</div>
+                    <div class="mini-stat-label">CO₂ non inalata</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">💓</div>
+                    <div class="mini-stat-value"><span id="heartbeats">0</span></div>
+                    <div class="mini-stat-label">Battiti risparmiati</div>
+                </div>
+            </div>
+
+            <!-- Next Milestone -->
+            <div class="milestone" id="milestoneCard">
+                <h3>Prossimo traguardo</h3>
+                <p id="milestoneText">24 ore senza fumare</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="milestoneProgress"></div>
+                </div>
+            </div>
+
+            <!-- Health Benefits -->
+            <div class="health-section">
+                <h2 style="margin-bottom: 15px;">💚 Benefici per la salute</h2>
+                <div id="healthBenefits"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Health benefits timeline (in days)
+        const healthTimeline = [
+            { days: 0.02, icon: '🫁', title: '20 minuti', text: 'Frequenza cardiaca e pressione tornano normali' },
+            { days: 0.5, icon: '💨', title: '12 ore', text: 'Livelli di CO nel sangue normalizzati' },
+            { days: 1, icon: '👃', title: '24 ore', text: 'Gusto e olfatto migliorano' },
+            { days: 2, icon: '⚡', title: '48 ore', text: 'Terminazioni nervose ricrescono, più energia' },
+            { days: 7, icon: '🏃', title: '1 settimana', text: 'Respirazione più facile, resistenza aumenta' },
+            { days: 30, icon: '🫀', title: '1 mese', text: 'Circolazione migliora, polmoni più efficienti' },
+            { days: 90, icon: '💪', title: '3 mesi', text: 'Funzione polmonare aumenta del 30%' },
+            { days: 180, icon: '😊', title: '6 mesi', text: 'Tosse e affanno ridotti drasticamente' },
+            { days: 365, icon: '❤️', title: '1 anno', text: 'Rischio infarto dimezzato' },
+            { days: 1825, icon: '🎉', title: '5 anni', text: 'Rischio ictus pari a non fumatore' },
+        ];
+
+        const milestones = [
+            { days: 1, text: '24 ore senza fumare! 🎯' },
+            { days: 3, text: '3 giorni - Nicotina eliminata! 💪' },
+            { days: 7, text: '1 settimana completa! 🌟' },
+            { days: 14, text: '2 settimane - Grande risultato! 🚀' },
+            { days: 30, text: '1 mese - Sei un campione! 🏆' },
+            { days: 90, text: '3 mesi - Incredibile! 🎊' },
+            { days: 180, text: '6 mesi - Straordinario! 🌈' },
+            { days: 365, text: '1 ANNO - LEGGENDA! 👑' },
+        ];
+
+        let updateInterval;
+
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            if (data) {
+                document.getElementById('setupScreen').classList.add('hidden');
+                document.getElementById('mainScreen').classList.remove('hidden');
+                updateStats();
+                updateInterval = setInterval(() => updateStats(), 1000);
+            } else {
+                const now = new Date();
+                document.getElementById('quitDate').valueAsDate = now;
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('quitTime').value = hours + ':' + minutes;
+            }
+        }
+
+        document.getElementById('setupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dateValue = document.getElementById('quitDate').value;
+            const timeValue = document.getElementById('quitTime').value;
+            
+            if (!dateValue || !timeValue) {
+                alert('Per favore compila tutti i campi');
+                return;
+            }
+            
+            const quitDateTime = new Date(dateValue + 'T' + timeValue);
+            
+            const data = {
+                quitDateTime: quitDateTime.toISOString(),
+                cigarettesPerDay: parseInt(document.getElementById('cigarettesPerDay').value),
+                packCost: parseFloat(document.getElementById('packCost').value),
+                cigarettesPerPack: parseInt(document.getElementById('cigarettesPerPack').value),
+                minutesPerCigarette: parseFloat(document.getElementById('minutesPerCigarette').value) || 5
+            };
+            
+            localStorage.setItem('smokeFreeData', JSON.stringify(data));
+            
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+            
+            updateStats();
+            updateInterval = setInterval(() => updateStats(), 1000);
+        });
+
+        function updateStats() {
+            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            if (!data) return;
+            
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+            const now = new Date();
+            const diffMs = now - quitDate;
+            
+            // Safety check
+            if (diffMs < 0) {
+                alert('La data di inizio è nel futuro! Correggi i dati.');
+                return;
+            }
+            
+            const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+            // Calculate time components
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const days = Math.floor(totalSeconds / (24 * 60 * 60));
+            const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+            const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+            const seconds = totalSeconds % 60;
+
+            // Update timer display
+            document.getElementById('daysCounter').textContent = days;
+            document.getElementById('hoursCounter').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutesCounter').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('secondsCounter').textContent = String(seconds).padStart(2, '0');
+
+            // Money saved (with live 5 decimals)
+            const costPerCigarette = data.packCost / data.cigarettesPerPack;
+            const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
+            const moneySaved = cigarettesAvoidedPrecise * costPerCigarette;
+            document.getElementById('moneySaved').textContent = moneySaved.toFixed(5);
+            
+            // Savings breakdown
+            const savingsPerDay = (data.cigarettesPerDay * costPerCigarette);
+            const savingsPerHour = (savingsPerDay / 24);
+            const savingsPerMinute = (savingsPerHour / 60);
+            const savingsPerSecond = (savingsPerMinute / 60);
+            
+            document.getElementById('savingsPerDay').textContent = savingsPerDay.toFixed(2);
+            document.getElementById('savingsPerHour').textContent = savingsPerHour.toFixed(2);
+            document.getElementById('savingsPerMinute').textContent = savingsPerMinute.toFixed(3);
+            document.getElementById('savingsPerSecond').textContent = savingsPerSecond.toFixed(5);
+
+            // Cigarettes avoided - with 5 decimals for live update
+            const cigarettesAvoidedLive = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
+            document.getElementById('cigarettesAvoided').textContent = cigarettesAvoidedLive.toFixed(5);
+
+            // For other calculations, still use rounded value
+            const cigarettesAvoidedRounded = Math.floor(cigarettesAvoidedLive);
+
+            // Time gained - OPTIMIZED: calculate directly from seconds passed
+            const minutesPerCig = data.minutesPerCigarette || 5;
+            const secondsInDay = 24 * 60 * 60;
+            const cigarettesPerSecond = data.cigarettesPerDay / secondsInDay;
+            const secondsPerCig = minutesPerCig * 60;
+            
+            // Total seconds of smoking time saved
+            const totalSecondsGainedPrecise = totalSeconds * cigarettesPerSecond * secondsPerCig;
+            
+            const hoursGained = Math.floor(totalSecondsGainedPrecise / 3600);
+            const minutesGainedRemainder = Math.floor((totalSecondsGainedPrecise % 3600) / 60);
+            const secondsGainedRemainder = Math.floor(totalSecondsGainedPrecise % 60);
+            
+            document.getElementById('timeGainedDisplay').textContent = 
+                `${hoursGained}h ${minutesGainedRemainder}m ${secondsGainedRemainder}s`;
+            document.getElementById('minutesPerCigDisplay').textContent = minutesPerCig;
+
+            // Life days gained (avg 11 min of life lost per cigarette) - use rounded value
+            const lifeMinutesGained = cigarettesAvoidedRounded * 11;
+            const lifeDaysGained = (lifeMinutesGained / (60 * 24)).toFixed(1);
+            document.getElementById('lifeDays').textContent = lifeDaysGained;
+
+            // Advanced health metrics - use rounded value
+            const tarAvoided = (cigarettesAvoidedRounded * 0.01).toFixed(1);
+            document.getElementById('tarAvoided').textContent = tarAvoided;
+            
+            const co2Avoided = (cigarettesAvoidedRounded * 0.014).toFixed(1);
+            document.getElementById('co2Avoided').textContent = co2Avoided;
+            
+            const heartbeatsSaved = (cigarettesAvoidedRounded * 450).toLocaleString('it-IT');
+            document.getElementById('heartbeats').textContent = heartbeatsSaved;
+
+            updateMilestone(diffDays);
+            updateHealthBenefits(diffDays);
+        }
+
+        function updateMilestone(days) {
+            let nextMilestone = milestones.find(m => m.days > days);
+            
+            if (nextMilestone) {
+                const previousMilestone = milestones[milestones.indexOf(nextMilestone) - 1];
+                const prevDays = previousMilestone ? previousMilestone.days : 0;
+                const progress = ((days - prevDays) / (nextMilestone.days - prevDays)) * 100;
+                
+                document.getElementById('milestoneText').textContent = nextMilestone.text;
+                document.getElementById('milestoneProgress').style.width = progress + '%';
+            } else {
+                document.getElementById('milestoneCard').innerHTML = `
+                    <h3>🏆 HAI COMPLETATO TUTTI I TRAGUARDI! 🏆</h3>
+                    <p>Continua così, sei inarrestabile!</p>
+                `;
+            }
+        }
+
+        function updateHealthBenefits(days) {
+            const container = document.getElementById('healthBenefits');
+            container.innerHTML = '';
+            
+            const relevantBenefits = healthTimeline.filter(h => h.days <= days);
+            const upcoming = healthTimeline.find(h => h.days > days);
+            
+            relevantBenefits.slice(-3).reverse().forEach(benefit => {
+                const div = document.createElement('div');
+                div.className = 'health-item';
+                div.innerHTML = `
+                    <div class="health-icon">${benefit.icon}</div>
+                    <div class="health-text">
+                        <strong>${benefit.title}</strong>
+                        ${benefit.text}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            if (upcoming) {
+                const div = document.createElement('div');
+                div.className = 'health-item';
+                div.style.opacity = '0.6';
+                div.innerHTML = `
+                    <div class="health-icon">${upcoming.icon}</div>
+                    <div class="health-text">
+                        <strong>Prossimo: ${upcoming.title}</strong>
+                        ${upcoming.text}
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function toggleEdit() {
+            const editForm = document.getElementById('editForm');
+            const isHidden = editForm.classList.contains('hidden');
+            
+            if (isHidden) {
+                const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+                
+                if (data.quitDateTime) {
+                    const dt = new Date(data.quitDateTime);
+                    document.getElementById('editQuitDate').value = dt.toISOString().split('T')[0];
+                    const hours = String(dt.getHours()).padStart(2, '0');
+                    const minutes = String(dt.getMinutes()).padStart(2, '0');
+                    document.getElementById('editQuitTime').value = hours + ':' + minutes;
+                } else {
+                    document.getElementById('editQuitDate').value = data.quitDate;
+                    document.getElementById('editQuitTime').value = '00:00';
+                }
+                
+                document.getElementById('editCigarettesPerDay').value = data.cigarettesPerDay;
+                document.getElementById('editPackCost').value = data.packCost;
+                document.getElementById('editCigarettesPerPack').value = data.cigarettesPerPack;
+                document.getElementById('editMinutesPerCigarette').value = data.minutesPerCigarette || 5;
+                editForm.classList.remove('hidden');
+            } else {
+                editForm.classList.add('hidden');
+            }
+        }
+
+        function saveEdit() {
+            const dateValue = document.getElementById('editQuitDate').value;
+            const timeValue = document.getElementById('editQuitTime').value;
+            const quitDateTime = new Date(dateValue + 'T' + timeValue);
+            
+            const data = {
+                quitDateTime: quitDateTime.toISOString(),
+                cigarettesPerDay: parseInt(document.getElementById('editCigarettesPerDay').value),
+                packCost: parseFloat(document.getElementById('editPackCost').value),
+                cigarettesPerPack: parseInt(document.getElementById('editCigarettesPerPack').value),
+                minutesPerCigarette: parseFloat(document.getElementById('editMinutesPerCigarette').value)
+            };
+            
+            localStorage.setItem('smokeFreeData', JSON.stringify(data));
+            
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            
+            document.getElementById('editForm').classList.add('hidden');
+            updateStats();
+            
+            updateInterval = setInterval(() => updateStats(), 1000);
+            
+            alert('✅ Dati aggiornati con successo!');
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
