@@ -317,12 +317,30 @@
             font-weight: 700;
             color: #10b981;
             margin: 5px 0;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+        
+        .mini-stat-unit {
+            font-size: 0.6em;
+            opacity: 0.8;
         }
         
         .mini-stat-label {
             font-size: 0.7em;
             opacity: 0.8;
             line-height: 1.3;
+        }
+        
+        .mini-stat-comparison {
+            font-size: 0.65em;
+            opacity: 0.9;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fbbf24;
+            font-weight: 600;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -470,21 +488,42 @@
                 </div>
             </div>
             
+            <div class="section-title">☢️ Sostanze Pericolose Evitate <span class="live-indicator"></span></div>
+            <div class="grid-3">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">☢️</div>
+                    <div class="mini-stat-value">
+                        <span id="poloniumAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">pCi</span>
+                    </div>
+                    <div class="mini-stat-label">Polonio-210 radioattivo</div>
+                    <div class="mini-stat-comparison" id="poloniumComparison">Equivalente a 0 radiografie</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🧪</div>
+                    <div class="mini-stat-value">
+                        <span id="benzeneAvoided">0.000</span><br>
+                        <span class="mini-stat-unit">μg</span>
+                    </div>
+                    <div class="mini-stat-label">Benzene cancerogeno</div>
+                    <div class="mini-stat-comparison" id="benzeneComparison">Limite sicurezza: 0x</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">⚠️</div>
+                    <div class="mini-stat-value">
+                        <span id="arsenicAvoided">0.0000</span><br>
+                        <span class="mini-stat-unit">μg</span>
+                    </div>
+                    <div class="mini-stat-label">Arsenico (veleno)</div>
+                    <div class="mini-stat-comparison" id="arsenicComparison">0% dose letale evitata</div>
+                </div>
+            </div>
+            
             <div class="grid-3">
                 <div class="mini-stat">
                     <div class="mini-stat-icon">💓</div>
                     <div class="mini-stat-value"><span id="heartbeats">0</span></div>
                     <div class="mini-stat-label">Battiti risparmiati</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-icon">🧪</div>
-                    <div class="mini-stat-value"><span id="toxinsAvoided">0</span>mg</div>
-                    <div class="mini-stat-label">Sostanze tossiche</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="mini-stat-icon">🧬</div>
-                    <div class="mini-stat-value"><span id="chemicalsAvoided">0</span></div>
-                    <div class="mini-stat-label">Composti chimici</div>
                 </div>
             </div>
 
@@ -667,17 +706,34 @@
             const co2Avoided = (cigarettesAvoidedRounded * 0.014).toFixed(1);
             document.getElementById('co2Avoided').textContent = co2Avoided;
             
+            // Dangerous substances avoided - LIVE with decimals
+            // Polonium-210 radioactive (avg 0.04 pCi per cigarette)
+            const poloniumAvoided = (cigarettesAvoidedLive * 0.04);
+            document.getElementById('poloniumAvoided').textContent = poloniumAvoided.toFixed(5);
+            // Comparison: 1 pCi ≈ 0.65 chest X-rays
+            const xraysEquivalent = (poloniumAvoided * 0.65).toFixed(1);
+            document.getElementById('poloniumComparison').textContent = 
+                `Equivalente a ${xraysEquivalent} radiografie al torace`;
+            
+            // Benzene carcinogen (avg 100 μg per cigarette)
+            const benzeneAvoided = (cigarettesAvoidedLive * 100);
+            document.getElementById('benzeneAvoided').textContent = benzeneAvoided.toFixed(3);
+            // Comparison: OSHA daily limit ≈ 25,000 μg (8-hour exposure)
+            const benzeneMultiple = (benzeneAvoided / 25000).toFixed(2);
+            document.getElementById('benzeneComparison').textContent = 
+                `Limite sicurezza superato ${benzeneMultiple}x`;
+            
+            // Arsenic poison (avg 1 μg per cigarette)
+            const arsenicAvoided = (cigarettesAvoidedLive * 1);
+            document.getElementById('arsenicAvoided').textContent = arsenicAvoided.toFixed(4);
+            // Comparison: Lethal dose ≈ 150,000 μg (150 mg)
+            const arsenicPercent = ((arsenicAvoided / 150000) * 100).toFixed(2);
+            document.getElementById('arsenicComparison').textContent = 
+                `${arsenicPercent}% dose letale evitata`;
+            
             // Heartbeats saved (avg 450 extra beats per cigarette)
             const heartbeatsSaved = (cigarettesAvoidedRounded * 450).toLocaleString('it-IT');
             document.getElementById('heartbeats').textContent = heartbeatsSaved;
-            
-            // Toxins avoided (avg 4mg toxic substances per cigarette)
-            const toxinsAvoided = (cigarettesAvoidedRounded * 4).toFixed(1);
-            document.getElementById('toxinsAvoided').textContent = toxinsAvoided;
-            
-            // Chemicals avoided (avg ~7000 chemical compounds per cigarette)
-            const chemicalsAvoided = (cigarettesAvoidedRounded * 7000).toLocaleString('it-IT');
-            document.getElementById('chemicalsAvoided').textContent = chemicalsAvoided;
 
             updateMilestone(diffDays);
             updateHealthBenefits(diffDays);
