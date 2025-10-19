@@ -1008,6 +1008,165 @@
             margin-bottom: 10px;
             text-align: center;
         }
+        
+        /* Mobile Optimization */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+                letter-spacing: 2px;
+            }
+            
+            .emoji {
+                font-size: 3em;
+            }
+            
+            .header-tagline {
+                font-size: 1em;
+                letter-spacing: 1px;
+            }
+            
+            .setup-screen, .main-screen {
+                padding: 20px 15px;
+            }
+            
+            .days-counter {
+                padding: 20px 15px;
+            }
+            
+            .days-number {
+                font-size: 3em;
+            }
+            
+            .time-number {
+                font-size: 1.4em;
+            }
+            
+            .stat-value {
+                font-size: 1.6em;
+            }
+            
+            .milestone {
+                padding: 20px 15px;
+            }
+            
+            .milestone h3 {
+                font-size: 1.2em;
+            }
+            
+            .milestone-text {
+                font-size: 1.1em;
+                flex-wrap: wrap;
+            }
+            
+            .milestone-icon {
+                font-size: 1.3em;
+            }
+            
+            .countdown-detailed {
+                gap: 8px;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+            }
+            
+            .countdown-block {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .countdown-value {
+                font-size: 1.8em;
+                min-width: 40px;
+            }
+            
+            .countdown-label {
+                font-size: 0.6em;
+            }
+            
+            .countdown-separator {
+                font-size: 1.5em;
+                margin: 0 -2px;
+                padding-bottom: 15px;
+            }
+            
+            .milestone-stat-value {
+                font-size: 1.5em;
+            }
+            
+            .progress-bar {
+                height: 20px;
+            }
+            
+            .progress-percentage {
+                font-size: 0.75em;
+                right: 5px;
+            }
+            
+            .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .mini-stat {
+                padding: 15px;
+            }
+            
+            .mini-stat-value {
+                font-size: 1.6em;
+            }
+            
+            .section-title {
+                font-size: 1.1em;
+                margin: 20px 0 12px 0;
+            }
+            
+            .achievement-icon {
+                font-size: 2em;
+            }
+            
+            .achievement-name {
+                font-size: 1.1em;
+            }
+            
+            .achievement-info {
+                font-size: 0.85em;
+            }
+        }
+        
+        @media screen and (max-width: 380px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .countdown-value {
+                font-size: 1.5em;
+                min-width: 35px;
+            }
+            
+            .countdown-label {
+                font-size: 0.55em;
+            }
+            
+            .countdown-separator {
+                font-size: 1.3em;
+            }
+            
+            .milestone h3 {
+                font-size: 1em;
+            }
+            
+            .milestone-text {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
