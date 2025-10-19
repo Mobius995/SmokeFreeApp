@@ -174,6 +174,11 @@
             50% { opacity: 0.3; }
         }
         
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
         .stat-unit {
             font-size: 0.6em;
             opacity: 0.7;
@@ -342,6 +347,68 @@
             font-weight: 600;
             line-height: 1.4;
         }
+        
+        .savings-goal {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .goal-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+        
+        .goal-percentage {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .goal-progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .goal-progress-fill {
+            background: linear-gradient(
+                90deg, 
+                #10b981 0%, 
+                #14f195 25%,
+                #fbbf24 50%,
+                #14f195 75%,
+                #10b981 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+            height: 100%;
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-size: 0.75em;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        .goal-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -379,6 +446,14 @@
                     <label for="minutesPerCigarette">Minuti per fumare una sigaretta:</label>
                     <input type="number" id="minutesPerCigarette" value="5" min="1" max="30" step="0.5" required>
                 </div>
+                <div class="form-group">
+                    <label for="savingsGoal">🎯 Obiettivo di risparmio (opzionale):</label>
+                    <input type="text" id="savingsGoalName" placeholder="es. Orologio, Vacanza...">
+                </div>
+                <div class="form-group">
+                    <label for="savingsGoalAmount">Importo obiettivo (€):</label>
+                    <input type="number" id="savingsGoalAmount" step="0.01" min="0" placeholder="es. 500.00">
+                </div>
                 <button type="submit">Inizia 🚀</button>
             </form>
         </div>
@@ -412,6 +487,14 @@
                     <div class="form-group">
                         <label for="editMinutesPerCigarette">Minuti per fumare una sigaretta:</label>
                         <input type="number" id="editMinutesPerCigarette" min="1" max="30" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSavingsGoalName">🎯 Obiettivo di risparmio:</label>
+                        <input type="text" id="editSavingsGoalName" placeholder="es. Orologio, Vacanza...">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSavingsGoalAmount">Importo obiettivo (€):</label>
+                        <input type="number" id="editSavingsGoalAmount" step="0.01" min="0">
                     </div>
                     <button onclick="saveEdit()">💾 Salva modifiche</button>
                 </div>
@@ -448,6 +531,24 @@
                     €<span id="savingsPerMinute">0.000</span>/min • 
                     €<span id="savingsPerSecond">0.00000</span>/sec
                 </div>
+                
+                <!-- Savings Goal Progress -->
+                <div class="savings-goal hidden" id="savingsGoalSection">
+                    <div class="goal-header">
+                        <div class="goal-name">🎯 <span id="goalNameDisplay">Obiettivo</span></div>
+                        <div class="goal-percentage"><span id="goalPercentage">0</span>%</div>
+                    </div>
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" id="goalProgressFill"></div>
+                    </div>
+                    <div class="goal-details">
+                        <span>Risparmiato: €<span id="goalCurrentAmount">0</span></span>
+                        <span>Obiettivo: €<span id="goalTargetAmount">0</span></span>
+                    </div>
+                    <div class="goal-details" style="margin-top: 5px;">
+                        <span style="color: #fbbf24; font-weight: 600;">Mancano: €<span id="goalRemainingAmount">0</span></span>
+                    </div>
+                </div>
             </div>
 
             <div class="stat-card">
@@ -473,13 +574,23 @@
             <div class="grid-3">
                 <div class="mini-stat">
                     <div class="mini-stat-icon">🚫</div>
-                    <div class="mini-stat-value"><span id="nicotineAvoided">0</span>mg</div>
+                    <div class="mini-stat-value">
+                        <span id="nicotineAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">mg</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
                     <div class="mini-stat-label">Nicotina evitata</div>
+                    <div class="mini-stat-comparison" id="nicotineComparison">0% dose letale evitata</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">🫁</div>
-                    <div class="mini-stat-value"><span id="tarAvoided">0</span>g</div>
+                    <div class="mini-stat-value">
+                        <span id="tarAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">g</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
                     <div class="mini-stat-label">Catrame evitato</div>
+                    <div class="mini-stat-comparison" id="tarComparison">0 cm² di asfalto</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">💨</div>
@@ -606,7 +717,9 @@
                 cigarettesPerDay: parseInt(document.getElementById('cigarettesPerDay').value),
                 packCost: parseFloat(document.getElementById('packCost').value),
                 cigarettesPerPack: parseInt(document.getElementById('cigarettesPerPack').value),
-                minutesPerCigarette: parseFloat(document.getElementById('minutesPerCigarette').value) || 5
+                minutesPerCigarette: parseFloat(document.getElementById('minutesPerCigarette').value) || 5,
+                savingsGoalName: document.getElementById('savingsGoalName').value || '',
+                savingsGoalAmount: parseFloat(document.getElementById('savingsGoalAmount').value) || 0
             };
             
             localStorage.setItem('smokeFreeData', JSON.stringify(data));
@@ -664,6 +777,23 @@
             document.getElementById('savingsPerMinute').textContent = savingsPerMinute.toFixed(3);
             document.getElementById('savingsPerSecond').textContent = savingsPerSecond.toFixed(5);
 
+            // Savings Goal Progress
+            if (data.savingsGoalName && data.savingsGoalAmount > 0) {
+                document.getElementById('savingsGoalSection').classList.remove('hidden');
+                document.getElementById('goalNameDisplay').textContent = data.savingsGoalName;
+                document.getElementById('goalTargetAmount').textContent = data.savingsGoalAmount.toFixed(2);
+                document.getElementById('goalCurrentAmount').textContent = moneySaved.toFixed(2);
+                
+                const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
+                document.getElementById('goalRemainingAmount').textContent = remaining.toFixed(2);
+                
+                const percentage = Math.min(100, (moneySaved / data.savingsGoalAmount) * 100);
+                document.getElementById('goalPercentage').textContent = percentage.toFixed(5);
+                document.getElementById('goalProgressFill').style.width = percentage + '%';
+            } else {
+                document.getElementById('savingsGoalSection').classList.add('hidden');
+            }
+
             // Cigarettes avoided - with 5 decimals for live update
             const cigarettesAvoidedLive = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
             document.getElementById('cigarettesAvoided').textContent = cigarettesAvoidedLive.toFixed(5);
@@ -694,13 +824,21 @@
             document.getElementById('lifeDays').textContent = lifeDaysGained.toFixed(4);
 
             // Advanced health metrics - use rounded value
-            // Nicotine avoided (avg 1mg per cigarette)
-            const nicotineAvoided = (cigarettesAvoidedRounded * 1).toFixed(1);
-            document.getElementById('nicotineAvoided').textContent = nicotineAvoided;
+            // Nicotine avoided (avg 1mg per cigarette) - LIVE with decimals
+            const nicotineAvoided = (cigarettesAvoidedLive * 1);
+            document.getElementById('nicotineAvoided').textContent = nicotineAvoided.toFixed(5);
+            // Comparison: Lethal dose ≈ 750mg (average of 500-1000mg range)
+            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(3);
+            document.getElementById('nicotineComparison').textContent = 
+                `${nicotinePercent}% dose letale evitata (750mg)`;
             
-            // Tar avoided (avg 10mg per cigarette)
-            const tarAvoided = (cigarettesAvoidedRounded * 0.01).toFixed(1);
-            document.getElementById('tarAvoided').textContent = tarAvoided;
+            // Tar avoided (avg 10mg per cigarette) - LIVE with decimals
+            const tarAvoided = (cigarettesAvoidedLive * 0.01);
+            document.getElementById('tarAvoided').textContent = tarAvoided.toFixed(5);
+            // Comparison: 1g tar ≈ 10 cm² of asphalt layer on lungs
+            const asphaltArea = (tarAvoided * 10).toFixed(2);
+            document.getElementById('tarComparison').textContent = 
+                `Come spalmare ${asphaltArea} cm² di asfalto nei polmoni`;
             
             // CO2 avoided (avg 14mg per cigarette)
             const co2Avoided = (cigarettesAvoidedRounded * 0.014).toFixed(1);
@@ -814,6 +952,8 @@
                 document.getElementById('editPackCost').value = data.packCost;
                 document.getElementById('editCigarettesPerPack').value = data.cigarettesPerPack;
                 document.getElementById('editMinutesPerCigarette').value = data.minutesPerCigarette || 5;
+                document.getElementById('editSavingsGoalName').value = data.savingsGoalName || '';
+                document.getElementById('editSavingsGoalAmount').value = data.savingsGoalAmount || '';
                 editForm.classList.remove('hidden');
             } else {
                 editForm.classList.add('hidden');
@@ -830,7 +970,9 @@
                 cigarettesPerDay: parseInt(document.getElementById('editCigarettesPerDay').value),
                 packCost: parseFloat(document.getElementById('editPackCost').value),
                 cigarettesPerPack: parseInt(document.getElementById('editCigarettesPerPack').value),
-                minutesPerCigarette: parseFloat(document.getElementById('editMinutesPerCigarette').value)
+                minutesPerCigarette: parseFloat(document.getElementById('editMinutesPerCigarette').value),
+                savingsGoalName: document.getElementById('editSavingsGoalName').value || '',
+                savingsGoalAmount: parseFloat(document.getElementById('editSavingsGoalAmount').value) || 0
             };
             
             localStorage.setItem('smokeFreeData', JSON.stringify(data));
