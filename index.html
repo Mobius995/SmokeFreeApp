@@ -454,6 +454,11 @@
             <div class="section-title">📊 Metriche Salute Avanzate</div>
             <div class="grid-3">
                 <div class="mini-stat">
+                    <div class="mini-stat-icon">🚫</div>
+                    <div class="mini-stat-value"><span id="nicotineAvoided">0</span>mg</div>
+                    <div class="mini-stat-label">Nicotina evitata</div>
+                </div>
+                <div class="mini-stat">
                     <div class="mini-stat-icon">🫁</div>
                     <div class="mini-stat-value"><span id="tarAvoided">0</span>g</div>
                     <div class="mini-stat-label">Catrame evitato</div>
@@ -463,10 +468,23 @@
                     <div class="mini-stat-value"><span id="co2Avoided">0</span>g</div>
                     <div class="mini-stat-label">CO₂ non inalata</div>
                 </div>
+            </div>
+            
+            <div class="grid-3">
                 <div class="mini-stat">
                     <div class="mini-stat-icon">💓</div>
                     <div class="mini-stat-value"><span id="heartbeats">0</span></div>
                     <div class="mini-stat-label">Battiti risparmiati</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🧪</div>
+                    <div class="mini-stat-value"><span id="toxinsAvoided">0</span>mg</div>
+                    <div class="mini-stat-label">Sostanze tossiche</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🧬</div>
+                    <div class="mini-stat-value"><span id="chemicalsAvoided">0</span></div>
+                    <div class="mini-stat-label">Composti chimici</div>
                 </div>
             </div>
 
@@ -631,20 +649,35 @@
                 `${hoursGained}h ${minutesGainedRemainder}m ${secondsGainedRemainder}s`;
             document.getElementById('minutesPerCigDisplay').textContent = minutesPerCig;
 
-            // Life days gained (avg 11 min of life lost per cigarette) - use rounded value
-            const lifeMinutesGained = cigarettesAvoidedRounded * 11;
-            const lifeDaysGained = (lifeMinutesGained / (60 * 24)).toFixed(1);
-            document.getElementById('lifeDays').textContent = lifeDaysGained;
+            // Life days gained (avg 11 min of life lost per cigarette) - LIVE with decimals
+            const lifeMinutesGained = cigarettesAvoidedLive * 11;
+            const lifeDaysGained = lifeMinutesGained / (60 * 24);
+            document.getElementById('lifeDays').textContent = lifeDaysGained.toFixed(4);
 
             // Advanced health metrics - use rounded value
+            // Nicotine avoided (avg 1mg per cigarette)
+            const nicotineAvoided = (cigarettesAvoidedRounded * 1).toFixed(1);
+            document.getElementById('nicotineAvoided').textContent = nicotineAvoided;
+            
+            // Tar avoided (avg 10mg per cigarette)
             const tarAvoided = (cigarettesAvoidedRounded * 0.01).toFixed(1);
             document.getElementById('tarAvoided').textContent = tarAvoided;
             
+            // CO2 avoided (avg 14mg per cigarette)
             const co2Avoided = (cigarettesAvoidedRounded * 0.014).toFixed(1);
             document.getElementById('co2Avoided').textContent = co2Avoided;
             
+            // Heartbeats saved (avg 450 extra beats per cigarette)
             const heartbeatsSaved = (cigarettesAvoidedRounded * 450).toLocaleString('it-IT');
             document.getElementById('heartbeats').textContent = heartbeatsSaved;
+            
+            // Toxins avoided (avg 4mg toxic substances per cigarette)
+            const toxinsAvoided = (cigarettesAvoidedRounded * 4).toFixed(1);
+            document.getElementById('toxinsAvoided').textContent = toxinsAvoided;
+            
+            // Chemicals avoided (avg ~7000 chemical compounds per cigarette)
+            const chemicalsAvoided = (cigarettesAvoidedRounded * 7000).toLocaleString('it-IT');
+            document.getElementById('chemicalsAvoided').textContent = chemicalsAvoided;
 
             updateMilestone(diffDays);
             updateHealthBenefits(diffDays);
