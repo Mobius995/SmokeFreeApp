@@ -678,22 +678,77 @@
         .days-counter {
             text-align: center;
             padding: 30px;
-            background: rgba(16, 185, 129, 0.2);
-            border-radius: 20px;
+            background: linear-gradient(
+                135deg,
+                #10b981 0%,
+                #06b6d4 25%,
+                #3b82f6 50%,
+                #8b5cf6 75%,
+                #10b981 100%
+            );
+            background-size: 400% 400%;
+            animation: aurora-wave 8s ease infinite;
+            border-radius: 25px;
             margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(16, 185, 129, 0.4),
+                0 0 60px rgba(59, 130, 246, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .days-counter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(31, 47, 31, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 0;
+        }
+        
+        .days-counter > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes aurora-wave {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 75%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 25%; }
+            100% { background-position: 0% 50%; }
         }
         
         .days-number {
             font-size: 4em;
             font-weight: 700;
-            color: #10b981;
+            color: #ffffff;
             line-height: 1;
+            text-shadow: 
+                0 0 20px rgba(16, 185, 129, 0.8),
+                0 0 40px rgba(59, 130, 246, 0.6),
+                0 0 60px rgba(139, 92, 246, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.5);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
         }
         
         .days-label {
-            font-size: 1.2em;
-            margin-top: 10px;
-            opacity: 0.9;
+            font-size: 1.5em;
+            margin-top: 15px;
+            opacity: 1;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(16, 185, 129, 0.6),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         .time-details {
@@ -702,23 +757,171 @@
             gap: 20px;
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
         
         .time-unit {
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
         
         .time-number {
             font-size: 1.8em;
             font-weight: 700;
-            color: #10b981;
+            color: #ffffff;
+            text-shadow: 
+                0 0 15px rgba(6, 182, 212, 0.8),
+                0 0 30px rgba(59, 130, 246, 0.5),
+                0 2px 10px rgba(0, 0, 0, 0.5);
         }
         
         .time-label {
             font-size: 0.8em;
-            opacity: 0.7;
+            opacity: 0.95;
             margin-top: 5px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .milliseconds-display {
+            font-size: 0.7em;
+            opacity: 1;
+            color: #06b6d4;
+            animation: millisecond-pulse 0.5s ease-in-out infinite;
+            text-shadow: 
+                0 0 10px rgba(6, 182, 212, 1),
+                0 0 20px rgba(6, 182, 212, 0.6);
+            font-weight: 700;
+        }
+        
+        @keyframes millisecond-pulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 0.6; }
+        }
+        
+        .next-day-progress {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .next-day-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            opacity: 1;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .next-day-percentage {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1em;
+            text-shadow: 
+                0 0 15px rgba(16, 185, 129, 0.8),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .next-day-bar {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            height: 28px;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.5),
+                0 0 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .next-day-fill {
+            background: linear-gradient(
+                90deg,
+                #10b981 0%,
+                #14f195 10%,
+                #06b6d4 20%,
+                #3b82f6 30%,
+                #6366f1 40%,
+                #8b5cf6 50%,
+                #a855f7 60%,
+                #d946ef 70%,
+                #ec4899 80%,
+                #f59e0b 90%,
+                #10b981 100%
+            );
+            background-size: 300% 100%;
+            animation: aurora-shimmer 4s linear infinite;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 
+                0 0 25px rgba(16, 185, 129, 0.9),
+                0 0 50px rgba(59, 130, 246, 0.7),
+                0 0 75px rgba(139, 92, 246, 0.5),
+                inset 0 2px 15px rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .next-day-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            animation: laser-sweep-progress 3s ease-in-out infinite;
+        }
+        
+        .next-day-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.5) 0%,
+                transparent 100%
+            );
+            border-radius: 10px 10px 0 0;
+        }
+        
+        @keyframes aurora-shimmer {
+            0% { background-position: 0% 0; }
+            100% { background-position: 300% 0; }
+        }
+        
+        @keyframes laser-sweep-progress {
+            0% { 
+                left: -100%;
+                opacity: 0;
+            }
+            20% { 
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% { 
+                left: 200%;
+                opacity: 0;
+            }
         }
         
         .section-title {
@@ -1041,10 +1244,31 @@
             
             .days-counter {
                 padding: 20px 15px;
+                box-shadow: 
+                    0 0 25px rgba(16, 185, 129, 0.4),
+                    0 0 50px rgba(59, 130, 246, 0.3),
+                    0 8px 32px rgba(0, 0, 0, 0.3);
             }
             
             .days-number {
                 font-size: 3em;
+                text-shadow: 
+                    0 0 15px rgba(16, 185, 129, 0.8),
+                    0 0 30px rgba(59, 130, 246, 0.6),
+                    0 0 45px rgba(139, 92, 246, 0.4),
+                    0 4px 15px rgba(0, 0, 0, 0.5);
+            }
+            
+            .days-label {
+                font-size: 1em;
+            }
+            
+            .time-number {
+                font-size: 1.5em;
+                text-shadow: 
+                    0 0 12px rgba(6, 182, 212, 0.8),
+                    0 0 25px rgba(59, 130, 246, 0.5),
+                    0 2px 8px rgba(0, 0, 0, 0.5);
             }
             
             .time-number {
@@ -1053,6 +1277,27 @@
             
             .time-label {
                 font-size: 0.9em;
+            }
+            
+            .milliseconds-display {
+                font-size: 0.6em;
+            }
+            
+            .next-day-progress {
+                margin-top: 15px;
+                padding-top: 15px;
+            }
+            
+            .next-day-label {
+                font-size: 0.85em;
+            }
+            
+            .next-day-percentage {
+                font-size: 1em;
+            }
+            
+            .next-day-bar {
+                height: 16px;
             }
             
             .stat-label {
@@ -1245,6 +1490,7 @@
         <div class="setup-screen" id="setupScreen">
             <h2>Inizia il tuo viaggio</h2>
             <form id="setupForm">
+            <div id="setupFormContainer">
                 <div class="form-group">
                     <label for="quitDate">Data in cui hai smesso:</label>
                     <input type="date" id="quitDate" required max="">
@@ -1278,6 +1524,7 @@
                     <input type="number" id="savingsGoalAmount" step="0.01" min="0" placeholder="es. 500.00">
                 </div>
                 <button type="submit">Inizia 🚀</button>
+            </div>
             </form>
         </div>
 
@@ -1337,8 +1584,21 @@
                         <div class="time-label">minuti</div>
                     </div>
                     <div class="time-unit">
-                        <div class="time-number" id="secondsCounter">00</div>
+                        <div class="time-number">
+                            <span id="secondsCounter">00</span><span class="milliseconds-display">.000</span>
+                        </div>
                         <div class="time-label">secondi</div>
+                    </div>
+                </div>
+                
+                <!-- Progress bar verso prossimo giorno -->
+                <div class="next-day-progress">
+                    <div class="next-day-label">
+                        <span>Verso giorno <span id="nextDayNumber">1</span></span>
+                        <span class="next-day-percentage" id="nextDayPercentage">0.0%</span>
+                    </div>
+                    <div class="next-day-bar">
+                        <div class="next-day-fill" id="nextDayFill"></div>
                     </div>
                 </div>
             </div>
@@ -1492,7 +1752,7 @@
             
             <div class="grid-3">
                 <div class="mini-stat">
-                    <div class="mini-stat-icon">💓</div>
+                    <div class="mini-stat-icon">💗</div>
                     <div class="mini-stat-value">
                         <span id="heartbeats">0</span>
                         <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
@@ -1532,7 +1792,7 @@
 
     <script>
         const healthTimeline = [
-            { days: 0.02, icon: '🫁', title: '20 minuti', text: 'Frequenza cardiaca e pressione tornano normali' },
+            { days: 0.02, icon: '🫀', title: '20 minuti', text: 'Frequenza cardiaca e pressione tornano normali' },
             { days: 0.5, icon: '💨', title: '12 ore', text: 'Livelli di CO nel sangue normalizzati' },
             { days: 1, icon: '👃', title: '24 ore', text: 'Gusto e olfatto migliorano' },
             { days: 2, icon: '⚡', title: '48 ore', text: 'Terminazioni nervose ricrescono, più energia' },
@@ -1592,7 +1852,7 @@
                 document.getElementById('mainScreen').classList.remove('hidden');
                 updateStats();
                 displayAchievements();
-                updateInterval = setInterval(() => updateStats(), 1000);
+                updateInterval = setInterval(() => updateStats(), 100);
             } else {
                 const now = new Date();
                 document.getElementById('quitDate').valueAsDate = now;
@@ -1602,9 +1862,7 @@
             }
         }
 
-        document.getElementById('setupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        function submitSetupForm() {
             const dateValue = document.getElementById('quitDate').value;
             const timeValue = document.getElementById('quitTime').value;
             
@@ -1638,8 +1896,8 @@
             
             updateStats();
             displayAchievements();
-            updateInterval = setInterval(() => updateStats(), 1000);
-        });
+            updateInterval = setInterval(() => updateStats(), 100);
+        }
 
         function updateStats() {
             const data = JSON.parse(localStorage.getItem('smokeFreeData'));
@@ -1660,11 +1918,25 @@
             const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
             const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
             const seconds = totalSeconds % 60;
+            const milliseconds = Math.floor((diffMs % 1000));
 
             document.getElementById('daysCounter').textContent = days;
             document.getElementById('hoursCounter').textContent = String(hours).padStart(2, '0');
             document.getElementById('minutesCounter').textContent = String(minutes).padStart(2, '0');
             document.getElementById('secondsCounter').textContent = String(seconds).padStart(2, '0');
+            
+            // Update millisecondi
+            const millisecondsDisplay = document.querySelector('.milliseconds-display');
+            if (millisecondsDisplay) {
+                millisecondsDisplay.textContent = '.' + String(milliseconds).padStart(3, '0');
+            }
+            
+            // Update progress bar verso prossimo giorno
+            const dayProgress = ((diffMs % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * 100;
+            const nextDay = days + 1;
+            document.getElementById('nextDayNumber').textContent = nextDay;
+            document.getElementById('nextDayPercentage').textContent = dayProgress.toFixed(4) + '%';
+            document.getElementById('nextDayFill').style.width = dayProgress + '%';
 
             const costPerCigarette = data.packCost / data.cigarettesPerPack;
             const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
@@ -1960,7 +2232,7 @@
             updateStats();
             displayAchievements();
             
-            updateInterval = setInterval(() => updateStats(), 1000);
+            updateInterval = setInterval(() => updateStats(), 100);
             
             alert('✅ Dati aggiornati con successo!');
         }
