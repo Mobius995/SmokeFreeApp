@@ -946,11 +946,18 @@
             gap: 10px;
             margin-bottom: 15px;
         }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
         
         .mini-stat {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 15px 10px;
+            padding: 20px 15px;
             text-align: center;
             border: 2px solid rgba(16, 185, 129, 0.2);
         }
@@ -975,9 +982,23 @@
         }
         
         .mini-stat-label {
-            font-size: 0.7em;
-            opacity: 0.8;
+            font-size: 0.95em;
+            font-weight: 700;
+            opacity: 1;
             line-height: 1.3;
+            margin-bottom: 8px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mini-stat-description {
+            font-size: 0.75em;
+            opacity: 0.85;
+            line-height: 1.4;
+            margin: 8px 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .mini-stat-comparison {
@@ -1384,6 +1405,11 @@
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
             
             .mini-stat {
                 padding: 18px 15px;
@@ -1398,9 +1424,13 @@
             }
             
             .mini-stat-label {
-                font-size: 0.85em;
+                font-size: 1em;
             }
-            
+
+            .mini-stat-description {
+                font-size: 0.8em;
+            }
+
             .mini-stat-comparison {
                 font-size: 0.8em;
             }
@@ -1694,66 +1724,72 @@
 
             <!-- Advanced Health Metrics -->
             <div class="section-title">📊 Metriche Salute Avanzate</div>
-            <div class="grid-3">
+            <div class="grid-2">
                 <div class="mini-stat">
                     <div class="mini-stat-icon">🚫</div>
+                    <div class="mini-stat-label">Nicotina</div>
+                    <div class="mini-stat-description">Sostanza che crea dipendenza fisica e psicologica.</div>
                     <div class="mini-stat-value">
                         <span id="nicotineAvoided">0.00000</span><br>
                         <span class="mini-stat-unit">mg</span>
                         <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
                     </div>
-                    <div class="mini-stat-label">Nicotina evitata</div>
                     <div class="mini-stat-comparison" id="nicotineComparison">0% dose letale evitata</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">🫁</div>
+                    <div class="mini-stat-label">Catrame</div>
+                    <div class="mini-stat-description">Si deposita nei polmoni riducendo la capacità respiratoria.</div>
                     <div class="mini-stat-value">
                         <span id="tarAvoided">0.00000</span><br>
                         <span class="mini-stat-unit">g</span>
                         <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
                     </div>
-                    <div class="mini-stat-label">Catrame evitato</div>
                     <div class="mini-stat-comparison" id="tarComparison">0 cm² di asfalto</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">💨</div>
+                    <div class="mini-stat-label">CO (Monossido di Carbonio)</div>
+                    <div class="mini-stat-description">Gas tossico che riduce l'ossigeno nel sangue.</div>
                     <div class="mini-stat-value">
                         <span id="coAvoided">0.00000</span><br>
                         <span class="mini-stat-unit">g</span>
                         <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
                     </div>
-                    <div class="mini-stat-label">CO monossido evitato</div>
                     <div class="mini-stat-comparison" id="coComparison">0 min in garage con motore acceso</div>
                 </div>
             </div>
             
-            <div class="section-title">☢️ Sostanze Pericolose Evitate <span class="live-indicator"></span></div>
-            <div class="grid-3">
+            <div class="section-title">☢️ Sostanze Pericolose <span class="live-indicator"></span></div>
+            <div class="grid-2">
                 <div class="mini-stat">
                     <div class="mini-stat-icon">☢️</div>
+                    <div class="mini-stat-label">Polonio-210</div>
+                    <div class="mini-stat-description">Elemento radioattivo altamente cancerogeno.</div>
                     <div class="mini-stat-value">
                         <span id="poloniumAvoided">0.00000</span><br>
                         <span class="mini-stat-unit">pCi</span>
                     </div>
-                    <div class="mini-stat-label">Polonio-210 radioattivo</div>
                     <div class="mini-stat-comparison" id="poloniumComparison">Equivalente a 0 radiografie</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">🧪</div>
+                    <div class="mini-stat-label">Benzene</div>
+                    <div class="mini-stat-description">Sostanza chimica che aumenta il rischio di leucemia.</div>
                     <div class="mini-stat-value">
                         <span id="benzeneAvoided">0.000</span><br>
                         <span class="mini-stat-unit">μg</span>
                     </div>
-                    <div class="mini-stat-label">Benzene cancerogeno</div>
                     <div class="mini-stat-comparison" id="benzeneComparison">Limite sicurezza: 0x</div>
                 </div>
                 <div class="mini-stat">
                     <div class="mini-stat-icon">⚠️</div>
+                    <div class="mini-stat-label">Arsenico</div>
+                    <div class="mini-stat-description">Veleno che danneggia organi e DNA cellulare.</div>
                     <div class="mini-stat-value">
                         <span id="arsenicAvoided">0.0000</span><br>
                         <span class="mini-stat-unit">μg</span>
                     </div>
-                    <div class="mini-stat-label">Arsenico (veleno)</div>
                     <div class="mini-stat-comparison" id="arsenicComparison">0% dose letale evitata</div>
                 </div>
             </div>
