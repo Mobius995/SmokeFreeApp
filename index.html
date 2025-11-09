@@ -199,6 +199,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
+            padding-bottom: 100px;
         }
         
         .setup-screen, .main-screen {
@@ -1511,34 +1512,36 @@
         /* SOS Button */
         .sos-button {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: linear-gradient(135deg, #ef4444, #f97316);
             color: white;
             border: none;
             border-radius: 15px;
-            padding: 15px 25px;
+            padding: 14px 30px;
             font-size: 1.1em;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
             z-index: 1000;
             animation: sos-pulse 2s infinite;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .sos-button:hover {
-            transform: scale(1.1);
+            transform: translateX(-50%) scale(1.05);
         }
 
         @keyframes sos-pulse {
             0%, 100% {
                 box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
-                transform: scale(1);
+                transform: translateX(-50%) scale(1);
             }
             50% {
                 box-shadow: 0 0 50px rgba(239, 68, 68, 0.9);
-                transform: scale(1.05);
+                transform: translateX(-50%) scale(1.05);
             }
         }
 
@@ -1771,15 +1774,10 @@
         /* Responsive */
         @media (max-width: 768px) {
             .sos-button {
-                bottom: 20px;
-                right: 50%;
-                transform: translateX(50%);
-                width: 90%;
-                max-width: 300px;
-            }
-
-            .sos-button:hover {
-                transform: translateX(50%) scale(1.05);
+                width: 85%;
+                max-width: 280px;
+                font-size: 1em;
+                padding: 12px 20px;
             }
 
             .modal-content {
