@@ -2915,6 +2915,8 @@
         let sosSecondsRemaining = 60; // 1 minuto
         let breathingInterval = null;
         let cravingStartTime = null;
+        let breathingTimeouts = [];
+        let breathingIntervals = [];
 
         function openSOSModal() {
             cravingStartTime = Date.now();
@@ -2932,9 +2934,28 @@
                 clearInterval(sosTimerInterval);
                 sosTimerInterval = null;
             }
-            if (breathingInterval) {
-                clearInterval(breathingInterval);
-                breathingInterval = null;
+            stopBreathingAnimation();
+        }
+
+        function stopBreathingAnimation() {
+            // Ferma tutti i timeout
+            breathingTimeouts.forEach(timeout => clearTimeout(timeout));
+            breathingTimeouts = [];
+
+            // Ferma tutti gli interval
+            breathingIntervals.forEach(interval => clearInterval(interval));
+            breathingIntervals = [];
+
+            // Ferma animazione CSS del cerchio
+            const breathingCircle = document.querySelector('.breathing-circle');
+            if (breathingCircle) {
+                breathingCircle.style.animation = 'none';
+            }
+
+            // Reset ring progress
+            const ringProgress = document.getElementById('ringProgress');
+            if (ringProgress) {
+                ringProgress.style.strokeDashoffset = '440';
             }
         }
 
@@ -2950,8 +2971,10 @@
                 if (sosSecondsRemaining <= 0) {
                     clearInterval(sosTimerInterval);
                     sosTimerInterval = null;
-                    // Timer completato
-                    document.getElementById('breathingText').textContent = '✅ COMPLETATO!';
+                    // Timer completato - ferma tutto
+                    stopBreathingAnimation();
+                    document.getElementById('breathingText').innerHTML = '✅ COMPLETATO!';
+                    document.getElementById('breathingText').style.color = '#86efac';
                 }
             }, 1000);
         }
@@ -2964,8 +2987,13 @@
         }
 
         function startBreathingAnimation() {
-            if (breathingInterval) {
-                clearInterval(breathingInterval);
+            // Pulisci eventuali animazioni precedenti
+            stopBreathingAnimation();
+
+            // Riattiva animazione CSS del cerchio
+            const breathingCircle = document.querySelector('.breathing-circle');
+            if (breathingCircle) {
+                breathingCircle.style.animation = 'breathe 12s infinite';
             }
 
             let phase = 0; // 0: inspira, 1: trattieni, 2: espira
@@ -2985,13 +3013,15 @@
                 breathingRing.style.filter = `drop-shadow(0 0 12px ${ringColor})`;
 
                 // Reset ring per la prossima fase
-                setTimeout(() => {
+                const resetTimeout1 = setTimeout(() => {
                     ringProgress.style.transition = 'none';
                     ringProgress.style.strokeDashoffset = '440';
-                    setTimeout(() => {
+                    const resetTimeout2 = setTimeout(() => {
                         ringProgress.style.transition = 'stroke 0.5s ease, stroke-dashoffset ' + (duration / 1000) + 's linear';
                     }, 50);
+                    breathingTimeouts.push(resetTimeout2);
                 }, 100);
+                breathingTimeouts.push(resetTimeout1);
 
                 // Countdown secondi
                 const countdownInterval = setInterval(() => {
@@ -3003,22 +3033,27 @@
                         }
                     }
                 }, 1000);
+                breathingIntervals.push(countdownInterval);
 
-                setTimeout(() => {
+                const clearCountdownTimeout = setTimeout(() => {
                     clearInterval(countdownInterval);
                 }, duration);
+                breathingTimeouts.push(clearCountdownTimeout);
             }
 
             function updateBreathingPhase() {
                 if (phase === 0) {
                     animatePhase('INSPIRA', 4000, '#93c5fd', '#93c5fd');
-                    setTimeout(() => { phase = 1; updateBreathingPhase(); }, 4000);
+                    const phaseTimeout = setTimeout(() => { phase = 1; updateBreathingPhase(); }, 4000);
+                    breathingTimeouts.push(phaseTimeout);
                 } else if (phase === 1) {
                     animatePhase('TRATTIENI', 2000, '#86efac', '#86efac');
-                    setTimeout(() => { phase = 2; updateBreathingPhase(); }, 2000);
+                    const phaseTimeout = setTimeout(() => { phase = 2; updateBreathingPhase(); }, 2000);
+                    breathingTimeouts.push(phaseTimeout);
                 } else {
                     animatePhase('ESPIRA', 6000, '#67e8f9', '#67e8f9');
-                    setTimeout(() => { phase = 0; updateBreathingPhase(); }, 6000);
+                    const phaseTimeout = setTimeout(() => { phase = 0; updateBreathingPhase(); }, 6000);
+                    breathingTimeouts.push(phaseTimeout);
                 }
             }
 
