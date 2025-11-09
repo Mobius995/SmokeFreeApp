@@ -1,0 +1,3013 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <title>Smoke Free</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1f2f1f 0%, #2d4a2d 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(
+                45deg,
+                #06b6d4,
+                #3b82f6,
+                #8b5cf6,
+                #ec4899,
+                #f59e0b,
+                #10b981
+            );
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            -webkit-animation: gradient-shift 4s ease infinite;
+            animation: gradient-shift 4s ease infinite;
+            position: relative;
+            -webkit-filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
+            filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
+        }
+        
+        @-webkit-keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .emoji {
+            font-size: 4em;
+            display: inline-block;
+            -webkit-animation: emoji-float 3s ease-in-out infinite;
+            animation: emoji-float 3s ease-in-out infinite;
+            -webkit-filter: drop-shadow(0 10px 30px rgba(239, 68, 68, 0.6));
+            filter: drop-shadow(0 10px 30px rgba(239, 68, 68, 0.6));
+        }
+        
+        @-webkit-keyframes emoji-float {
+            0%, 100% { 
+                -webkit-transform: translateY(0) rotate(0deg) scale(1);
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                -webkit-transform: translateY(-15px) rotate(-5deg) scale(1.05);
+                transform: translateY(-15px) rotate(-5deg) scale(1.05);
+            }
+            50% {
+                -webkit-transform: translateY(-20px) rotate(0deg) scale(1.1);
+                transform: translateY(-20px) rotate(0deg) scale(1.1);
+            }
+            75% {
+                -webkit-transform: translateY(-15px) rotate(5deg) scale(1.05);
+                transform: translateY(-15px) rotate(5deg) scale(1.05);
+            }
+        }
+        
+        @keyframes emoji-float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-15px) rotate(-5deg) scale(1.05);
+            }
+            50% {
+                transform: translateY(-20px) rotate(0deg) scale(1.1);
+            }
+            75% {
+                transform: translateY(-15px) rotate(5deg) scale(1.05);
+            }
+        }
+        
+        .header-tagline {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            opacity: 0.9;
+            letter-spacing: 2px;
+            -webkit-animation: tagline-fade 3s ease-in-out infinite;
+            animation: tagline-fade 3s ease-in-out infinite;
+        }
+        
+        @-webkit-keyframes tagline-fade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes tagline-fade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .header-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(45deg, #10b981, #06b6d4);
+            border-radius: 50%;
+            opacity: 0;
+            -webkit-animation: particle-float 6s ease-in-out infinite;
+            animation: particle-float 6s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) { left: 10%; -webkit-animation-delay: 0s; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 30%; -webkit-animation-delay: 1s; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 50%; -webkit-animation-delay: 2s; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 70%; -webkit-animation-delay: 3s; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 90%; -webkit-animation-delay: 4s; animation-delay: 4s; }
+        
+        @-webkit-keyframes particle-float {
+            0% {
+                -webkit-transform: translateY(100px) scale(0);
+                transform: translateY(100px) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                -webkit-transform: translateY(-200px) scale(1.5);
+                transform: translateY(-200px) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100px) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .setup-screen, .main-screen {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .setup-screen h2 {
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .edit-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .edit-toggle {
+            background: rgba(16, 185, 129, 0.3);
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        
+        .edit-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .edit-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .edit-form input {
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .edit-form button {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .stat-subtext {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-left: 5px;
+            -webkit-animation: pulse 2s infinite;
+            animation: pulse 2s infinite;
+        }
+        
+        @-webkit-keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        @-webkit-keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .stat-unit {
+            font-size: 0.6em;
+            opacity: 0.7;
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+        }
+        
+        .milestone::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            -webkit-animation: shine 3s infinite;
+            animation: shine 3s infinite;
+        }
+        
+        @-webkit-keyframes shine {
+            0% { -webkit-transform: translateX(-100%) translateY(-100%) rotate(45deg); transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { -webkit-transform: translateX(100%) translateY(100%) rotate(45deg); transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .milestone-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .milestone h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            -webkit-animation: pulse-glow 2s ease-in-out infinite;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @-webkit-keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+            50% { text-shadow: 0 2px 20px rgba(255, 255, 255, 0.5); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+            50% { text-shadow: 0 2px 20px rgba(255, 255, 255, 0.5); }
+        }
+        
+        .milestone-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .milestone-icon {
+            font-size: 1.5em;
+            -webkit-animation: bounce 2s ease-in-out infinite;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @-webkit-keyframes bounce {
+            0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+            50% { -webkit-transform: translateY(-10px); transform: translateY(-10px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .milestone-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            gap: 20px;
+        }
+        
+        .milestone-stat {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .milestone-stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+        
+        .countdown-detailed {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .countdown-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .countdown-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            line-height: 1;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .countdown-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-top: 5px;
+            text-transform: lowercase;
+        }
+        
+        .countdown-separator {
+            font-size: 2em;
+            font-weight: 700;
+            opacity: 0.6;
+            margin: 0 -5px;
+            align-self: center;
+            padding-bottom: 20px;
+        }
+        
+        .milestone-stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            height: 25px;
+            margin-top: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-fill {
+            background: linear-gradient(
+                90deg,
+                #06b6d4 0%,
+                #3b82f6 25%,
+                #8b5cf6 50%,
+                #ec4899 75%,
+                #f59e0b 100%
+            );
+            background-size: 400% 100%;
+            -webkit-animation: rainbow-flow 3s linear infinite;
+            animation: rainbow-flow 3s linear infinite;
+            height: 100%;
+            transition: width 0.5s ease-out;
+            border-radius: 12px;
+            box-shadow: 
+                0 0 20px rgba(59, 130, 246, 0.6),
+                0 0 40px rgba(139, 92, 246, 0.4),
+                inset 0 2px 10px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.8),
+                transparent
+            );
+            -webkit-animation: laser-sweep 2s ease-in-out infinite;
+            animation: laser-sweep 2s ease-in-out infinite;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                transparent 100%
+            );
+            border-radius: 12px 12px 0 0;
+        }
+        
+        @-webkit-keyframes rainbow-flow {
+            0% { background-position: 0% 0; }
+            100% { background-position: 400% 0; }
+        }
+        
+        @keyframes rainbow-flow {
+            0% { background-position: 0% 0; }
+            100% { background-position: 400% 0; }
+        }
+        
+        @-webkit-keyframes laser-sweep {
+            0% { 
+                left: -100%;
+                opacity: 0;
+            }
+            50% { 
+                opacity: 1;
+            }
+            100% { 
+                left: 200%;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes laser-sweep {
+            0% { 
+                left: -100%;
+                opacity: 0;
+            }
+            50% { 
+                opacity: 1;
+            }
+            100% { 
+                left: 200%;
+                opacity: 0;
+            }
+        }
+        
+        .progress-percentage {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #10b981;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+        
+        .milestone-completed {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-animation: celebrate-pulse 1s ease-in-out;
+            animation: celebrate-pulse 1s ease-in-out;
+        }
+        
+        @-webkit-keyframes celebrate-pulse {
+            0%, 100% { -webkit-transform: scale(1); transform: scale(1); }
+            50% { -webkit-transform: scale(1.05); transform: scale(1.05); }
+        }
+        
+        @keyframes celebrate-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .health-section {
+            margin-top: 30px;
+        }
+        
+        .health-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .health-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .health-text {
+            flex: 1;
+        }
+        
+        .health-text strong {
+            display: block;
+            color: #10b981;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .days-counter {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(
+                135deg,
+                #10b981 0%,
+                #06b6d4 25%,
+                #3b82f6 50%,
+                #8b5cf6 75%,
+                #10b981 100%
+            );
+            background-size: 400% 400%;
+            animation: aurora-wave 8s ease infinite;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(16, 185, 129, 0.4),
+                0 0 60px rgba(59, 130, 246, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .days-counter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(31, 47, 31, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 0;
+        }
+        
+        .days-counter > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes aurora-wave {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 75%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 25%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .days-number {
+            font-size: 4em;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1;
+            text-shadow: 
+                0 0 20px rgba(16, 185, 129, 0.8),
+                0 0 40px rgba(59, 130, 246, 0.6),
+                0 0 60px rgba(139, 92, 246, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.5);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .days-label {
+            font-size: 1.5em;
+            margin-top: 15px;
+            opacity: 1;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(16, 185, 129, 0.6),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .time-details {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .time-unit {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .time-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 
+                0 0 15px rgba(6, 182, 212, 0.8),
+                0 0 30px rgba(59, 130, 246, 0.5),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+            min-width: fit-content;
+        }
+        
+        .time-label {
+            font-size: 0.8em;
+            opacity: 0.95;
+            margin-top: 5px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .milliseconds-display {
+            font-size: 0.7em;
+            opacity: 1;
+            color: #06b6d4;
+            animation: millisecond-pulse 0.5s ease-in-out infinite;
+            text-shadow: 
+                0 0 10px rgba(6, 182, 212, 1),
+                0 0 20px rgba(6, 182, 212, 0.6);
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+        }
+        
+        @keyframes millisecond-pulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 0.6; }
+        }
+        
+        .next-day-progress {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .next-day-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            opacity: 1;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .next-day-percentage {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1em;
+            text-shadow: 
+                0 0 15px rgba(16, 185, 129, 0.8),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+        }
+        
+        .next-day-bar {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            height: 28px;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.5),
+                0 0 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .next-day-fill {
+            background: linear-gradient(
+                90deg,
+                #10b981 0%,
+                #14f195 10%,
+                #06b6d4 20%,
+                #3b82f6 30%,
+                #6366f1 40%,
+                #8b5cf6 50%,
+                #a855f7 60%,
+                #d946ef 70%,
+                #ec4899 80%,
+                #f59e0b 90%,
+                #10b981 100%
+            );
+            background-size: 300% 100%;
+            animation: aurora-shimmer 4s linear infinite;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 
+                0 0 25px rgba(16, 185, 129, 0.9),
+                0 0 50px rgba(59, 130, 246, 0.7),
+                0 0 75px rgba(139, 92, 246, 0.5),
+                inset 0 2px 15px rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .next-day-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            animation: laser-sweep-progress 3s ease-in-out infinite;
+        }
+        
+        .next-day-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.5) 0%,
+                transparent 100%
+            );
+            border-radius: 10px 10px 0 0;
+        }
+        
+        @keyframes aurora-shimmer {
+            0% { background-position: 0% 0; }
+            100% { background-position: 300% 0; }
+        }
+        
+        @keyframes laser-sweep-progress {
+            0% { 
+                left: -100%;
+                opacity: 0;
+            }
+            20% { 
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% { 
+                left: 200%;
+                opacity: 0;
+            }
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+            padding-left: 10px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .mini-stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .mini-stat-icon {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .mini-stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #10b981;
+            margin: 5px 0;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+        
+        .mini-stat-unit {
+            font-size: 0.6em;
+            opacity: 0.8;
+        }
+        
+        .mini-stat-label {
+            font-size: 0.95em;
+            font-weight: 700;
+            opacity: 1;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mini-stat-description {
+            font-size: 0.75em;
+            opacity: 0.85;
+            line-height: 1.4;
+            margin: 8px 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .mini-stat-comparison {
+            font-size: 0.65em;
+            opacity: 0.9;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fbbf24;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .savings-goal {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .goal-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+        
+        .goal-percentage {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .goal-progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .goal-progress-fill {
+            background: linear-gradient(
+                90deg, 
+                #10b981 0%, 
+                #14f195 25%,
+                #fbbf24 50%,
+                #14f195 75%,
+                #10b981 100%
+            );
+            background-size: 200% 100%;
+            -webkit-animation: shimmer 3s linear infinite;
+            animation: shimmer 3s linear infinite;
+            height: 100%;
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-size: 0.75em;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        .goal-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+        
+        .achievement-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #1f2937;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            -webkit-animation: celebrate 0.5s ease-out;
+            animation: celebrate 0.5s ease-out;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        @-webkit-keyframes celebrate {
+            0% { -webkit-transform: scale(0.8); transform: scale(0.8); opacity: 0; }
+            50% { -webkit-transform: scale(1.1); transform: scale(1.1); }
+            100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .new-goal-btn {
+            background: rgba(251, 191, 36, 0.3);
+            border: 2px solid #fbbf24;
+            margin-top: 15px;
+            font-size: 16px;
+            padding: 12px;
+        }
+        
+        .new-goal-btn:hover {
+            background: rgba(251, 191, 36, 0.5);
+            border-color: #f59e0b;
+        }
+        
+        .new-goal-form {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .new-goal-form h3 {
+            text-align: center;
+        }
+        
+        .achievements-section {
+            margin: 30px 0;
+        }
+        
+        .achievement-item {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .achievement-item:hover {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .achievement-item.expanded {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
+        }
+        
+        .achievement-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .achievement-icon {
+            font-size: 2.5em;
+        }
+        
+        .achievement-details {
+            flex: 1;
+        }
+        
+        .achievement-name {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-info {
+            font-size: 0.9em;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        
+        .achievement-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .achievement-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn {
+            background: rgba(251, 191, 36, 0.3);
+            border: 2px solid #fbbf24;
+        }
+        
+        .edit-btn:hover {
+            background: rgba(251, 191, 36, 0.5);
+        }
+        
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #ef4444;
+        }
+        
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.5);
+        }
+        
+        .edit-name-form, .delete-confirm-section {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .edit-name-form {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .edit-name-form input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .delete-confirm-section {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .delete-confirm-section p {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* Mobile Optimization */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            header {
+                padding-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+                letter-spacing: 2px;
+            }
+            
+            .emoji {
+                font-size: 3em;
+            }
+            
+            .header-tagline {
+                font-size: 1em;
+                letter-spacing: 1px;
+            }
+            
+            .setup-screen, .main-screen {
+                padding: 20px 15px;
+            }
+            
+            .days-counter {
+                padding: 20px 15px;
+                box-shadow: 
+                    0 0 25px rgba(16, 185, 129, 0.4),
+                    0 0 50px rgba(59, 130, 246, 0.3),
+                    0 8px 32px rgba(0, 0, 0, 0.3);
+            }
+            
+            .days-number {
+                font-size: 3em;
+                text-shadow: 
+                    0 0 15px rgba(16, 185, 129, 0.8),
+                    0 0 30px rgba(59, 130, 246, 0.6),
+                    0 0 45px rgba(139, 92, 246, 0.4),
+                    0 4px 15px rgba(0, 0, 0, 0.5);
+            }
+            
+            .days-label {
+                font-size: 1em;
+            }
+            
+            .time-number {
+                font-size: 1.5em;
+                text-shadow: 
+                    0 0 12px rgba(6, 182, 212, 0.8),
+                    0 0 25px rgba(59, 130, 246, 0.5),
+                    0 2px 8px rgba(0, 0, 0, 0.5);
+            }
+            
+            .time-number {
+                font-size: 1.5em;
+            }
+            
+            .time-label {
+                font-size: 0.9em;
+            }
+            
+            .milliseconds-display {
+                font-size: 0.6em;
+            }
+            
+            .next-day-progress {
+                margin-top: 15px;
+                padding-top: 15px;
+            }
+            
+            .next-day-label {
+                font-size: 0.85em;
+            }
+            
+            .next-day-percentage {
+                font-size: 1em;
+            }
+            
+            .next-day-bar {
+                height: 16px;
+            }
+            
+            .stat-label {
+                font-size: 1em;
+            }
+            
+            .stat-value {
+                font-size: 1.8em;
+            }
+            
+            .stat-subtext {
+                font-size: 0.95em;
+            }
+            
+            .milestone {
+                padding: 20px 15px;
+            }
+            
+            .milestone h3 {
+                font-size: 1.3em;
+            }
+            
+            .milestone-text {
+                font-size: 1.15em;
+                flex-wrap: wrap;
+            }
+            
+            .milestone-icon {
+                font-size: 1.3em;
+            }
+            
+            .countdown-detailed {
+                gap: 8px;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+            }
+            
+            .countdown-block {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .countdown-value {
+                font-size: 2em;
+                min-width: 45px;
+            }
+            
+            .countdown-label {
+                font-size: 0.7em;
+            }
+            
+            .countdown-separator {
+                font-size: 1.6em;
+                margin: 0 -2px;
+                padding-bottom: 15px;
+            }
+            
+            .milestone-stat-value {
+                font-size: 1.6em;
+            }
+            
+            .milestone-stat-label {
+                font-size: 0.9em;
+            }
+            
+            .progress-bar {
+                height: 22px;
+            }
+            
+            .progress-percentage {
+                font-size: 0.8em;
+                right: 5px;
+            }
+            
+            .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .mini-stat {
+                padding: 18px 15px;
+            }
+            
+            .mini-stat-value {
+                font-size: 1.8em;
+            }
+            
+            .mini-stat-unit {
+                font-size: 0.65em;
+            }
+            
+            .mini-stat-label {
+                font-size: 1em;
+            }
+
+            .mini-stat-description {
+                font-size: 0.8em;
+            }
+
+            .mini-stat-comparison {
+                font-size: 0.8em;
+            }
+            
+            .section-title {
+                font-size: 1.15em;
+                margin: 20px 0 12px 0;
+            }
+            
+            .health-item {
+                padding: 18px 15px;
+            }
+            
+            .health-text {
+                font-size: 0.95em;
+            }
+            
+            .achievement-icon {
+                font-size: 2em;
+            }
+            
+            .achievement-name {
+                font-size: 1.15em;
+            }
+            
+            .achievement-info {
+                font-size: 0.9em;
+            }
+            
+            .goal-name {
+                font-size: 1.05em;
+            }
+            
+            .goal-percentage {
+                font-size: 1.25em;
+            }
+            
+            .goal-details {
+                font-size: 0.9em;
+            }
+        }
+        
+        @media screen and (max-width: 380px) {
+            h1 {
+                font-size: 1.9em;
+            }
+            
+            .countdown-value {
+                font-size: 1.7em;
+                min-width: 38px;
+            }
+            
+            .countdown-label {
+                font-size: 0.65em;
+            }
+            
+            .countdown-separator {
+                font-size: 1.4em;
+            }
+            
+            .milestone h3 {
+                font-size: 1.1em;
+            }
+            
+            .milestone-text {
+                font-size: 1em;
+            }
+            
+            .mini-stat-label {
+                font-size: 0.8em;
+            }
+            
+            .mini-stat-comparison {
+                font-size: 0.75em;
+            }
+        }
+
+        /* SOS Button */
+        .sos-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+            z-index: 1000;
+            animation: sos-pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .sos-button:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes sos-pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(239, 68, 68, 0.9);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: linear-gradient(135deg, #1f2f1f 0%, #2d4a2d 100%);
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: modal-enter 0.3s ease;
+        }
+
+        @keyframes modal-enter {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #ef4444;
+            margin: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Breathing Animation Section */
+        .breathing-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #3b82f6, #1d4ed8);
+            animation: breathe 12s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+                background: radial-gradient(circle, #3b82f6, #1d4ed8);
+            }
+            33% {
+                transform: scale(1.3);
+                background: radial-gradient(circle, #10b981, #059669);
+            }
+            50% {
+                transform: scale(1.3);
+                background: radial-gradient(circle, #10b981, #059669);
+            }
+            83% {
+                transform: scale(1);
+                background: radial-gradient(circle, #06b6d4, #0891b2);
+            }
+        }
+
+        .breathing-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #10b981;
+        }
+
+        .timer-text {
+            font-size: 3em;
+            font-weight: 700;
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        /* Motivational Quote */
+        .quote-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .quote-text {
+            font-size: 1.1em;
+            font-style: italic;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 15px;
+        }
+
+        .quote-refresh {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .quote-refresh:hover {
+            background: rgba(16, 185, 129, 0.3);
+            transform: rotate(180deg);
+        }
+
+        /* Success Button */
+        .success-button {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .success-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.6);
+        }
+
+        /* Craving Stats Card */
+        .craving-stats {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .craving-stats-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .craving-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .craving-stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .craving-stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #10b981;
+            display: block;
+        }
+
+        .craving-stat-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sos-button {
+                bottom: 20px;
+                right: 50%;
+                transform: translateX(50%);
+                width: 90%;
+                max-width: 300px;
+            }
+
+            .sos-button:hover {
+                transform: translateX(50%) scale(1.05);
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-title {
+                font-size: 1.5em;
+            }
+
+            .breathing-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .timer-text {
+                font-size: 2.5em;
+            }
+
+            .craving-stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            <div class="emoji">🚭</div>
+            <h1>SMOKE FREE</h1>
+            <div class="header-tagline">Il tuo viaggio verso la libertà</div>
+        </header>
+
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setupScreen">
+            <h2>Inizia il tuo viaggio</h2>
+            <form id="setupForm">
+            <div id="setupFormContainer">
+                <div class="form-group">
+                    <label for="quitDate">Data in cui hai smesso:</label>
+                    <input type="date" id="quitDate" required max="">
+                </div>
+                <div class="form-group">
+                    <label for="quitTime">Ora:</label>
+                    <input type="time" id="quitTime" value="00:00" required>
+                </div>
+                <div class="form-group">
+                    <label for="cigarettesPerDay">Sigarette al giorno (prima):</label>
+                    <input type="number" id="cigarettesPerDay" min="1" placeholder="es. 20" required>
+                </div>
+                <div class="form-group">
+                    <label for="packCost">Costo pacchetto (€):</label>
+                    <input type="number" id="packCost" step="0.01" min="0" placeholder="es. 6.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="cigarettesPerPack">Sigarette per pacchetto:</label>
+                    <input type="number" id="cigarettesPerPack" value="20" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="minutesPerCigarette">Minuti per fumare una sigaretta:</label>
+                    <input type="number" id="minutesPerCigarette" value="5" min="1" max="30" step="0.5" required>
+                </div>
+                <div class="form-group">
+                    <label for="savingsGoal">🎯 Obiettivo di risparmio (opzionale):</label>
+                    <input type="text" id="savingsGoalName" placeholder="es. Orologio, Vacanza...">
+                </div>
+                <div class="form-group">
+                    <label for="savingsGoalAmount">Importo obiettivo (€):</label>
+                    <input type="number" id="savingsGoalAmount" step="0.01" min="0" placeholder="es. 500.00">
+                </div>
+                <button type="submit">Inizia 🚀</button>
+            </div>
+            </form>
+        </div>
+
+        <!-- Main Screen -->
+        <div class="main-screen hidden" id="mainScreen">
+            <!-- Edit Section -->
+            <div class="edit-section">
+                <button class="edit-toggle" onclick="toggleEdit()">⚙️ Modifica dati iniziali</button>
+                <div class="edit-form hidden" id="editForm">
+                    <div class="form-group">
+                        <label for="editQuitDate">Data in cui hai smesso:</label>
+                        <input type="date" id="editQuitDate" max="">
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuitTime">Ora:</label>
+                        <input type="time" id="editQuitTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCigarettesPerDay">Sigarette al giorno (prima):</label>
+                        <input type="number" id="editCigarettesPerDay" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPackCost">Costo pacchetto (€):</label>
+                        <input type="number" id="editPackCost" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCigarettesPerPack">Sigarette per pacchetto:</label>
+                        <input type="number" id="editCigarettesPerPack" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editMinutesPerCigarette">Minuti per fumare una sigaretta:</label>
+                        <input type="number" id="editMinutesPerCigarette" min="1" max="30" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSavingsGoalName">🎯 Obiettivo di risparmio:</label>
+                        <input type="text" id="editSavingsGoalName" placeholder="es. Orologio, Vacanza...">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSavingsGoalAmount">Importo obiettivo (€):</label>
+                        <input type="number" id="editSavingsGoalAmount" step="0.01" min="0">
+                    </div>
+                    <button onclick="saveEdit()">💾 Salva modifiche</button>
+                </div>
+            </div>
+            
+            <!-- Timer Counter -->
+            <div class="days-counter">
+                <div class="days-number" id="daysCounter">0</div>
+                <div class="days-label">giorni senza fumare</div>
+                <div class="time-details">
+                    <div class="time-unit">
+                        <div class="time-number" id="hoursCounter">00</div>
+                        <div class="time-label">ore</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number" id="minutesCounter">00</div>
+                        <div class="time-label">minuti</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number">
+                            <span id="secondsCounter">00</span><span class="milliseconds-display">.000</span>
+                        </div>
+                        <div class="time-label">secondi</div>
+                    </div>
+                </div>
+                
+                <!-- Progress bar verso prossimo giorno -->
+                <div class="next-day-progress">
+                    <div class="next-day-label">
+                        <span>Verso giorno <span id="nextDayNumber">1</span></span>
+                        <span class="next-day-percentage" id="nextDayPercentage">0.0%</span>
+                    </div>
+                    <div class="next-day-bar">
+                        <div class="next-day-fill" id="nextDayFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stat-card">
+                <div class="stat-label">💰 Denaro risparmiato <span class="live-indicator"></span></div>
+                <div class="stat-value">€<span id="moneySaved">0.00000</span></div>
+                <div class="stat-subtext">
+                    Stai risparmiando:<br>
+                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> • 
+                    €<span id="savingsPerHour">0.00</span>/ora • 
+                    €<span id="savingsPerMinute">0.000</span>/min • 
+                    €<span id="savingsPerSecond">0.00000</span>/sec
+                </div>
+                
+                <!-- Savings Goal Progress -->
+                <div class="savings-goal hidden" id="savingsGoalSection">
+                    <div class="goal-header">
+                        <div class="goal-name">🎯 <span id="goalNameDisplay">Obiettivo</span></div>
+                        <div class="goal-percentage"><span id="goalPercentage">0</span>%</div>
+                    </div>
+                    
+                    <!-- Achievement Badge (shown when 100% reached) -->
+                    <div class="achievement-badge hidden" id="achievementBadge">
+                        🎉 OBIETTIVO RAGGIUNTO! 🎉
+                    </div>
+                    
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" id="goalProgressFill"></div>
+                    </div>
+                    <div class="goal-details">
+                        <span>Risparmiato: €<span id="goalCurrentAmount">0</span></span>
+                        <span>Obiettivo: €<span id="goalTargetAmount">0</span></span>
+                    </div>
+                    <div class="goal-details" style="margin-top: 5px;">
+                        <span style="color: #fbbf24; font-weight: 600;" id="goalRemainingText">Mancano: €<span id="goalRemainingAmount">0</span></span>
+                    </div>
+                    
+                    <!-- New Goal Button (shown when goal is completed) -->
+                    <button class="new-goal-btn hidden" id="newGoalBtn" onclick="showNewGoalForm()">🎯 Imposta nuovo obiettivo</button>
+                    
+                    <!-- New Goal Form (shown when button is clicked) -->
+                    <div class="new-goal-form hidden" id="newGoalForm">
+                        <h3 style="margin-bottom: 15px; color: #fbbf24;">🎯 Nuovo Obiettivo</h3>
+                        <div class="form-group">
+                            <label for="newGoalName">Nome obiettivo:</label>
+                            <input type="text" id="newGoalName" placeholder="es. Nuovo orologio, Vacanza...">
+                        </div>
+                        <div class="form-group">
+                            <label for="newGoalAmount">Importo (€):</label>
+                            <input type="number" id="newGoalAmount" step="0.01" min="0" placeholder="es. 500.00">
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="saveNewGoal()" style="flex: 1;">💾 Salva</button>
+                            <button onclick="cancelNewGoal()" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">🚬 Sigarette NON fumate <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="cigarettesAvoided">0.00000</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">⏱️ Tempo guadagnato <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="timeGainedDisplay">0h 0m 0s</span></div>
+                <div class="stat-subtext">
+                    Tempo che avresti speso fumando (<span id="minutesPerCigDisplay">5</span> min/sigaretta)
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">❤️ Giorni di vita guadagnati <span class="live-indicator"></span></div>
+                <div class="stat-value"><span id="lifeDays">0.0000</span> <span class="stat-unit">giorni</span></div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div class="achievements-section hidden" id="achievementsSection">
+                <div class="section-title">🏆 Obiettivi Raggiunti</div>
+                <div id="achievementsList"></div>
+            </div>
+
+            <!-- Craving Stats Card -->
+            <div class="craving-stats">
+                <div class="craving-stats-title">
+                    🔥 Crisi Superate
+                </div>
+                <div class="craving-stats-grid">
+                    <div class="craving-stat-item">
+                        <span class="craving-stat-value" id="cravingsResisted">0</span>
+                        <div class="craving-stat-label">Crisi superate</div>
+                    </div>
+                    <div class="craving-stat-item">
+                        <span class="craving-stat-value" id="lastCraving">-</span>
+                        <div class="craving-stat-label">Ultima crisi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Health Metrics -->
+            <div class="section-title">📊 Metriche Salute Avanzate</div>
+            <div class="grid-2">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🚫</div>
+                    <div class="mini-stat-label">Nicotina</div>
+                    <div class="mini-stat-description">Sostanza che crea dipendenza fisica e psicologica.</div>
+                    <div class="mini-stat-value">
+                        <span id="nicotineAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">mg</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
+                    <div class="mini-stat-comparison" id="nicotineComparison">0% dose letale evitata</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🫁</div>
+                    <div class="mini-stat-label">Catrame</div>
+                    <div class="mini-stat-description">Si deposita nei polmoni riducendo la capacità respiratoria.</div>
+                    <div class="mini-stat-value">
+                        <span id="tarAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">g</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
+                    <div class="mini-stat-comparison" id="tarComparison">0 cm² di asfalto</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">💨</div>
+                    <div class="mini-stat-label">CO (Monossido di Carbonio)</div>
+                    <div class="mini-stat-description">Gas tossico che riduce l'ossigeno nel sangue.</div>
+                    <div class="mini-stat-value">
+                        <span id="coAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">g</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
+                    <div class="mini-stat-comparison" id="coComparison">0 min in garage con motore acceso</div>
+                </div>
+            </div>
+            
+            <div class="section-title">☢️ Sostanze Pericolose <span class="live-indicator"></span></div>
+            <div class="grid-2">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">☢️</div>
+                    <div class="mini-stat-label">Polonio-210</div>
+                    <div class="mini-stat-description">Elemento radioattivo altamente cancerogeno.</div>
+                    <div class="mini-stat-value">
+                        <span id="poloniumAvoided">0.00000</span><br>
+                        <span class="mini-stat-unit">pCi</span>
+                    </div>
+                    <div class="mini-stat-comparison" id="poloniumComparison">Equivalente a 0 radiografie</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">🧪</div>
+                    <div class="mini-stat-label">Benzene</div>
+                    <div class="mini-stat-description">Sostanza chimica che aumenta il rischio di leucemia.</div>
+                    <div class="mini-stat-value">
+                        <span id="benzeneAvoided">0.000</span><br>
+                        <span class="mini-stat-unit">μg</span>
+                    </div>
+                    <div class="mini-stat-comparison" id="benzeneComparison">Limite sicurezza: 0x</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">⚠️</div>
+                    <div class="mini-stat-label">Arsenico</div>
+                    <div class="mini-stat-description">Veleno che danneggia organi e DNA cellulare.</div>
+                    <div class="mini-stat-value">
+                        <span id="arsenicAvoided">0.0000</span><br>
+                        <span class="mini-stat-unit">μg</span>
+                    </div>
+                    <div class="mini-stat-comparison" id="arsenicComparison">0% dose letale evitata</div>
+                </div>
+            </div>
+            
+            <div class="grid-3">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon">💗</div>
+                    <div class="mini-stat-value">
+                        <span id="heartbeats">0</span>
+                        <span class="live-indicator" style="width: 6px; height: 6px; margin-left: 3px;"></span>
+                    </div>
+                    <div class="mini-stat-label">Battiti risparmiati</div>
+                </div>
+            </div>
+
+            <!-- Next Milestone -->
+            <div class="milestone" id="milestoneCard">
+                <div class="milestone-content">
+                    <h3>🎯 Prossimo traguardo</h3>
+                    <div class="milestone-text" id="milestoneText">
+                        <span class="milestone-icon">🎯</span>
+                        <span>24 ore senza fumare</span>
+                    </div>
+                    <div class="milestone-stats" id="milestoneStats">
+                        <div class="milestone-stat" id="timeRemainingContainer" style="flex: 1; max-width: 100%;">
+                            <span class="milestone-stat-value" id="daysToMilestone">1</span>
+                            <span class="milestone-stat-label" id="daysToMilestoneLabel">giorni mancanti</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="milestoneProgress"></div>
+                        <div class="progress-percentage" id="milestoneProgressText">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Benefits -->
+            <div class="health-section">
+                <h2 style="margin-bottom: 15px;">💚 Benefici per la salute</h2>
+                <div id="healthBenefits"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOS Button -->
+    <button class="sos-button" id="sosButton" onclick="openSOSModal()">
+        🆘 AIUTO!<br>
+        <span style="font-size: 0.7em;">Ho voglia di fumare</span>
+    </button>
+
+    <!-- SOS Modal -->
+    <div class="modal-overlay" id="sosModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🛑 FERMATI UN ATTIMO!</h2>
+                <button class="modal-close" onclick="closeSOSModal()">×</button>
+            </div>
+
+            <!-- Breathing Section -->
+            <div class="breathing-section">
+                <div class="breathing-circle"></div>
+                <div class="breathing-text" id="breathingText">RESPIRA</div>
+                <div class="timer-text" id="sosTimer">3:00</div>
+            </div>
+
+            <!-- Motivational Quote -->
+            <div class="quote-section">
+                <div class="quote-icon">💬</div>
+                <div class="quote-text" id="quoteText">Ogni momento senza fumare è una vittoria.</div>
+                <button class="quote-refresh" onclick="changeQuote()">Cambia frase ↻</button>
+            </div>
+
+            <!-- Success Button -->
+            <button class="success-button" onclick="resistedCraving()">✅ CE L'HO FATTA!</button>
+        </div>
+    </div>
+
+    <script>
+        const healthTimeline = [
+            { days: 0.02, icon: '🫀', title: '20 minuti', text: 'Frequenza cardiaca e pressione tornano normali' },
+            { days: 0.5, icon: '💨', title: '12 ore', text: 'Livelli di CO nel sangue normalizzati' },
+            { days: 1, icon: '👃', title: '24 ore', text: 'Gusto e olfatto migliorano' },
+            { days: 2, icon: '⚡', title: '48 ore', text: 'Terminazioni nervose ricrescono, più energia' },
+            { days: 7, icon: '🏃', title: '1 settimana', text: 'Respirazione più facile, resistenza aumenta' },
+            { days: 30, icon: '🫀', title: '1 mese', text: 'Circolazione migliora, polmoni più efficienti' },
+            { days: 90, icon: '💪', title: '3 mesi', text: 'Funzione polmonare aumenta del 30%' },
+            { days: 180, icon: '😊', title: '6 mesi', text: 'Tosse e affanno ridotti drasticamente' },
+            { days: 365, icon: '❤️', title: '1 anno', text: 'Rischio infarto dimezzato' },
+            { days: 1825, icon: '🎉', title: '5 anni', text: 'Rischio ictus pari a non fumatore' },
+        ];
+
+        const milestones = [
+            { days: 1, text: '24 ore senza fumare! 🎯' },
+            { days: 3, text: '3 giorni - Nicotina eliminata! 💪' },
+            { days: 7, text: '1 settimana completa! 🌟' },
+            { days: 14, text: '2 settimane - Grande risultato! 🚀' },
+            { days: 30, text: '1 mese - Sei un campione! 🏆' },
+            { days: 90, text: '3 mesi - Incredibile! 🎊' },
+            { days: 180, text: '6 mesi - Straordinario! 🌈' },
+            { days: 365, text: '1 ANNO - LEGGENDA! 👑' },
+        ];
+
+        let updateInterval;
+
+        function setMaxDateToToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('quitDate').setAttribute('max', today);
+            document.getElementById('editQuitDate').setAttribute('max', today);
+        }
+
+        function validateDateNotFuture(input) {
+            const selectedDate = new Date(input.value);
+            const today = new Date();
+            today.setHours(23, 59, 59, 999);
+            
+            if (selectedDate > today) {
+                alert('⚠️ La data non può essere nel futuro! Inserisci la data in cui hai effettivamente smesso di fumare.');
+                input.value = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function loadData() {
+            setMaxDateToToday();
+            
+            document.getElementById('quitDate').addEventListener('change', function() {
+                validateDateNotFuture(this);
+            });
+            
+            document.getElementById('editQuitDate').addEventListener('change', function() {
+                validateDateNotFuture(this);
+            });
+            
+            const data = localStorage.getItem('smokeFreeData');
+            if (data) {
+                const parsedData = JSON.parse(data);
+                document.getElementById('setupScreen').classList.add('hidden');
+                document.getElementById('mainScreen').classList.remove('hidden');
+                updateStats();
+                displayAchievements();
+                updateInterval = setInterval(() => updateStats(), 100);
+            } else {
+                const now = new Date();
+                document.getElementById('quitDate').valueAsDate = now;
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('quitTime').value = hours + ':' + minutes;
+            }
+        }
+
+        function submitSetupForm() {
+            const dateValue = document.getElementById('quitDate').value;
+            const timeValue = document.getElementById('quitTime').value;
+            
+            if (!dateValue || !timeValue) {
+                alert('Per favore compila tutti i campi');
+                return;
+            }
+            
+            const quitDateTime = new Date(dateValue + 'T' + timeValue);
+            const now = new Date();
+            
+            if (quitDateTime > now) {
+                alert('⚠️ La data non può essere nel futuro! Inserisci la data in cui hai effettivamente smesso di fumare.');
+                return;
+            }
+            
+            const data = {
+                quitDateTime: quitDateTime.toISOString(),
+                cigarettesPerDay: parseInt(document.getElementById('cigarettesPerDay').value),
+                packCost: parseFloat(document.getElementById('packCost').value),
+                cigarettesPerPack: parseInt(document.getElementById('cigarettesPerPack').value),
+                minutesPerCigarette: parseFloat(document.getElementById('minutesPerCigarette').value) || 5,
+                savingsGoalName: document.getElementById('savingsGoalName').value || '',
+                savingsGoalAmount: parseFloat(document.getElementById('savingsGoalAmount').value) || 0
+            };
+            
+            localStorage.setItem('smokeFreeData', JSON.stringify(data));
+            
+            document.getElementById('setupScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+            
+            updateStats();
+            displayAchievements();
+            updateInterval = setInterval(() => updateStats(), 100);
+        }
+
+        function updateStats() {
+            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            if (!data) return;
+            
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+            const now = new Date();
+            const diffMs = now - quitDate;
+            
+            if (diffMs < 0) {
+                alert('La data di inizio è nel futuro! Correggi i dati.');
+                return;
+            }
+            
+            const diffDays = diffMs / (1000 * 60 * 60 * 24);
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const days = Math.floor(totalSeconds / (24 * 60 * 60));
+            const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+            const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+            const seconds = totalSeconds % 60;
+            const milliseconds = Math.floor((diffMs % 1000));
+
+            document.getElementById('daysCounter').textContent = days;
+            document.getElementById('hoursCounter').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutesCounter').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('secondsCounter').textContent = String(seconds).padStart(2, '0');
+            
+            // Update millisecondi
+            const millisecondsDisplay = document.querySelector('.milliseconds-display');
+            if (millisecondsDisplay) {
+                millisecondsDisplay.textContent = '.' + String(milliseconds).padStart(3, '0');
+            }
+            
+            // Update progress bar verso prossimo giorno
+            const dayProgress = ((diffMs % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * 100;
+            const nextDay = days + 1;
+            document.getElementById('nextDayNumber').textContent = nextDay;
+            document.getElementById('nextDayPercentage').textContent = dayProgress.toFixed(4) + '%';
+            document.getElementById('nextDayFill').style.width = dayProgress + '%';
+
+            const costPerCigarette = data.packCost / data.cigarettesPerPack;
+            const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
+            const moneySaved = cigarettesAvoidedPrecise * costPerCigarette;
+            document.getElementById('moneySaved').textContent = moneySaved.toFixed(5);
+            
+            const savingsPerDay = (data.cigarettesPerDay * costPerCigarette);
+            const savingsPerHour = (savingsPerDay / 24);
+            const savingsPerMinute = (savingsPerHour / 60);
+            const savingsPerSecond = (savingsPerMinute / 60);
+            
+            document.getElementById('savingsPerDay').textContent = savingsPerDay.toFixed(2);
+            document.getElementById('savingsPerHour').textContent = savingsPerHour.toFixed(2);
+            document.getElementById('savingsPerMinute').textContent = savingsPerMinute.toFixed(3);
+            document.getElementById('savingsPerSecond').textContent = savingsPerSecond.toFixed(5);
+
+            if (data.savingsGoalName && data.savingsGoalAmount > 0) {
+                document.getElementById('savingsGoalSection').classList.remove('hidden');
+                document.getElementById('goalNameDisplay').textContent = data.savingsGoalName;
+                document.getElementById('goalTargetAmount').textContent = data.savingsGoalAmount.toFixed(2);
+                document.getElementById('goalCurrentAmount').textContent = moneySaved.toFixed(2);
+                
+                const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
+                
+                const percentage = Math.min(150, (moneySaved / data.savingsGoalAmount) * 100);
+                document.getElementById('goalPercentage').textContent = percentage.toFixed(5);
+                document.getElementById('goalProgressFill').style.width = Math.min(100, percentage) + '%';
+                
+                if (percentage >= 100) {
+                    document.getElementById('achievementBadge').classList.remove('hidden');
+                    document.getElementById('newGoalBtn').classList.remove('hidden');
+                    
+                    const exceeded = moneySaved - data.savingsGoalAmount;
+                    document.getElementById('goalRemainingText').innerHTML = 
+                        `<span style="color: #10b981; font-weight: 600;">Superato di: €<span id="goalRemainingAmount">${exceeded.toFixed(2)}</span></span>`;
+                    
+                    saveAchievement(data, moneySaved, diffDays);
+                } else {
+                    document.getElementById('achievementBadge').classList.add('hidden');
+                    document.getElementById('newGoalBtn').classList.add('hidden');
+                    
+                    document.getElementById('goalRemainingAmount').textContent = remaining.toFixed(2);
+                    document.getElementById('goalRemainingText').innerHTML = 
+                        `<span style="color: #fbbf24; font-weight: 600;">Mancano: €<span id="goalRemainingAmount">${remaining.toFixed(2)}</span></span>`;
+                }
+            } else {
+                document.getElementById('savingsGoalSection').classList.add('hidden');
+            }
+
+            const cigarettesAvoidedLive = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
+            document.getElementById('cigarettesAvoided').textContent = cigarettesAvoidedLive.toFixed(5);
+
+            const cigarettesAvoidedRounded = Math.floor(cigarettesAvoidedLive);
+
+            const minutesPerCig = data.minutesPerCigarette || 5;
+            const secondsInDay = 24 * 60 * 60;
+            const cigarettesPerSecond = data.cigarettesPerDay / secondsInDay;
+            const secondsPerCig = minutesPerCig * 60;
+            
+            const totalSecondsGainedPrecise = totalSeconds * cigarettesPerSecond * secondsPerCig;
+            
+            const hoursGained = Math.floor(totalSecondsGainedPrecise / 3600);
+            const minutesGainedRemainder = Math.floor((totalSecondsGainedPrecise % 3600) / 60);
+            const secondsGainedRemainder = Math.floor(totalSecondsGainedPrecise % 60);
+            
+            document.getElementById('timeGainedDisplay').textContent = 
+                `${hoursGained}h ${minutesGainedRemainder}m ${secondsGainedRemainder}s`;
+            document.getElementById('minutesPerCigDisplay').textContent = minutesPerCig;
+
+            const lifeMinutesGained = cigarettesAvoidedLive * 11;
+            const lifeDaysGained = lifeMinutesGained / (60 * 24);
+            document.getElementById('lifeDays').textContent = lifeDaysGained.toFixed(4);
+
+            const nicotineAvoided = cigarettesAvoidedLive * 1;
+            document.getElementById('nicotineAvoided').textContent = nicotineAvoided.toFixed(5);
+            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(3);
+            document.getElementById('nicotineComparison').textContent = 
+                `${nicotinePercent}% dose letale evitata (750mg)`;
+            
+            const tarAvoided = cigarettesAvoidedLive * 0.01;
+            document.getElementById('tarAvoided').textContent = tarAvoided.toFixed(5);
+            const asphaltArea = (tarAvoided * 10).toFixed(2);
+            document.getElementById('tarComparison').textContent = 
+                `Come spalmare ${asphaltArea} cm² di asfalto nei polmoni`;
+            
+            const coAvoided = (cigarettesAvoidedLive * 0.014);
+            document.getElementById('coAvoided').textContent = coAvoided.toFixed(5);
+            const garageMinutes = (cigarettesAvoidedLive * 0.5).toFixed(1);
+            document.getElementById('coComparison').textContent = 
+                `Come ${garageMinutes} min in garage con motore acceso`;
+            
+            const poloniumAvoided = cigarettesAvoidedLive * 0.04;
+            document.getElementById('poloniumAvoided').textContent = poloniumAvoided.toFixed(5);
+            const xraysEquivalent = (poloniumAvoided * 0.65).toFixed(1);
+            document.getElementById('poloniumComparison').textContent = 
+                `Equivalente a ${xraysEquivalent} radiografie al torace`;
+            
+            const benzeneAvoided = cigarettesAvoidedLive * 100;
+            document.getElementById('benzeneAvoided').textContent = benzeneAvoided.toFixed(3);
+            const benzeneMultiple = (benzeneAvoided / 25000).toFixed(2);
+            document.getElementById('benzeneComparison').textContent = 
+                `Limite sicurezza superato ${benzeneMultiple}x`;
+            
+            const arsenicAvoided = cigarettesAvoidedLive * 1;
+            document.getElementById('arsenicAvoided').textContent = arsenicAvoided.toFixed(4);
+            const arsenicPercent = ((arsenicAvoided / 150000) * 100).toFixed(2);
+            document.getElementById('arsenicComparison').textContent = 
+                `${arsenicPercent}% dose letale evitata`;
+            
+            const heartbeatsSaved = Math.floor(cigarettesAvoidedLive * 450).toLocaleString('it-IT');
+            document.getElementById('heartbeats').textContent = heartbeatsSaved;
+
+            updateMilestone(diffDays);
+            updateHealthBenefits(diffDays);
+        }
+
+        function updateMilestone(days) {
+            let nextMilestone = milestones.find(m => m.days > days);
+            
+            if (nextMilestone) {
+                const previousMilestone = milestones[milestones.indexOf(nextMilestone) - 1];
+                const prevDays = previousMilestone ? previousMilestone.days : 0;
+                const progress = ((days - prevDays) / (nextMilestone.days - prevDays)) * 100;
+                const progressRounded = Math.min(100, Math.round(progress));
+                
+                const textParts = nextMilestone.text.split(' ');
+                const emoji = textParts[textParts.length - 1];
+                const textWithoutEmoji = textParts.slice(0, -1).join(' ');
+                
+                document.getElementById('milestoneText').innerHTML = `
+                    <span class="milestone-icon">${emoji}</span>
+                    <span>${textWithoutEmoji}</span>
+                `;
+                
+                const daysRemaining = nextMilestone.days - days;
+                const totalSecondsRemaining = daysRemaining * 24 * 60 * 60;
+                
+                const daysRemainingFloor = Math.floor(daysRemaining);
+                const hoursRemaining = Math.floor((daysRemaining - daysRemainingFloor) * 24);
+                const minutesRemaining = Math.floor(((daysRemaining - daysRemainingFloor) * 24 - hoursRemaining) * 60);
+                const secondsRemaining = Math.floor((((daysRemaining - daysRemainingFloor) * 24 - hoursRemaining) * 60 - minutesRemaining) * 60);
+                
+                const timeContainer = document.getElementById('daysToMilestone');
+                const labelContainer = document.getElementById('daysToMilestoneLabel');
+                
+                if (daysRemaining < 7) {
+                    timeContainer.innerHTML = `
+                        <div class="countdown-detailed">
+                            <div class="countdown-block">
+                                <div class="countdown-value">${String(daysRemainingFloor).padStart(2, '0')}</div>
+                                <div class="countdown-label">giorni</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-block">
+                                <div class="countdown-value">${String(hoursRemaining).padStart(2, '0')}</div>
+                                <div class="countdown-label">ore</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-block">
+                                <div class="countdown-value">${String(minutesRemaining).padStart(2, '0')}</div>
+                                <div class="countdown-label">minuti</div>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-block">
+                                <div class="countdown-value">${String(secondsRemaining).padStart(2, '0')}</div>
+                                <div class="countdown-label">secondi</div>
+                            </div>
+                        </div>
+                    `;
+                    labelContainer.style.display = 'none';
+                } else {
+                    timeContainer.textContent = Math.ceil(daysRemaining);
+                    labelContainer.textContent = 'giorni mancanti';
+                    labelContainer.style.display = 'block';
+                }
+                
+                document.getElementById('milestoneProgress').style.width = progress + '%';
+                document.getElementById('milestoneProgressText').textContent = progressRounded + '%';
+                
+                document.getElementById('milestoneCard').classList.remove('milestone-completed');
+            } else {
+                document.getElementById('milestoneCard').classList.add('milestone-completed');
+                document.getElementById('milestoneCard').innerHTML = `
+                    <div class="milestone-content">
+                        <h3>🏆 HAI COMPLETATO TUTTI I TRAGUARDI! 🏆</h3>
+                        <div class="milestone-text">
+                            <span class="milestone-icon" style="font-size: 3em;">👑</span>
+                        </div>
+                        <p style="font-size: 1.2em; margin-top: 15px;">Continua così, sei inarrestabile!</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                            <div class="progress-percentage">100%</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateHealthBenefits(days) {
+            const container = document.getElementById('healthBenefits');
+            container.innerHTML = '';
+            
+            const relevantBenefits = healthTimeline.filter(h => h.days <= days);
+            const upcoming = healthTimeline.find(h => h.days > days);
+            
+            relevantBenefits.slice(-3).reverse().forEach(benefit => {
+                const div = document.createElement('div');
+                div.className = 'health-item';
+                div.innerHTML = `
+                    <div class="health-icon">${benefit.icon}</div>
+                    <div class="health-text">
+                        <strong>${benefit.title}</strong>
+                        ${benefit.text}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            if (upcoming) {
+                const div = document.createElement('div');
+                div.className = 'health-item';
+                div.style.opacity = '0.6';
+                div.innerHTML = `
+                    <div class="health-icon">${upcoming.icon}</div>
+                    <div class="health-text">
+                        <strong>Prossimo: ${upcoming.title}</strong>
+                        ${upcoming.text}
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function toggleEdit() {
+            const editForm = document.getElementById('editForm');
+            const isHidden = editForm.classList.contains('hidden');
+            
+            if (isHidden) {
+                setMaxDateToToday();
+                const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+                
+                if (data.quitDateTime) {
+                    const dt = new Date(data.quitDateTime);
+                    document.getElementById('editQuitDate').value = dt.toISOString().split('T')[0];
+                    const hours = String(dt.getHours()).padStart(2, '0');
+                    const minutes = String(dt.getMinutes()).padStart(2, '0');
+                    document.getElementById('editQuitTime').value = hours + ':' + minutes;
+                } else {
+                    document.getElementById('editQuitDate').value = data.quitDate;
+                    document.getElementById('editQuitTime').value = '00:00';
+                }
+                
+                document.getElementById('editCigarettesPerDay').value = data.cigarettesPerDay;
+                document.getElementById('editPackCost').value = data.packCost;
+                document.getElementById('editCigarettesPerPack').value = data.cigarettesPerPack;
+                document.getElementById('editMinutesPerCigarette').value = data.minutesPerCigarette || 5;
+                document.getElementById('editSavingsGoalName').value = data.savingsGoalName || '';
+                document.getElementById('editSavingsGoalAmount').value = data.savingsGoalAmount || '';
+                editForm.classList.remove('hidden');
+            } else {
+                editForm.classList.add('hidden');
+            }
+        }
+
+        function saveEdit() {
+            const dateValue = document.getElementById('editQuitDate').value;
+            const timeValue = document.getElementById('editQuitTime').value;
+            const quitDateTime = new Date(dateValue + 'T' + timeValue);
+            const now = new Date();
+            
+            if (quitDateTime > now) {
+                alert('⚠️ La data non può essere nel futuro! Inserisci la data in cui hai effettivamente smesso di fumare.');
+                return;
+            }
+            
+            const data = {
+                quitDateTime: quitDateTime.toISOString(),
+                cigarettesPerDay: parseInt(document.getElementById('editCigarettesPerDay').value),
+                packCost: parseFloat(document.getElementById('editPackCost').value),
+                cigarettesPerPack: parseInt(document.getElementById('editCigarettesPerPack').value),
+                minutesPerCigarette: parseFloat(document.getElementById('editMinutesPerCigarette').value),
+                savingsGoalName: document.getElementById('editSavingsGoalName').value || '',
+                savingsGoalAmount: parseFloat(document.getElementById('editSavingsGoalAmount').value) || 0
+            };
+            
+            localStorage.setItem('smokeFreeData', JSON.stringify(data));
+            
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            
+            document.getElementById('editForm').classList.add('hidden');
+            updateStats();
+            displayAchievements();
+            
+            updateInterval = setInterval(() => updateStats(), 100);
+            
+            alert('✅ Dati aggiornati con successo!');
+        }
+
+        function saveAchievement(data, moneySaved, daysElapsed) {
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+            
+            const alreadyExists = achievements.some(ach => 
+                ach.name === data.savingsGoalName && ach.amount === data.savingsGoalAmount
+            );
+            
+            if (!alreadyExists) {
+                const achievement = {
+                    name: data.savingsGoalName,
+                    amount: data.savingsGoalAmount,
+                    completedDate: new Date().toISOString(),
+                    daysToComplete: Math.floor(daysElapsed)
+                };
+                
+                achievements.push(achievement);
+                localStorage.setItem('achievements', JSON.stringify(achievements));
+            }
+        }
+
+        function displayAchievements() {
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+            
+            if (achievements.length === 0) {
+                document.getElementById('achievementsSection').classList.add('hidden');
+                return;
+            }
+            
+            document.getElementById('achievementsSection').classList.remove('hidden');
+            const container = document.getElementById('achievementsList');
+            container.innerHTML = '';
+            
+            achievements.sort((a, b) => new Date(b.completedDate) - new Date(a.completedDate));
+            
+            achievements.forEach((ach, index) => {
+                const date = new Date(ach.completedDate);
+                const formattedDate = date.toLocaleDateString('it-IT', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric' 
+                });
+                
+                const div = document.createElement('div');
+                div.className = 'achievement-item';
+                div.id = `ach-${index}`;
+                div.innerHTML = `
+                    <div class="achievement-content">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-details">
+                            <div class="achievement-name">${ach.name}</div>
+                            <div class="achievement-info">
+                                💰 €${ach.amount.toFixed(2)} risparmiati<br>
+                                📅 Raggiunto il ${formattedDate} (dopo ${ach.daysToComplete} giorni)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-buttons hidden" id="buttons-${index}">
+                        <button class="edit-btn" id="edit-btn-${index}">✏️ Modifica nome</button>
+                        <button class="delete-btn" id="delete-btn-${index}">🗑️ Elimina</button>
+                    </div>
+                    
+                    <div class="edit-name-form hidden" id="edit-form-${index}">
+                        <input type="text" id="edit-input-${index}" value="${ach.name}">
+                        <div style="display: flex; gap: 10px;">
+                            <button id="save-edit-${index}" style="flex: 1;">💾 Salva</button>
+                            <button id="cancel-edit-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
+                        </div>
+                    </div>
+                    
+                    <div class="delete-confirm-section hidden" id="delete-confirm-${index}">
+                        <p>⚠️ Sei sicuro di voler eliminare questo obiettivo?</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="confirm-delete-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.5); border: 2px solid #ef4444;">✅ Sì, elimina</button>
+                            <button id="cancel-delete-${index}" style="flex: 1; background: rgba(16, 185, 129, 0.3); border: 2px solid #10b981;">❌ No, annulla</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+                
+                const achievementItem = document.getElementById(`ach-${index}`);
+                const buttonsDiv = document.getElementById(`buttons-${index}`);
+                const editForm = document.getElementById(`edit-form-${index}`);
+                const deleteConfirm = document.getElementById(`delete-confirm-${index}`);
+                
+                achievementItem.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
+                        return;
+                    }
+                    
+                    document.querySelectorAll('.achievement-item').forEach((item, i) => {
+                        if (i !== index) {
+                            item.classList.remove('expanded');
+                            document.getElementById(`buttons-${i}`).classList.add('hidden');
+                            document.getElementById(`edit-form-${i}`).classList.add('hidden');
+                            document.getElementById(`delete-confirm-${i}`).classList.add('hidden');
+                        }
+                    });
+                    
+                    if (buttonsDiv.classList.contains('hidden')) {
+                        achievementItem.classList.add('expanded');
+                        buttonsDiv.classList.remove('hidden');
+                        editForm.classList.add('hidden');
+                        deleteConfirm.classList.add('hidden');
+                    } else {
+                        achievementItem.classList.remove('expanded');
+                        buttonsDiv.classList.add('hidden');
+                        editForm.classList.add('hidden');
+                        deleteConfirm.classList.add('hidden');
+                    }
+                });
+                
+                document.getElementById(`edit-btn-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    buttonsDiv.classList.add('hidden');
+                    deleteConfirm.classList.add('hidden');
+                    editForm.classList.remove('hidden');
+                });
+                
+                document.getElementById(`delete-btn-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    buttonsDiv.classList.add('hidden');
+                    editForm.classList.add('hidden');
+                    deleteConfirm.classList.remove('hidden');
+                });
+                
+                document.getElementById(`save-edit-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const newName = document.getElementById(`edit-input-${index}`).value.trim();
+                    
+                    if (!newName) {
+                        alert('⚠️ Il nome non può essere vuoto');
+                        return;
+                    }
+                    
+                    const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+                    achievements[index].name = newName;
+                    localStorage.setItem('achievements', JSON.stringify(achievements));
+                    
+                    displayAchievements();
+                });
+                
+                document.getElementById(`cancel-edit-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    editForm.classList.add('hidden');
+                    buttonsDiv.classList.remove('hidden');
+                    document.getElementById(`edit-input-${index}`).value = ach.name;
+                });
+                
+                document.getElementById(`confirm-delete-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+                    achievements.splice(index, 1);
+                    localStorage.setItem('achievements', JSON.stringify(achievements));
+                    displayAchievements();
+                });
+                
+                document.getElementById(`cancel-delete-${index}`).addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    deleteConfirm.classList.add('hidden');
+                    buttonsDiv.classList.remove('hidden');
+                });
+            });
+        }
+
+        function showNewGoalForm() {
+            document.getElementById('newGoalBtn').classList.add('hidden');
+            document.getElementById('newGoalForm').classList.remove('hidden');
+        }
+
+        function cancelNewGoal() {
+            document.getElementById('newGoalForm').classList.add('hidden');
+            document.getElementById('newGoalBtn').classList.remove('hidden');
+            document.getElementById('newGoalName').value = '';
+            document.getElementById('newGoalAmount').value = '';
+        }
+
+        function saveNewGoal() {
+            const newGoalName = document.getElementById('newGoalName').value.trim();
+            const newGoalAmount = parseFloat(document.getElementById('newGoalAmount').value);
+            
+            if (!newGoalName) {
+                alert('⚠️ Inserisci il nome dell\'obiettivo');
+                return;
+            }
+            
+            if (!newGoalAmount || newGoalAmount <= 0) {
+                alert('⚠️ Inserisci un importo valido');
+                return;
+            }
+            
+            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            data.savingsGoalName = newGoalName;
+            data.savingsGoalAmount = newGoalAmount;
+            localStorage.setItem('smokeFreeData', JSON.stringify(data));
+            
+            document.getElementById('newGoalForm').classList.add('hidden');
+            document.getElementById('achievementBadge').classList.add('hidden');
+            document.getElementById('newGoalBtn').classList.add('hidden');
+            
+            document.getElementById('newGoalName').value = '';
+            document.getElementById('newGoalAmount').value = '';
+            
+            updateStats();
+            displayAchievements();
+            
+            alert('✅ Nuovo obiettivo impostato con successo!');
+        }
+
+        // ===== SOS FUNCTIONALITY =====
+
+        const motivationalQuotes = [
+            "Ogni momento senza fumare è una vittoria.",
+            "La voglia passa in pochi minuti. Resisti!",
+            "Sei più forte della dipendenza.",
+            "Hai già dimostrato di potercela fare.",
+            "Il tuo corpo ti sta ringraziando.",
+            "Pensa a quanto sei arrivato lontano.",
+            "La libertà dalla nicotina non ha prezzo.",
+            "Ogni crisi superata ti rende più forte.",
+            "Respira. Ce la puoi fare.",
+            "Sei un esempio per chi vuole smettere."
+        ];
+
+        let sosTimerInterval = null;
+        let sosSecondsRemaining = 180; // 3 minuti
+        let breathingInterval = null;
+        let cravingStartTime = null;
+
+        function openSOSModal() {
+            cravingStartTime = Date.now();
+            document.getElementById('sosModal').classList.add('active');
+            sosSecondsRemaining = 180;
+            updateSOSTimer();
+            startSOSTimer();
+            startBreathingAnimation();
+            changeQuote();
+        }
+
+        function closeSOSModal() {
+            document.getElementById('sosModal').classList.remove('active');
+            if (sosTimerInterval) {
+                clearInterval(sosTimerInterval);
+                sosTimerInterval = null;
+            }
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+                breathingInterval = null;
+            }
+        }
+
+        function startSOSTimer() {
+            if (sosTimerInterval) {
+                clearInterval(sosTimerInterval);
+            }
+
+            sosTimerInterval = setInterval(() => {
+                sosSecondsRemaining--;
+                updateSOSTimer();
+
+                if (sosSecondsRemaining <= 0) {
+                    clearInterval(sosTimerInterval);
+                    sosTimerInterval = null;
+                    // Timer completato
+                    document.getElementById('breathingText').textContent = '✅ COMPLETATO!';
+                }
+            }, 1000);
+        }
+
+        function updateSOSTimer() {
+            const minutes = Math.floor(sosSecondsRemaining / 60);
+            const seconds = sosSecondsRemaining % 60;
+            document.getElementById('sosTimer').textContent =
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startBreathingAnimation() {
+            if (breathingInterval) {
+                clearInterval(breathingInterval);
+            }
+
+            let phase = 0; // 0: inspira, 1: trattieni, 2: espira
+            const breathingText = document.getElementById('breathingText');
+
+            function updateBreathingText() {
+                if (phase === 0) {
+                    breathingText.textContent = 'INSPIRA';
+                    breathingText.style.color = '#3b82f6';
+                    setTimeout(() => { phase = 1; updateBreathingText(); }, 4000);
+                } else if (phase === 1) {
+                    breathingText.textContent = 'TRATTIENI';
+                    breathingText.style.color = '#10b981';
+                    setTimeout(() => { phase = 2; updateBreathingText(); }, 2000);
+                } else {
+                    breathingText.textContent = 'ESPIRA';
+                    breathingText.style.color = '#06b6d4';
+                    setTimeout(() => { phase = 0; updateBreathingText(); }, 6000);
+                }
+            }
+
+            updateBreathingText();
+        }
+
+        function changeQuote() {
+            const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+            document.getElementById('quoteText').textContent = motivationalQuotes[randomIndex];
+        }
+
+        function resistedCraving() {
+            // Calcola durata permanenza nel modal
+            const durationSeconds = Math.floor((Date.now() - cravingStartTime) / 1000);
+
+            // Carica dati esistenti
+            let cravingData = JSON.parse(localStorage.getItem('cravingData') || '{"cravings": [], "totalResisted": 0}');
+
+            // Aggiungi nuova crisi
+            cravingData.cravings.push({
+                timestamp: new Date().toISOString(),
+                resisted: true,
+                duration: durationSeconds
+            });
+            cravingData.totalResisted = (cravingData.totalResisted || 0) + 1;
+
+            // Salva in localStorage
+            localStorage.setItem('cravingData', JSON.stringify(cravingData));
+
+            // Mostra messaggio
+            alert('🎉 Grande! Hai superato un momento difficile!\n\nCrisi superate: ' + cravingData.totalResisted);
+
+            // Aggiorna display
+            updateCravingDisplay();
+
+            // Chiudi modal
+            closeSOSModal();
+        }
+
+        function updateCravingDisplay() {
+            const cravingData = JSON.parse(localStorage.getItem('cravingData') || '{"cravings": [], "totalResisted": 0}');
+
+            // Aggiorna numero crisi superate
+            document.getElementById('cravingsResisted').textContent = cravingData.totalResisted || 0;
+
+            // Aggiorna ultima crisi
+            if (cravingData.cravings && cravingData.cravings.length > 0) {
+                const lastCraving = cravingData.cravings[cravingData.cravings.length - 1];
+                const lastTime = new Date(lastCraving.timestamp);
+                const now = new Date();
+                const diffMs = now - lastTime;
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffDays = Math.floor(diffHours / 24);
+
+                let timeText = '';
+                if (diffDays > 0) {
+                    timeText = diffDays + 'd fa';
+                } else if (diffHours > 0) {
+                    timeText = diffHours + 'h fa';
+                } else {
+                    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                    timeText = diffMinutes > 0 ? diffMinutes + 'm fa' : 'Ora';
+                }
+
+                document.getElementById('lastCraving').textContent = timeText;
+            } else {
+                document.getElementById('lastCraving').textContent = '-';
+            }
+        }
+
+        loadData();
+        updateCravingDisplay(); // Carica stats crisi all'avvio
+    </script>
+</body>
+</html>
