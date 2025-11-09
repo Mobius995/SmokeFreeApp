@@ -1613,6 +1613,10 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .modal-close:hover {
@@ -1711,7 +1715,7 @@
 
         .quote-refresh:hover {
             background: rgba(16, 185, 129, 0.3);
-            transform: rotate(180deg);
+            transform: scale(1.05);
         }
 
         /* Success Button */
@@ -2161,8 +2165,7 @@
 
     <!-- SOS Button -->
     <button class="sos-button" id="sosButton" onclick="openSOSModal()">
-        🆘 AIUTO!<br>
-        <span style="font-size: 0.7em;">Ho voglia di fumare</span>
+        🆘 HO VOGLIA
     </button>
 
     <!-- SOS Modal -->
