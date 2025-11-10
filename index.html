@@ -1249,7 +1249,28 @@
         .delete-btn:hover {
             background: rgba(239, 68, 68, 0.5);
         }
-        
+
+        .redeem-btn {
+            background: rgba(16, 185, 129, 0.3);
+            border: 2px solid #10b981;
+        }
+
+        .redeem-btn:hover {
+            background: rgba(16, 185, 129, 0.5);
+        }
+
+        .redeemed-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
         .edit-name-form, .delete-confirm-section {
             margin-top: 15px;
             padding: 15px;
@@ -2079,11 +2100,14 @@
             <div class="stat-card">
                 <div class="stat-label">💰 Denaro risparmiato <span class="live-indicator"></span></div>
                 <div class="stat-value">€<span id="moneySaved">0.00000</span></div>
+                <div class="stat-subtext" style="margin-top: 8px; color: #3b82f6; font-weight: 600;">
+                    💳 Saldo disponibile: €<span id="availableBalance">0.00</span>
+                </div>
                 <div class="stat-subtext">
                     Stai risparmiando:<br>
-                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> • 
-                    €<span id="savingsPerHour">0.00</span>/ora • 
-                    €<span id="savingsPerMinute">0.000</span>/min • 
+                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> •
+                    €<span id="savingsPerHour">0.00</span>/ora •
+                    €<span id="savingsPerMinute">0.000</span>/min •
                     €<span id="savingsPerSecond">0.00000</span>/sec
                 </div>
                 
@@ -2367,6 +2391,7 @@
 
             // Soldi risparmiati
             moneySaved: null,
+            availableBalance: null,
             savingsPerDay: null,
             savingsPerHour: null,
             savingsPerMinute: null,
@@ -2452,6 +2477,7 @@
             domCache.nextDayFill = document.getElementById('nextDayFill');
 
             domCache.moneySaved = document.getElementById('moneySaved');
+            domCache.availableBalance = document.getElementById('availableBalance');
             domCache.savingsPerDay = document.getElementById('savingsPerDay');
             domCache.savingsPerHour = document.getElementById('savingsPerHour');
             domCache.savingsPerMinute = document.getElementById('savingsPerMinute');
@@ -2758,6 +2784,7 @@
 
             updateMilestone(diffDays);
             updateHealthBenefits(diffDays);
+            updateSavingsSummary();
         }
 
         function updateMilestone(days) {
@@ -2875,6 +2902,73 @@
             }
         }
 
+        // ===== SALDO DISPONIBILE =====
+        function updateSavingsSummary() {
+            // OTTIMIZZAZIONE: Usa cache invece di parsing ripetuto
+            const data = getCachedData();
+            if (!data) return;
+
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+
+            // Calcola il totale risparmiato
+            const now = new Date();
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+            const daysElapsed = (now - quitDate) / (1000 * 60 * 60 * 24);
+            const packsPerDay = data.cigarettesPerDay / data.cigarettesPerPack;
+            const totalSaved = packsPerDay * data.packCost * daysElapsed;
+
+            // Calcola il totale riscattato (somma degli achievement con redeemed=true)
+            const totalRedeemed = achievements
+                .filter(ach => ach.redeemed === true)
+                .reduce((sum, ach) => sum + ach.amount, 0);
+
+            // Calcola il saldo disponibile
+            const availableBalance = totalSaved - totalRedeemed;
+
+            // OTTIMIZZAZIONE: Usa cache DOM
+            if (domCache.availableBalance) {
+                domCache.availableBalance.textContent = availableBalance.toFixed(2);
+            }
+        }
+
+        function redeemAchievement(completedDate) {
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+
+            // Trova l'achievement usando completedDate come ID univoco
+            const achIndex = achievements.findIndex(a => a.completedDate === completedDate);
+
+            if (achIndex === -1) {
+                alert('⚠️ Errore: obiettivo non trovato');
+                return;
+            }
+
+            const achievement = achievements[achIndex];
+
+            if (achievement.redeemed === true) {
+                alert('⚠️ Questo obiettivo è già stato riscattato');
+                return;
+            }
+
+            // Conferma prima di riscattare
+            const confirmMsg = `✅ Vuoi riscattare "${achievement.name}"?\n\n💰 Verrà scalato €${achievement.amount.toFixed(2)} dal saldo disponibile.`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            // Marca come riscattato
+            achievement.redeemed = true;
+            achievement.redeemedDate = new Date().toISOString();
+            achievements[achIndex] = achievement;
+
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+
+            // Aggiorna la visualizzazione
+            displayAchievements();
+            updateSavingsSummary();
+
+            alert('🎉 Obiettivo riscattato con successo!\n\nIl saldo disponibile è stato aggiornato.');
+        }
+
         function toggleEdit() {
             const editForm = document.getElementById('editForm');
             const isHidden = editForm.classList.contains('hidden');
@@ -2980,15 +3074,23 @@
             
             achievements.forEach((ach, index) => {
                 const date = new Date(ach.completedDate);
-                const formattedDate = date.toLocaleDateString('it-IT', { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric' 
+                const formattedDate = date.toLocaleDateString('it-IT', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
                 });
-                
+
+                // Usa completedDate come ID univoco invece dell'indice
+                const achId = ach.completedDate.replace(/[:.]/g, '-');
+
                 const div = document.createElement('div');
                 div.className = 'achievement-item';
-                div.id = `ach-${index}`;
+                div.id = `ach-${achId}`;
+
+                const isRedeemed = ach.redeemed === true;
+                const redeemedBadge = isRedeemed ? '<div class="redeemed-badge">✅ Riscattato</div>' : '';
+                const redeemButton = !isRedeemed ? `<button class="redeem-btn" id="redeem-btn-${achId}">✓ Riscatta</button>` : '';
+
                 div.innerHTML = `
                     <div class="achievement-content">
                         <div class="achievement-icon">🏆</div>
@@ -2996,53 +3098,60 @@
                             <div class="achievement-name">${ach.name}</div>
                             <div class="achievement-info">
                                 💰 €${ach.amount.toFixed(2)} risparmiati<br>
-                                📅 Raggiunto il ${formattedDate} (dopo ${ach.daysToComplete} giorni)
+                                📅 Raggiunto il ${formattedDate}
+                                ${redeemedBadge}
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="achievement-buttons hidden" id="buttons-${index}">
-                        <button class="edit-btn" id="edit-btn-${index}">✏️ Modifica nome</button>
-                        <button class="delete-btn" id="delete-btn-${index}">🗑️ Elimina</button>
+
+                    <div class="achievement-buttons hidden" id="buttons-${achId}">
+                        ${redeemButton}
+                        <button class="edit-btn" id="edit-btn-${achId}">✏️ Modifica nome</button>
+                        <button class="delete-btn" id="delete-btn-${achId}">🗑️ Elimina</button>
                     </div>
                     
-                    <div class="edit-name-form hidden" id="edit-form-${index}">
-                        <input type="text" id="edit-input-${index}" value="${ach.name}">
+                    <div class="edit-name-form hidden" id="edit-form-${achId}">
+                        <input type="text" id="edit-input-${achId}" value="${ach.name}">
                         <div style="display: flex; gap: 10px;">
-                            <button id="save-edit-${index}" style="flex: 1;">💾 Salva</button>
-                            <button id="cancel-edit-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
+                            <button id="save-edit-${achId}" style="flex: 1;">💾 Salva</button>
+                            <button id="cancel-edit-${achId}" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
                         </div>
                     </div>
-                    
-                    <div class="delete-confirm-section hidden" id="delete-confirm-${index}">
+
+                    <div class="delete-confirm-section hidden" id="delete-confirm-${achId}">
                         <p>⚠️ Sei sicuro di voler eliminare questo obiettivo?</p>
                         <div style="display: flex; gap: 10px;">
-                            <button id="confirm-delete-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.5); border: 2px solid #ef4444;">✅ Sì, elimina</button>
-                            <button id="cancel-delete-${index}" style="flex: 1; background: rgba(16, 185, 129, 0.3); border: 2px solid #10b981;">❌ No, annulla</button>
+                            <button id="confirm-delete-${achId}" style="flex: 1; background: rgba(239, 68, 68, 0.5); border: 2px solid #ef4444;">✅ Sì, elimina</button>
+                            <button id="cancel-delete-${achId}" style="flex: 1; background: rgba(16, 185, 129, 0.3); border: 2px solid #10b981;">❌ No, annulla</button>
                         </div>
                     </div>
                 `;
                 container.appendChild(div);
-                
-                const achievementItem = document.getElementById(`ach-${index}`);
-                const buttonsDiv = document.getElementById(`buttons-${index}`);
-                const editForm = document.getElementById(`edit-form-${index}`);
-                const deleteConfirm = document.getElementById(`delete-confirm-${index}`);
+
+                const achievementItem = document.getElementById(`ach-${achId}`);
+                const buttonsDiv = document.getElementById(`buttons-${achId}`);
+                const editForm = document.getElementById(`edit-form-${achId}`);
+                const deleteConfirm = document.getElementById(`delete-confirm-${achId}`);
                 
                 achievementItem.addEventListener('click', function(e) {
                     if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
                         return;
                     }
-                    
-                    document.querySelectorAll('.achievement-item').forEach((item, i) => {
-                        if (i !== index) {
+
+                    // Chiudi tutti gli altri achievement
+                    document.querySelectorAll('.achievement-item').forEach((item) => {
+                        if (item.id !== `ach-${achId}`) {
                             item.classList.remove('expanded');
-                            document.getElementById(`buttons-${i}`).classList.add('hidden');
-                            document.getElementById(`edit-form-${i}`).classList.add('hidden');
-                            document.getElementById(`delete-confirm-${i}`).classList.add('hidden');
+                            const itemId = item.id.replace('ach-', '');
+                            const itemButtons = document.getElementById(`buttons-${itemId}`);
+                            const itemEdit = document.getElementById(`edit-form-${itemId}`);
+                            const itemDelete = document.getElementById(`delete-confirm-${itemId}`);
+                            if (itemButtons) itemButtons.classList.add('hidden');
+                            if (itemEdit) itemEdit.classList.add('hidden');
+                            if (itemDelete) itemDelete.classList.add('hidden');
                         }
                     });
-                    
+
                     if (buttonsDiv.classList.contains('hidden')) {
                         achievementItem.classList.add('expanded');
                         buttonsDiv.classList.remove('hidden');
@@ -3055,53 +3164,63 @@
                         deleteConfirm.classList.add('hidden');
                     }
                 });
-                
-                document.getElementById(`edit-btn-${index}`).addEventListener('click', function(e) {
+
+                // Event listener per il bottone Riscatta
+                if (!isRedeemed) {
+                    document.getElementById(`redeem-btn-${achId}`).addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        redeemAchievement(ach.completedDate);
+                    });
+                }
+
+                document.getElementById(`edit-btn-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     buttonsDiv.classList.add('hidden');
                     deleteConfirm.classList.add('hidden');
                     editForm.classList.remove('hidden');
                 });
-                
-                document.getElementById(`delete-btn-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`delete-btn-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     buttonsDiv.classList.add('hidden');
                     editForm.classList.add('hidden');
                     deleteConfirm.classList.remove('hidden');
                 });
-                
-                document.getElementById(`save-edit-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`save-edit-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const newName = document.getElementById(`edit-input-${index}`).value.trim();
-                    
+                    const newName = document.getElementById(`edit-input-${achId}`).value.trim();
+
                     if (!newName) {
                         alert('⚠️ Il nome non può essere vuoto');
                         return;
                     }
-                    
+
                     const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
                     achievements[index].name = newName;
                     localStorage.setItem('achievements', JSON.stringify(achievements));
-                    
+
                     displayAchievements();
+                    updateSavingsSummary();
                 });
-                
-                document.getElementById(`cancel-edit-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`cancel-edit-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     editForm.classList.add('hidden');
                     buttonsDiv.classList.remove('hidden');
-                    document.getElementById(`edit-input-${index}`).value = ach.name;
+                    document.getElementById(`edit-input-${achId}`).value = ach.name;
                 });
-                
-                document.getElementById(`confirm-delete-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`confirm-delete-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
                     achievements.splice(index, 1);
                     localStorage.setItem('achievements', JSON.stringify(achievements));
                     displayAchievements();
+                    updateSavingsSummary();
                 });
-                
-                document.getElementById(`cancel-delete-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`cancel-delete-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     deleteConfirm.classList.add('hidden');
                     buttonsDiv.classList.remove('hidden');
