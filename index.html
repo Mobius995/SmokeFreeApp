@@ -2624,13 +2624,13 @@
             const dayProgress = ((diffMs % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * 100;
             const nextDay = days + 1;
             domCache.nextDayNumber.textContent = nextDay;
-            domCache.nextDayPercentage.textContent = dayProgress.toFixed(2) + '%'; // OTTIMIZZAZIONE: da 4 a 2 decimali
+            domCache.nextDayPercentage.textContent = dayProgress.toFixed(4) + '%';
             domCache.nextDayFill.style.width = dayProgress + '%';
 
             const costPerCigarette = data.packCost / data.cigarettesPerPack;
             const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
             const moneySaved = cigarettesAvoidedPrecise * costPerCigarette;
-            domCache.moneySaved.textContent = moneySaved.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
+            domCache.moneySaved.textContent = moneySaved.toFixed(5);
 
             const savingsPerDay = (data.cigarettesPerDay * costPerCigarette);
             const savingsPerHour = (savingsPerDay / 24);
@@ -2639,8 +2639,8 @@
 
             domCache.savingsPerDay.textContent = savingsPerDay.toFixed(2);
             domCache.savingsPerHour.textContent = savingsPerHour.toFixed(2);
-            domCache.savingsPerMinute.textContent = savingsPerMinute.toFixed(2); // OTTIMIZZAZIONE: da 3 a 2 decimali
-            domCache.savingsPerSecond.textContent = savingsPerSecond.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
+            domCache.savingsPerMinute.textContent = savingsPerMinute.toFixed(3);
+            domCache.savingsPerSecond.textContent = savingsPerSecond.toFixed(5);
 
             if (data.savingsGoalName && data.savingsGoalAmount > 0) {
                 domCache.savingsGoalSection.classList.remove('hidden');
@@ -2651,7 +2651,7 @@
                 const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
 
                 const percentage = Math.min(150, (moneySaved / data.savingsGoalAmount) * 100);
-                domCache.goalPercentage.textContent = percentage.toFixed(1); // OTTIMIZZAZIONE: da 5 a 1 decimale
+                domCache.goalPercentage.textContent = percentage.toFixed(5);
                 domCache.goalProgressFill.style.width = Math.min(100, percentage) + '%';
 
                 if (percentage >= 100) {
@@ -2675,7 +2675,7 @@
             }
 
             const cigarettesAvoidedLive = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
-            domCache.cigarettesAvoided.textContent = cigarettesAvoidedLive.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
+            domCache.cigarettesAvoided.textContent = cigarettesAvoidedLive.toFixed(5);
 
             const cigarettesAvoidedRounded = Math.floor(cigarettesAvoidedLive);
 
@@ -2696,40 +2696,40 @@
 
             const lifeMinutesGained = cigarettesAvoidedLive * 11;
             const lifeDaysGained = lifeMinutesGained / (60 * 24);
-            domCache.lifeDays.textContent = lifeDaysGained.toFixed(2); // OTTIMIZZAZIONE: da 4 a 2 decimali
+            domCache.lifeDays.textContent = lifeDaysGained.toFixed(4);
 
             const nicotineAvoided = cigarettesAvoidedLive * 1;
-            domCache.nicotineAvoided.textContent = nicotineAvoided.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
-            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(2); // OTTIMIZZAZIONE: da 3 a 2 decimali
+            domCache.nicotineAvoided.textContent = nicotineAvoided.toFixed(5);
+            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(3);
             domCache.nicotineComparison.textContent =
                 `${nicotinePercent}% dose letale evitata (750mg)`;
 
             const tarAvoided = cigarettesAvoidedLive * 0.01;
-            domCache.tarAvoided.textContent = tarAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
-            const asphaltArea = (tarAvoided * 10).toFixed(1); // OTTIMIZZAZIONE: da 2 a 1 decimale
+            domCache.tarAvoided.textContent = tarAvoided.toFixed(5);
+            const asphaltArea = (tarAvoided * 10).toFixed(2);
             domCache.tarComparison.textContent =
                 `Come spalmare ${asphaltArea} cm² di asfalto nei polmoni`;
 
             const coAvoided = (cigarettesAvoidedLive * 0.014);
-            domCache.coAvoided.textContent = coAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
+            domCache.coAvoided.textContent = coAvoided.toFixed(5);
             const garageMinutes = (cigarettesAvoidedLive * 0.5).toFixed(1);
             domCache.coComparison.textContent =
                 `Come ${garageMinutes} min in garage con motore acceso`;
 
             const poloniumAvoided = cigarettesAvoidedLive * 0.04;
-            domCache.poloniumAvoided.textContent = poloniumAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
+            domCache.poloniumAvoided.textContent = poloniumAvoided.toFixed(5);
             const xraysEquivalent = (poloniumAvoided * 0.65).toFixed(1);
             domCache.poloniumComparison.textContent =
                 `Equivalente a ${xraysEquivalent} radiografie al torace`;
 
             const benzeneAvoided = cigarettesAvoidedLive * 100;
-            domCache.benzeneAvoided.textContent = benzeneAvoided.toFixed(1); // OTTIMIZZAZIONE: da 3 a 1 decimale
+            domCache.benzeneAvoided.textContent = benzeneAvoided.toFixed(3);
             const benzeneMultiple = (benzeneAvoided / 25000).toFixed(2);
             domCache.benzeneComparison.textContent =
                 `Limite sicurezza superato ${benzeneMultiple}x`;
 
             const arsenicAvoided = cigarettesAvoidedLive * 1;
-            domCache.arsenicAvoided.textContent = arsenicAvoided.toFixed(2); // OTTIMIZZAZIONE: da 4 a 2 decimali
+            domCache.arsenicAvoided.textContent = arsenicAvoided.toFixed(4);
             const arsenicPercent = ((arsenicAvoided / 150000) * 100).toFixed(2);
             domCache.arsenicComparison.textContent =
                 `${arsenicPercent}% dose letale evitata`;
