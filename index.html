@@ -1643,29 +1643,42 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 30px rgba(147, 197, 253, 0.6);
-            transition: box-shadow 0.5s ease;
+            transition: box-shadow 0.5s ease, opacity 0.5s ease;
+            opacity: 0.6;
         }
 
         @keyframes breathe {
-            0%, 100% {
+            0% {
                 transform: scale(1);
                 background: radial-gradient(circle, #93c5fd 0%, #60a5fa 50%, #3b82f6 100%);
                 box-shadow: 0 0 30px rgba(147, 197, 253, 0.6);
+                opacity: 0.6;
             }
             33% {
                 transform: scale(1.3);
                 background: radial-gradient(circle, #86efac 0%, #4ade80 50%, #22c55e 100%);
-                box-shadow: 0 0 40px rgba(134, 239, 172, 0.7);
+                box-shadow: 0 0 50px rgba(134, 239, 172, 0.8);
+                opacity: 1;
+                animation-timing-function: ease-in;
             }
             50% {
                 transform: scale(1.3);
                 background: radial-gradient(circle, #86efac 0%, #4ade80 50%, #22c55e 100%);
-                box-shadow: 0 0 40px rgba(134, 239, 172, 0.7);
+                box-shadow: 0 0 45px rgba(134, 239, 172, 0.75);
+                opacity: 1;
             }
             83% {
                 transform: scale(1);
                 background: radial-gradient(circle, #67e8f9 0%, #22d3ee 50%, #06b6d4 100%);
                 box-shadow: 0 0 30px rgba(103, 232, 249, 0.6);
+                opacity: 0.6;
+                animation-timing-function: ease-out;
+            }
+            100% {
+                transform: scale(1);
+                background: radial-gradient(circle, #93c5fd 0%, #60a5fa 50%, #3b82f6 100%);
+                box-shadow: 0 0 30px rgba(147, 197, 253, 0.6);
+                opacity: 0.6;
             }
         }
 
@@ -1673,6 +1686,36 @@
             font-size: 0.7em;
             opacity: 0.8;
             font-weight: 400;
+        }
+
+        /* Breathing Particles */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color);
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--color);
+        }
+
+        .particle.active {
+            animation: particle-fly 3s ease-out forwards;
+        }
+
+        @keyframes particle-fly {
+            0% {
+                opacity: 0.8;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(
+                    calc(cos(var(--angle)) * 80px),
+                    calc(sin(var(--angle)) * 80px)
+                ) scale(0.3);
+            }
         }
 
         .breathing-text {
@@ -2215,6 +2258,19 @@
                         <circle class="ring-progress" cx="80" cy="80" r="70" id="ringProgress" />
                     </svg>
                     <div class="breathing-circle"></div>
+                    <!-- Breathing Particles -->
+                    <div class="particle" style="--angle: 0deg; --color: #93c5fd;"></div>
+                    <div class="particle" style="--angle: 30deg; --color: #86efac;"></div>
+                    <div class="particle" style="--angle: 60deg; --color: #fef08a;"></div>
+                    <div class="particle" style="--angle: 90deg; --color: #fca5a1;"></div>
+                    <div class="particle" style="--angle: 120deg; --color: #c4b5fd;"></div>
+                    <div class="particle" style="--angle: 150deg; --color: #a5f3fc;"></div>
+                    <div class="particle" style="--angle: 180deg; --color: #fde68a;"></div>
+                    <div class="particle" style="--angle: 210deg; --color: #bae6fd;"></div>
+                    <div class="particle" style="--angle: 240deg; --color: #d8b4fe;"></div>
+                    <div class="particle" style="--angle: 270deg; --color: #99f6e4;"></div>
+                    <div class="particle" style="--angle: 300deg; --color: #fecaca;"></div>
+                    <div class="particle" style="--angle: 330deg; --color: #ddd6fe;"></div>
                 </div>
                 <div class="breathing-text" id="breathingText">RESPIRA <span class="phase-countdown" id="phaseCountdown"></span></div>
                 <div class="timer-text" id="sosTimer">1:00</div>
@@ -2996,7 +3052,7 @@
             const ringProgress = document.getElementById('ringProgress');
             const breathingRing = document.querySelector('.breathing-ring');
 
-            function animatePhase(phaseName, duration, color, ringColor) {
+            function animatePhase(phaseName, duration, color, ringColor, isExpire = false) {
                 let secondsLeft = Math.floor(duration / 1000);
                 breathingText.innerHTML = phaseName + ' <span class="phase-countdown" id="phaseCountdown">(' + secondsLeft + 's)</span>';
                 breathingText.style.color = color;
@@ -3016,6 +3072,21 @@
                     breathingTimeouts.push(resetTimeout2);
                 }, 100);
                 breathingTimeouts.push(resetTimeout1);
+
+                // Attiva particelle durante ESPIRA
+                if (isExpire) {
+                    const particles = document.querySelectorAll('.particle');
+                    particles.forEach((particle, index) => {
+                        const particleTimeout = setTimeout(() => {
+                            particle.classList.add('active');
+                            const removeActiveTimeout = setTimeout(() => {
+                                particle.classList.remove('active');
+                            }, 3000);
+                            breathingTimeouts.push(removeActiveTimeout);
+                        }, index * 100);
+                        breathingTimeouts.push(particleTimeout);
+                    });
+                }
 
                 // Countdown secondi
                 const countdownInterval = setInterval(() => {
@@ -3037,15 +3108,15 @@
 
             function updateBreathingPhase() {
                 if (phase === 0) {
-                    animatePhase('INSPIRA', 4000, '#93c5fd', '#93c5fd');
+                    animatePhase('INSPIRA', 4000, '#93c5fd', '#93c5fd', false);
                     const phaseTimeout = setTimeout(() => { phase = 1; updateBreathingPhase(); }, 4000);
                     breathingTimeouts.push(phaseTimeout);
                 } else if (phase === 1) {
-                    animatePhase('TRATTIENI', 2000, '#86efac', '#86efac');
+                    animatePhase('TRATTIENI', 2000, '#86efac', '#86efac', false);
                     const phaseTimeout = setTimeout(() => { phase = 2; updateBreathingPhase(); }, 2000);
                     breathingTimeouts.push(phaseTimeout);
                 } else {
-                    animatePhase('ESPIRA', 6000, '#67e8f9', '#67e8f9');
+                    animatePhase('ESPIRA', 6000, '#67e8f9', '#67e8f9', true);
                     const phaseTimeout = setTimeout(() => { phase = 0; updateBreathingPhase(); }, 6000);
                     breathingTimeouts.push(phaseTimeout);
                 }
