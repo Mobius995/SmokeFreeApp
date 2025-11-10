@@ -2793,9 +2793,9 @@
 
             const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
 
-            // Calcola il totale risparmiato
+            // Calcola il totale risparmiato (usa quitDateTime o quitDate per compatibilità)
             const now = new Date();
-            const quitDate = new Date(data.quitDate);
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
             const daysElapsed = (now - quitDate) / (1000 * 60 * 60 * 24);
             const packsPerDay = data.cigarettesPerDay / 20;
             const totalSaved = packsPerDay * data.pricePerPack * daysElapsed;
@@ -2831,19 +2831,22 @@
             
             achievements.forEach((ach, index) => {
                 const date = new Date(ach.completedDate);
-                const formattedDate = date.toLocaleDateString('it-IT', { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric' 
+                const formattedDate = date.toLocaleDateString('it-IT', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
                 });
-                
+
+                // Usa completedDate come ID univoco invece dell'indice
+                const achId = ach.completedDate.replace(/[:.]/g, '-');
+
                 const div = document.createElement('div');
                 div.className = 'achievement-item';
-                div.id = `ach-${index}`;
+                div.id = `ach-${achId}`;
 
                 const isRedeemed = ach.redeemed === true;
                 const redeemedBadge = isRedeemed ? '<div class="redeemed-badge">✅ Riscattato</div>' : '';
-                const redeemButton = !isRedeemed ? `<button class="redeem-btn" id="redeem-btn-${index}">✓ Riscatta</button>` : '';
+                const redeemButton = !isRedeemed ? `<button class="redeem-btn" id="redeem-btn-${achId}">✓ Riscatta</button>` : '';
 
                 div.innerHTML = `
                     <div class="achievement-content">
@@ -2858,49 +2861,53 @@
                         </div>
                     </div>
 
-                    <div class="achievement-buttons hidden" id="buttons-${index}">
+                    <div class="achievement-buttons hidden" id="buttons-${achId}">
                         ${redeemButton}
-                        <button class="edit-btn" id="edit-btn-${index}">✏️ Modifica nome</button>
-                        <button class="delete-btn" id="delete-btn-${index}">🗑️ Elimina</button>
+                        <button class="edit-btn" id="edit-btn-${achId}">✏️ Modifica nome</button>
+                        <button class="delete-btn" id="delete-btn-${achId}">🗑️ Elimina</button>
                     </div>
-                    
-                    <div class="edit-name-form hidden" id="edit-form-${index}">
-                        <input type="text" id="edit-input-${index}" value="${ach.name}">
+
+                    <div class="edit-name-form hidden" id="edit-form-${achId}">
+                        <input type="text" id="edit-input-${achId}" value="${ach.name}">
                         <div style="display: flex; gap: 10px;">
-                            <button id="save-edit-${index}" style="flex: 1;">💾 Salva</button>
-                            <button id="cancel-edit-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
+                            <button id="save-edit-${achId}" style="flex: 1;">💾 Salva</button>
+                            <button id="cancel-edit-${achId}" style="flex: 1; background: rgba(239, 68, 68, 0.3); border: 2px solid #ef4444;">❌ Annulla</button>
                         </div>
                     </div>
-                    
-                    <div class="delete-confirm-section hidden" id="delete-confirm-${index}">
+
+                    <div class="delete-confirm-section hidden" id="delete-confirm-${achId}">
                         <p>⚠️ Sei sicuro di voler eliminare questo obiettivo?</p>
                         <div style="display: flex; gap: 10px;">
-                            <button id="confirm-delete-${index}" style="flex: 1; background: rgba(239, 68, 68, 0.5); border: 2px solid #ef4444;">✅ Sì, elimina</button>
-                            <button id="cancel-delete-${index}" style="flex: 1; background: rgba(16, 185, 129, 0.3); border: 2px solid #10b981;">❌ No, annulla</button>
+                            <button id="confirm-delete-${achId}" style="flex: 1; background: rgba(239, 68, 68, 0.5); border: 2px solid #ef4444;">✅ Sì, elimina</button>
+                            <button id="cancel-delete-${achId}" style="flex: 1; background: rgba(16, 185, 129, 0.3); border: 2px solid #10b981;">❌ No, annulla</button>
                         </div>
                     </div>
                 `;
                 container.appendChild(div);
-                
-                const achievementItem = document.getElementById(`ach-${index}`);
-                const buttonsDiv = document.getElementById(`buttons-${index}`);
-                const editForm = document.getElementById(`edit-form-${index}`);
-                const deleteConfirm = document.getElementById(`delete-confirm-${index}`);
+
+                const achievementItem = document.getElementById(`ach-${achId}`);
+                const buttonsDiv = document.getElementById(`buttons-${achId}`);
+                const editForm = document.getElementById(`edit-form-${achId}`);
+                const deleteConfirm = document.getElementById(`delete-confirm-${achId}`);
                 
                 achievementItem.addEventListener('click', function(e) {
                     if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') {
                         return;
                     }
-                    
-                    document.querySelectorAll('.achievement-item').forEach((item, i) => {
-                        if (i !== index) {
+
+                    // Chiudi tutti gli altri achievement
+                    document.querySelectorAll('.achievement-item').forEach((item) => {
+                        if (item.id !== `ach-${achId}`) {
                             item.classList.remove('expanded');
-                            document.getElementById(`buttons-${i}`).classList.add('hidden');
-                            document.getElementById(`edit-form-${i}`).classList.add('hidden');
-                            document.getElementById(`delete-confirm-${i}`).classList.add('hidden');
+                            const itemButtons = item.querySelector('.achievement-buttons');
+                            const itemEditForm = item.querySelector('.edit-name-form');
+                            const itemDeleteConfirm = item.querySelector('.delete-confirm-section');
+                            if (itemButtons) itemButtons.classList.add('hidden');
+                            if (itemEditForm) itemEditForm.classList.add('hidden');
+                            if (itemDeleteConfirm) itemDeleteConfirm.classList.add('hidden');
                         }
                     });
-                    
+
                     if (buttonsDiv.classList.contains('hidden')) {
                         achievementItem.classList.add('expanded');
                         buttonsDiv.classList.remove('hidden');
@@ -2913,8 +2920,8 @@
                         deleteConfirm.classList.add('hidden');
                     }
                 });
-                
-                document.getElementById(`edit-btn-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`edit-btn-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     buttonsDiv.classList.add('hidden');
                     deleteConfirm.classList.add('hidden');
@@ -2922,55 +2929,61 @@
                 });
 
                 // Event listener per il bottone Riscatta (solo se esiste)
-                const redeemBtn = document.getElementById(`redeem-btn-${index}`);
+                const redeemBtn = document.getElementById(`redeem-btn-${achId}`);
                 if (redeemBtn) {
                     redeemBtn.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        redeemAchievement(index);
+                        redeemAchievement(ach.completedDate);
                     });
                 }
 
-                document.getElementById(`delete-btn-${index}`).addEventListener('click', function(e) {
+                document.getElementById(`delete-btn-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     buttonsDiv.classList.add('hidden');
                     editForm.classList.add('hidden');
                     deleteConfirm.classList.remove('hidden');
                 });
-                
-                document.getElementById(`save-edit-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`save-edit-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const newName = document.getElementById(`edit-input-${index}`).value.trim();
-                    
+                    const newName = document.getElementById(`edit-input-${achId}`).value.trim();
+
                     if (!newName) {
                         alert('⚠️ Il nome non può essere vuoto');
                         return;
                     }
-                    
+
                     const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-                    achievements[index].name = newName;
-                    localStorage.setItem('achievements', JSON.stringify(achievements));
+                    const achIndex = achievements.findIndex(a => a.completedDate === ach.completedDate);
+                    if (achIndex !== -1) {
+                        achievements[achIndex].name = newName;
+                        localStorage.setItem('achievements', JSON.stringify(achievements));
+                    }
 
                     displayAchievements();
                     updateSavingsSummary();
                 });
-                
-                document.getElementById(`cancel-edit-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`cancel-edit-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     editForm.classList.add('hidden');
                     buttonsDiv.classList.remove('hidden');
-                    document.getElementById(`edit-input-${index}`).value = ach.name;
+                    document.getElementById(`edit-input-${achId}`).value = ach.name;
                 });
-                
-                document.getElementById(`confirm-delete-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`confirm-delete-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-                    achievements.splice(index, 1);
-                    localStorage.setItem('achievements', JSON.stringify(achievements));
+                    const achIndex = achievements.findIndex(a => a.completedDate === ach.completedDate);
+                    if (achIndex !== -1) {
+                        achievements.splice(achIndex, 1);
+                        localStorage.setItem('achievements', JSON.stringify(achievements));
+                    }
                     displayAchievements();
                     updateSavingsSummary();
                 });
-                
-                document.getElementById(`cancel-delete-${index}`).addEventListener('click', function(e) {
+
+                document.getElementById(`cancel-delete-${achId}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     deleteConfirm.classList.add('hidden');
                     buttonsDiv.classList.remove('hidden');
@@ -2978,15 +2991,18 @@
             });
         }
 
-        function redeemAchievement(index) {
+        function redeemAchievement(completedDate) {
             const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
 
-            if (index < 0 || index >= achievements.length) {
+            // Trova l'achievement usando completedDate come ID univoco
+            const achIndex = achievements.findIndex(a => a.completedDate === completedDate);
+
+            if (achIndex === -1) {
                 alert('⚠️ Errore: achievement non trovato');
                 return;
             }
 
-            const achievement = achievements[index];
+            const achievement = achievements[achIndex];
 
             if (achievement.redeemed === true) {
                 alert('⚠️ Questo obiettivo è già stato riscattato');
@@ -3002,7 +3018,7 @@
             // Marca come riscattato
             achievement.redeemed = true;
             achievement.redeemedDate = new Date().toISOString();
-            achievements[index] = achievement;
+            achievements[achIndex] = achievement;
 
             localStorage.setItem('achievements', JSON.stringify(achievements));
 
