@@ -19,6 +19,12 @@
             min-height: 100vh;
             padding: 20px;
         }
+
+        /* OTTIMIZZAZIONE: Pausa animazioni quando pagina non visibile */
+        body.page-hidden * {
+            -webkit-animation-play-state: paused !important;
+            animation-play-state: paused !important;
+        }
         
         header {
             text-align: center;
@@ -52,6 +58,8 @@
             position: relative;
             -webkit-filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
             filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
+            /* OTTIMIZZAZIONE: will-change per performance GPU */
+            will-change: background-position;
         }
         
         @-webkit-keyframes gradient-shift {
@@ -71,6 +79,8 @@
             animation: emoji-float 3s ease-in-out infinite;
             -webkit-filter: drop-shadow(0 10px 30px rgba(239, 68, 68, 0.6));
             filter: drop-shadow(0 10px 30px rgba(239, 68, 68, 0.6));
+            /* OTTIMIZZAZIONE: will-change per animazioni smooth */
+            will-change: transform;
         }
         
         @-webkit-keyframes emoji-float {
@@ -120,6 +130,8 @@
             letter-spacing: 2px;
             -webkit-animation: tagline-fade 3s ease-in-out infinite;
             animation: tagline-fade 3s ease-in-out infinite;
+            /* OTTIMIZZAZIONE: will-change per opacity */
+            will-change: opacity;
         }
         
         @-webkit-keyframes tagline-fade {
@@ -2311,6 +2323,170 @@
         ];
 
         let updateInterval;
+        let millisecondsInterval;
+        let isPageVisible = true;
+
+        // ===== PERFORMANCE OPTIMIZATION: DOM CACHE =====
+        // Cache dei riferimenti DOM per evitare query ripetute
+        const domCache = {
+            // Contatori principali
+            daysCounter: null,
+            hoursCounter: null,
+            minutesCounter: null,
+            secondsCounter: null,
+            millisecondsDisplay: null,
+
+            // Progress bar giorno
+            nextDayNumber: null,
+            nextDayPercentage: null,
+            nextDayFill: null,
+
+            // Soldi risparmiati
+            moneySaved: null,
+            savingsPerDay: null,
+            savingsPerHour: null,
+            savingsPerMinute: null,
+            savingsPerSecond: null,
+
+            // Goal
+            savingsGoalSection: null,
+            goalNameDisplay: null,
+            goalTargetAmount: null,
+            goalCurrentAmount: null,
+            goalPercentage: null,
+            goalProgressFill: null,
+            goalRemainingText: null,
+            goalRemainingAmount: null,
+            achievementBadge: null,
+            newGoalBtn: null,
+
+            // Sigarette evitate
+            cigarettesAvoided: null,
+            timeGainedDisplay: null,
+            minutesPerCigDisplay: null,
+            lifeDays: null,
+
+            // Sostanze
+            nicotineAvoided: null,
+            nicotineComparison: null,
+            tarAvoided: null,
+            tarComparison: null,
+            coAvoided: null,
+            coComparison: null,
+            poloniumAvoided: null,
+            poloniumComparison: null,
+            benzeneAvoided: null,
+            benzeneComparison: null,
+            arsenicAvoided: null,
+            arsenicComparison: null,
+            heartbeats: null,
+
+            // Milestone
+            milestoneText: null,
+            daysToMilestone: null,
+            daysToMilestoneLabel: null,
+            milestoneProgress: null,
+            milestoneProgressText: null,
+            milestoneCard: null,
+
+            // Health benefits
+            healthBenefits: null
+        };
+
+        // ===== PERFORMANCE OPTIMIZATION: DATA CACHE =====
+        // Cache dei dati localStorage per evitare parsing ripetuto
+        let dataCache = null;
+        let dataCacheTimestamp = 0;
+        const CACHE_DURATION = 5000; // 5 secondi
+
+        function getCachedData() {
+            const now = Date.now();
+            if (!dataCache || (now - dataCacheTimestamp > CACHE_DURATION)) {
+                const rawData = localStorage.getItem('smokeFreeData');
+                if (!rawData) return null;
+                dataCache = JSON.parse(rawData);
+                dataCacheTimestamp = now;
+            }
+            return dataCache;
+        }
+
+        function invalidateDataCache() {
+            dataCache = null;
+            dataCacheTimestamp = 0;
+        }
+
+        // ===== PERFORMANCE OPTIMIZATION: DOM CACHE INITIALIZATION =====
+        function initDOMCache() {
+            domCache.daysCounter = document.getElementById('daysCounter');
+            domCache.hoursCounter = document.getElementById('hoursCounter');
+            domCache.minutesCounter = document.getElementById('minutesCounter');
+            domCache.secondsCounter = document.getElementById('secondsCounter');
+            domCache.millisecondsDisplay = document.querySelector('.milliseconds-display');
+
+            domCache.nextDayNumber = document.getElementById('nextDayNumber');
+            domCache.nextDayPercentage = document.getElementById('nextDayPercentage');
+            domCache.nextDayFill = document.getElementById('nextDayFill');
+
+            domCache.moneySaved = document.getElementById('moneySaved');
+            domCache.savingsPerDay = document.getElementById('savingsPerDay');
+            domCache.savingsPerHour = document.getElementById('savingsPerHour');
+            domCache.savingsPerMinute = document.getElementById('savingsPerMinute');
+            domCache.savingsPerSecond = document.getElementById('savingsPerSecond');
+
+            domCache.savingsGoalSection = document.getElementById('savingsGoalSection');
+            domCache.goalNameDisplay = document.getElementById('goalNameDisplay');
+            domCache.goalTargetAmount = document.getElementById('goalTargetAmount');
+            domCache.goalCurrentAmount = document.getElementById('goalCurrentAmount');
+            domCache.goalPercentage = document.getElementById('goalPercentage');
+            domCache.goalProgressFill = document.getElementById('goalProgressFill');
+            domCache.goalRemainingText = document.getElementById('goalRemainingText');
+            domCache.goalRemainingAmount = document.getElementById('goalRemainingAmount');
+            domCache.achievementBadge = document.getElementById('achievementBadge');
+            domCache.newGoalBtn = document.getElementById('newGoalBtn');
+
+            domCache.cigarettesAvoided = document.getElementById('cigarettesAvoided');
+            domCache.timeGainedDisplay = document.getElementById('timeGainedDisplay');
+            domCache.minutesPerCigDisplay = document.getElementById('minutesPerCigDisplay');
+            domCache.lifeDays = document.getElementById('lifeDays');
+
+            domCache.nicotineAvoided = document.getElementById('nicotineAvoided');
+            domCache.nicotineComparison = document.getElementById('nicotineComparison');
+            domCache.tarAvoided = document.getElementById('tarAvoided');
+            domCache.tarComparison = document.getElementById('tarComparison');
+            domCache.coAvoided = document.getElementById('coAvoided');
+            domCache.coComparison = document.getElementById('coComparison');
+            domCache.poloniumAvoided = document.getElementById('poloniumAvoided');
+            domCache.poloniumComparison = document.getElementById('poloniumComparison');
+            domCache.benzeneAvoided = document.getElementById('benzeneAvoided');
+            domCache.benzeneComparison = document.getElementById('benzeneComparison');
+            domCache.arsenicAvoided = document.getElementById('arsenicAvoided');
+            domCache.arsenicComparison = document.getElementById('arsenicComparison');
+            domCache.heartbeats = document.getElementById('heartbeats');
+
+            domCache.milestoneText = document.getElementById('milestoneText');
+            domCache.daysToMilestone = document.getElementById('daysToMilestone');
+            domCache.daysToMilestoneLabel = document.getElementById('daysToMilestoneLabel');
+            domCache.milestoneProgress = document.getElementById('milestoneProgress');
+            domCache.milestoneProgressText = document.getElementById('milestoneProgressText');
+            domCache.milestoneCard = document.getElementById('milestoneCard');
+
+            domCache.healthBenefits = document.getElementById('healthBenefits');
+        }
+
+        // ===== PERFORMANCE OPTIMIZATION: PAGE VISIBILITY =====
+        // Pausa aggiornamenti e animazioni quando la pagina non è visibile
+        document.addEventListener('visibilitychange', function() {
+            isPageVisible = !document.hidden;
+
+            if (isPageVisible) {
+                // Riprendi aggiornamenti e animazioni quando la pagina diventa visibile
+                document.body.classList.remove('page-hidden');
+                updateStats();
+            } else {
+                // Pausa animazioni quando la pagina è nascosta (risparmio batteria/CPU)
+                document.body.classList.add('page-hidden');
+            }
+        });
 
         function setMaxDateToToday() {
             const today = new Date().toISOString().split('T')[0];
@@ -2345,9 +2521,19 @@
                 const parsedData = JSON.parse(data);
                 document.getElementById('setupScreen').classList.add('hidden');
                 document.getElementById('mainScreen').classList.remove('hidden');
+
+                // Inizializza cache DOM prima di iniziare gli aggiornamenti
+                initDOMCache();
+
                 updateStats();
                 displayAchievements();
-                updateInterval = setInterval(() => updateStats(), 100);
+
+                // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms (90% meno aggiornamenti!)
+                updateInterval = setInterval(() => {
+                    if (isPageVisible) {
+                        updateStats();
+                    }
+                }, 1000);
             } else {
                 const now = new Date();
                 document.getElementById('quitDate').valueAsDate = now;
@@ -2385,104 +2571,111 @@
             };
             
             localStorage.setItem('smokeFreeData', JSON.stringify(data));
-            
+            invalidateDataCache(); // Invalida cache dopo salvataggio
+
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('mainScreen').classList.remove('hidden');
-            
+
+            // Inizializza cache DOM prima di iniziare gli aggiornamenti
+            initDOMCache();
+
             updateStats();
             displayAchievements();
-            updateInterval = setInterval(() => updateStats(), 100);
+
+            // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms (90% meno aggiornamenti!)
+            updateInterval = setInterval(() => {
+                if (isPageVisible) {
+                    updateStats();
+                }
+            }, 1000);
         }
 
         function updateStats() {
-            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            // OTTIMIZZAZIONE: Usa cache invece di parsing ripetuto
+            const data = getCachedData();
             if (!data) return;
-            
+
             const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
             const now = new Date();
             const diffMs = now - quitDate;
-            
+
             if (diffMs < 0) {
                 alert('La data di inizio è nel futuro! Correggi i dati.');
                 return;
             }
-            
+
             const diffDays = diffMs / (1000 * 60 * 60 * 24);
             const totalSeconds = Math.floor(diffMs / 1000);
             const days = Math.floor(totalSeconds / (24 * 60 * 60));
             const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
             const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
             const seconds = totalSeconds % 60;
-            const milliseconds = Math.floor((diffMs % 1000));
 
-            document.getElementById('daysCounter').textContent = days;
-            document.getElementById('hoursCounter').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutesCounter').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('secondsCounter').textContent = String(seconds).padStart(2, '0');
-            
-            // Update millisecondi
-            const millisecondsDisplay = document.querySelector('.milliseconds-display');
-            if (millisecondsDisplay) {
-                millisecondsDisplay.textContent = '.' + String(milliseconds).padStart(3, '0');
-            }
+            // OTTIMIZZAZIONE: Usa cache DOM invece di getElementById ripetuto
+            domCache.daysCounter.textContent = days;
+            domCache.hoursCounter.textContent = String(hours).padStart(2, '0');
+            domCache.minutesCounter.textContent = String(minutes).padStart(2, '0');
+            domCache.secondsCounter.textContent = String(seconds).padStart(2, '0');
+
+            // OTTIMIZZAZIONE: Millisecondi rimossi dall'aggiornamento principale (non necessari ogni secondo)
+            // Possono essere aggiunti separatamente se necessario con requestAnimationFrame
             
             // Update progress bar verso prossimo giorno
             const dayProgress = ((diffMs % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * 100;
             const nextDay = days + 1;
-            document.getElementById('nextDayNumber').textContent = nextDay;
-            document.getElementById('nextDayPercentage').textContent = dayProgress.toFixed(4) + '%';
-            document.getElementById('nextDayFill').style.width = dayProgress + '%';
+            domCache.nextDayNumber.textContent = nextDay;
+            domCache.nextDayPercentage.textContent = dayProgress.toFixed(2) + '%'; // OTTIMIZZAZIONE: da 4 a 2 decimali
+            domCache.nextDayFill.style.width = dayProgress + '%';
 
             const costPerCigarette = data.packCost / data.cigarettesPerPack;
             const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
             const moneySaved = cigarettesAvoidedPrecise * costPerCigarette;
-            document.getElementById('moneySaved').textContent = moneySaved.toFixed(5);
-            
+            domCache.moneySaved.textContent = moneySaved.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
+
             const savingsPerDay = (data.cigarettesPerDay * costPerCigarette);
             const savingsPerHour = (savingsPerDay / 24);
             const savingsPerMinute = (savingsPerHour / 60);
             const savingsPerSecond = (savingsPerMinute / 60);
-            
-            document.getElementById('savingsPerDay').textContent = savingsPerDay.toFixed(2);
-            document.getElementById('savingsPerHour').textContent = savingsPerHour.toFixed(2);
-            document.getElementById('savingsPerMinute').textContent = savingsPerMinute.toFixed(3);
-            document.getElementById('savingsPerSecond').textContent = savingsPerSecond.toFixed(5);
+
+            domCache.savingsPerDay.textContent = savingsPerDay.toFixed(2);
+            domCache.savingsPerHour.textContent = savingsPerHour.toFixed(2);
+            domCache.savingsPerMinute.textContent = savingsPerMinute.toFixed(2); // OTTIMIZZAZIONE: da 3 a 2 decimali
+            domCache.savingsPerSecond.textContent = savingsPerSecond.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
 
             if (data.savingsGoalName && data.savingsGoalAmount > 0) {
-                document.getElementById('savingsGoalSection').classList.remove('hidden');
-                document.getElementById('goalNameDisplay').textContent = data.savingsGoalName;
-                document.getElementById('goalTargetAmount').textContent = data.savingsGoalAmount.toFixed(2);
-                document.getElementById('goalCurrentAmount').textContent = moneySaved.toFixed(2);
-                
+                domCache.savingsGoalSection.classList.remove('hidden');
+                domCache.goalNameDisplay.textContent = data.savingsGoalName;
+                domCache.goalTargetAmount.textContent = data.savingsGoalAmount.toFixed(2);
+                domCache.goalCurrentAmount.textContent = moneySaved.toFixed(2);
+
                 const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
-                
+
                 const percentage = Math.min(150, (moneySaved / data.savingsGoalAmount) * 100);
-                document.getElementById('goalPercentage').textContent = percentage.toFixed(5);
-                document.getElementById('goalProgressFill').style.width = Math.min(100, percentage) + '%';
-                
+                domCache.goalPercentage.textContent = percentage.toFixed(1); // OTTIMIZZAZIONE: da 5 a 1 decimale
+                domCache.goalProgressFill.style.width = Math.min(100, percentage) + '%';
+
                 if (percentage >= 100) {
-                    document.getElementById('achievementBadge').classList.remove('hidden');
-                    document.getElementById('newGoalBtn').classList.remove('hidden');
-                    
+                    domCache.achievementBadge.classList.remove('hidden');
+                    domCache.newGoalBtn.classList.remove('hidden');
+
                     const exceeded = moneySaved - data.savingsGoalAmount;
-                    document.getElementById('goalRemainingText').innerHTML = 
+                    domCache.goalRemainingText.innerHTML =
                         `<span style="color: #10b981; font-weight: 600;">Superato di: €<span id="goalRemainingAmount">${exceeded.toFixed(2)}</span></span>`;
-                    
+
                     saveAchievement(data, moneySaved, diffDays);
                 } else {
-                    document.getElementById('achievementBadge').classList.add('hidden');
-                    document.getElementById('newGoalBtn').classList.add('hidden');
-                    
-                    document.getElementById('goalRemainingAmount').textContent = remaining.toFixed(2);
-                    document.getElementById('goalRemainingText').innerHTML = 
+                    domCache.achievementBadge.classList.add('hidden');
+                    domCache.newGoalBtn.classList.add('hidden');
+
+                    domCache.goalRemainingText.innerHTML =
                         `<span style="color: #fbbf24; font-weight: 600;">Mancano: €<span id="goalRemainingAmount">${remaining.toFixed(2)}</span></span>`;
                 }
             } else {
-                document.getElementById('savingsGoalSection').classList.add('hidden');
+                domCache.savingsGoalSection.classList.add('hidden');
             }
 
             const cigarettesAvoidedLive = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
-            document.getElementById('cigarettesAvoided').textContent = cigarettesAvoidedLive.toFixed(5);
+            domCache.cigarettesAvoided.textContent = cigarettesAvoidedLive.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
 
             const cigarettesAvoidedRounded = Math.floor(cigarettesAvoidedLive);
 
@@ -2490,59 +2683,59 @@
             const secondsInDay = 24 * 60 * 60;
             const cigarettesPerSecond = data.cigarettesPerDay / secondsInDay;
             const secondsPerCig = minutesPerCig * 60;
-            
+
             const totalSecondsGainedPrecise = totalSeconds * cigarettesPerSecond * secondsPerCig;
-            
+
             const hoursGained = Math.floor(totalSecondsGainedPrecise / 3600);
             const minutesGainedRemainder = Math.floor((totalSecondsGainedPrecise % 3600) / 60);
             const secondsGainedRemainder = Math.floor(totalSecondsGainedPrecise % 60);
-            
-            document.getElementById('timeGainedDisplay').textContent = 
+
+            domCache.timeGainedDisplay.textContent =
                 `${hoursGained}h ${minutesGainedRemainder}m ${secondsGainedRemainder}s`;
-            document.getElementById('minutesPerCigDisplay').textContent = minutesPerCig;
+            domCache.minutesPerCigDisplay.textContent = minutesPerCig;
 
             const lifeMinutesGained = cigarettesAvoidedLive * 11;
             const lifeDaysGained = lifeMinutesGained / (60 * 24);
-            document.getElementById('lifeDays').textContent = lifeDaysGained.toFixed(4);
+            domCache.lifeDays.textContent = lifeDaysGained.toFixed(2); // OTTIMIZZAZIONE: da 4 a 2 decimali
 
             const nicotineAvoided = cigarettesAvoidedLive * 1;
-            document.getElementById('nicotineAvoided').textContent = nicotineAvoided.toFixed(5);
-            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(3);
-            document.getElementById('nicotineComparison').textContent = 
+            domCache.nicotineAvoided.textContent = nicotineAvoided.toFixed(2); // OTTIMIZZAZIONE: da 5 a 2 decimali
+            const nicotinePercent = ((nicotineAvoided / 750) * 100).toFixed(2); // OTTIMIZZAZIONE: da 3 a 2 decimali
+            domCache.nicotineComparison.textContent =
                 `${nicotinePercent}% dose letale evitata (750mg)`;
-            
+
             const tarAvoided = cigarettesAvoidedLive * 0.01;
-            document.getElementById('tarAvoided').textContent = tarAvoided.toFixed(5);
-            const asphaltArea = (tarAvoided * 10).toFixed(2);
-            document.getElementById('tarComparison').textContent = 
+            domCache.tarAvoided.textContent = tarAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
+            const asphaltArea = (tarAvoided * 10).toFixed(1); // OTTIMIZZAZIONE: da 2 a 1 decimale
+            domCache.tarComparison.textContent =
                 `Come spalmare ${asphaltArea} cm² di asfalto nei polmoni`;
-            
+
             const coAvoided = (cigarettesAvoidedLive * 0.014);
-            document.getElementById('coAvoided').textContent = coAvoided.toFixed(5);
+            domCache.coAvoided.textContent = coAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
             const garageMinutes = (cigarettesAvoidedLive * 0.5).toFixed(1);
-            document.getElementById('coComparison').textContent = 
+            domCache.coComparison.textContent =
                 `Come ${garageMinutes} min in garage con motore acceso`;
-            
+
             const poloniumAvoided = cigarettesAvoidedLive * 0.04;
-            document.getElementById('poloniumAvoided').textContent = poloniumAvoided.toFixed(5);
+            domCache.poloniumAvoided.textContent = poloniumAvoided.toFixed(3); // OTTIMIZZAZIONE: da 5 a 3 decimali
             const xraysEquivalent = (poloniumAvoided * 0.65).toFixed(1);
-            document.getElementById('poloniumComparison').textContent = 
+            domCache.poloniumComparison.textContent =
                 `Equivalente a ${xraysEquivalent} radiografie al torace`;
-            
+
             const benzeneAvoided = cigarettesAvoidedLive * 100;
-            document.getElementById('benzeneAvoided').textContent = benzeneAvoided.toFixed(3);
+            domCache.benzeneAvoided.textContent = benzeneAvoided.toFixed(1); // OTTIMIZZAZIONE: da 3 a 1 decimale
             const benzeneMultiple = (benzeneAvoided / 25000).toFixed(2);
-            document.getElementById('benzeneComparison').textContent = 
+            domCache.benzeneComparison.textContent =
                 `Limite sicurezza superato ${benzeneMultiple}x`;
-            
+
             const arsenicAvoided = cigarettesAvoidedLive * 1;
-            document.getElementById('arsenicAvoided').textContent = arsenicAvoided.toFixed(4);
+            domCache.arsenicAvoided.textContent = arsenicAvoided.toFixed(2); // OTTIMIZZAZIONE: da 4 a 2 decimali
             const arsenicPercent = ((arsenicAvoided / 150000) * 100).toFixed(2);
-            document.getElementById('arsenicComparison').textContent = 
+            domCache.arsenicComparison.textContent =
                 `${arsenicPercent}% dose letale evitata`;
-            
+
             const heartbeatsSaved = Math.floor(cigarettesAvoidedLive * 450).toLocaleString('it-IT');
-            document.getElementById('heartbeats').textContent = heartbeatsSaved;
+            domCache.heartbeats.textContent = heartbeatsSaved;
 
             updateMilestone(diffDays);
             updateHealthBenefits(diffDays);
@@ -2550,35 +2743,33 @@
 
         function updateMilestone(days) {
             let nextMilestone = milestones.find(m => m.days > days);
-            
+
             if (nextMilestone) {
                 const previousMilestone = milestones[milestones.indexOf(nextMilestone) - 1];
                 const prevDays = previousMilestone ? previousMilestone.days : 0;
                 const progress = ((days - prevDays) / (nextMilestone.days - prevDays)) * 100;
                 const progressRounded = Math.min(100, Math.round(progress));
-                
+
                 const textParts = nextMilestone.text.split(' ');
                 const emoji = textParts[textParts.length - 1];
                 const textWithoutEmoji = textParts.slice(0, -1).join(' ');
-                
-                document.getElementById('milestoneText').innerHTML = `
+
+                // OTTIMIZZAZIONE: Usa cache DOM
+                domCache.milestoneText.innerHTML = `
                     <span class="milestone-icon">${emoji}</span>
                     <span>${textWithoutEmoji}</span>
                 `;
-                
+
                 const daysRemaining = nextMilestone.days - days;
                 const totalSecondsRemaining = daysRemaining * 24 * 60 * 60;
-                
+
                 const daysRemainingFloor = Math.floor(daysRemaining);
                 const hoursRemaining = Math.floor((daysRemaining - daysRemainingFloor) * 24);
                 const minutesRemaining = Math.floor(((daysRemaining - daysRemainingFloor) * 24 - hoursRemaining) * 60);
                 const secondsRemaining = Math.floor((((daysRemaining - daysRemainingFloor) * 24 - hoursRemaining) * 60 - minutesRemaining) * 60);
-                
-                const timeContainer = document.getElementById('daysToMilestone');
-                const labelContainer = document.getElementById('daysToMilestoneLabel');
-                
+
                 if (daysRemaining < 7) {
-                    timeContainer.innerHTML = `
+                    domCache.daysToMilestone.innerHTML = `
                         <div class="countdown-detailed">
                             <div class="countdown-block">
                                 <div class="countdown-value">${String(daysRemainingFloor).padStart(2, '0')}</div>
@@ -2601,20 +2792,20 @@
                             </div>
                         </div>
                     `;
-                    labelContainer.style.display = 'none';
+                    domCache.daysToMilestoneLabel.style.display = 'none';
                 } else {
-                    timeContainer.textContent = Math.ceil(daysRemaining);
-                    labelContainer.textContent = 'giorni mancanti';
-                    labelContainer.style.display = 'block';
+                    domCache.daysToMilestone.textContent = Math.ceil(daysRemaining);
+                    domCache.daysToMilestoneLabel.textContent = 'giorni mancanti';
+                    domCache.daysToMilestoneLabel.style.display = 'block';
                 }
-                
-                document.getElementById('milestoneProgress').style.width = progress + '%';
-                document.getElementById('milestoneProgressText').textContent = progressRounded + '%';
-                
-                document.getElementById('milestoneCard').classList.remove('milestone-completed');
+
+                domCache.milestoneProgress.style.width = progress + '%';
+                domCache.milestoneProgressText.textContent = progressRounded + '%';
+
+                domCache.milestoneCard.classList.remove('milestone-completed');
             } else {
-                document.getElementById('milestoneCard').classList.add('milestone-completed');
-                document.getElementById('milestoneCard').innerHTML = `
+                domCache.milestoneCard.classList.add('milestone-completed');
+                domCache.milestoneCard.innerHTML = `
                     <div class="milestone-content">
                         <h3>🏆 HAI COMPLETATO TUTTI I TRAGUARDI! 🏆</h3>
                         <div class="milestone-text">
@@ -2631,8 +2822,8 @@
         }
 
         function updateHealthBenefits(days) {
-            const container = document.getElementById('healthBenefits');
-            container.innerHTML = '';
+            // OTTIMIZZAZIONE: Usa cache DOM
+            domCache.healthBenefits.innerHTML = '';
             
             const relevantBenefits = healthTimeline.filter(h => h.days <= days);
             const upcoming = healthTimeline.find(h => h.days > days);
@@ -2647,9 +2838,9 @@
                         ${benefit.text}
                     </div>
                 `;
-                container.appendChild(div);
+                domCache.healthBenefits.appendChild(div);
             });
-            
+
             if (upcoming) {
                 const div = document.createElement('div');
                 div.className = 'health-item';
@@ -2661,7 +2852,7 @@
                         ${upcoming.text}
                     </div>
                 `;
-                container.appendChild(div);
+                domCache.healthBenefits.appendChild(div);
             }
         }
 
@@ -2718,16 +2909,22 @@
             };
             
             localStorage.setItem('smokeFreeData', JSON.stringify(data));
-            
+            invalidateDataCache(); // OTTIMIZZAZIONE: Invalida cache dopo salvataggio
+
             if (updateInterval) {
                 clearInterval(updateInterval);
             }
-            
+
             document.getElementById('editForm').classList.add('hidden');
             updateStats();
             displayAchievements();
-            
-            updateInterval = setInterval(() => updateStats(), 100);
+
+            // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms
+            updateInterval = setInterval(() => {
+                if (isPageVisible) {
+                    updateStats();
+                }
+            }, 1000);
             
             alert('✅ Dati aggiornati con successo!');
         }
