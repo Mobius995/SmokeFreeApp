@@ -325,6 +325,10 @@
             font-size: 2em;
             font-weight: 700;
             color: #10b981;
+            /* Fix oscillazione numeri: cifre a larghezza fissa */
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+            min-width: fit-content;
         }
         
         .stat-subtext {
@@ -638,6 +642,8 @@
             color: #10b981;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             z-index: 2;
+            /* Fix oscillazione numeri: cifre a larghezza fissa */
+            font-variant-numeric: tabular-nums;
         }
         
         .milestone-completed {
@@ -986,6 +992,8 @@
             color: #10b981;
             margin: 5px 0;
             word-break: break-word;
+            /* Fix oscillazione numeri: cifre a larghezza fissa */
+            font-variant-numeric: tabular-nums;
             line-height: 1.2;
         }
         
@@ -1048,6 +1056,10 @@
             font-size: 1.3em;
             font-weight: 700;
             color: #10b981;
+            /* Fix oscillazione numeri: cifre a larghezza fissa */
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+            min-width: fit-content;
         }
         
         .goal-progress-bar {
