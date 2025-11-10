@@ -1271,6 +1271,125 @@
             box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
         }
 
+        /* Achievements Summary Card */
+        .achievements-summary-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
+            border: 2px solid rgba(251, 191, 36, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .achievements-summary-card:hover {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(251, 191, 36, 0.1));
+            border-color: rgba(251, 191, 36, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .achievements-summary-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .achievements-summary-icon {
+            font-size: 2.5em;
+            animation: trophy-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes trophy-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .achievements-summary-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .achievements-summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .achievements-summary-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .achievements-summary-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .achievements-summary-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fbbf24;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .achievements-summary-footer {
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.7;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Achievements Overlay */
+        .achievements-modal-content {
+            max-height: 85vh;
+        }
+
+        .achievements-overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .achievements-overlay-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .close-overlay-btn {
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-overlay-btn:hover {
+            background: rgba(239, 68, 68, 0.5);
+            transform: scale(1.05);
+        }
+
+        .achievements-overlay-list {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
         .edit-name-form, .delete-confirm-section {
             margin-top: 15px;
             padding: 15px;
@@ -2175,9 +2294,25 @@
             </div>
 
             <!-- Achievements Section -->
-            <div class="achievements-section hidden" id="achievementsSection">
-                <div class="section-title">🏆 Obiettivi Raggiunti</div>
-                <div id="achievementsList"></div>
+            <!-- Achievements Summary Card -->
+            <div class="achievements-summary-card hidden" id="achievementsSummaryCard" onclick="openAchievementsOverlay()">
+                <div class="achievements-summary-header">
+                    <div class="achievements-summary-icon">🏆</div>
+                    <div class="achievements-summary-title">Obiettivi Raggiunti</div>
+                </div>
+                <div class="achievements-summary-stats">
+                    <div class="achievements-summary-stat">
+                        <div class="achievements-summary-label">Completati</div>
+                        <div class="achievements-summary-value" id="achievementsCount">0</div>
+                    </div>
+                    <div class="achievements-summary-stat">
+                        <div class="achievements-summary-label">Valore Totale</div>
+                        <div class="achievements-summary-value">€<span id="achievementsTotalValue">0.00</span></div>
+                    </div>
+                </div>
+                <div class="achievements-summary-footer">
+                    👆 Clicca per vedere i dettagli
+                </div>
             </div>
 
             <!-- Craving Stats Card -->
@@ -2342,6 +2477,19 @@
 
             <!-- Cancel Button -->
             <button class="cancel-button" onclick="closeSOSModal()">Annulla</button>
+        </div>
+    </div>
+
+    <!-- Achievements Overlay -->
+    <div class="modal-overlay" id="achievementsOverlay">
+        <div class="modal-content achievements-modal-content">
+            <div class="achievements-overlay-header">
+                <div class="achievements-overlay-title">🏆 I Tuoi Obiettivi Raggiunti</div>
+                <button class="close-overlay-btn" onclick="closeAchievementsOverlay()">✕ Chiudi</button>
+            </div>
+            <div class="achievements-overlay-list" id="achievementsOverlayList">
+                <!-- Lista obiettivi popolata dinamicamente -->
+            </div>
         </div>
     </div>
 
@@ -3066,16 +3214,37 @@
             }
         }
 
-        function displayAchievements() {
+        // ===== ACHIEVEMENTS OVERLAY FUNCTIONS =====
+        function openAchievementsOverlay() {
+            document.getElementById('achievementsOverlay').classList.add('active');
+            displayAchievementsInOverlay();
+        }
+
+        function closeAchievementsOverlay() {
+            document.getElementById('achievementsOverlay').classList.remove('active');
+        }
+
+        function updateAchievementsSummary() {
             const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-            
+
             if (achievements.length === 0) {
-                document.getElementById('achievementsSection').classList.add('hidden');
+                document.getElementById('achievementsSummaryCard').classList.add('hidden');
                 return;
             }
-            
-            document.getElementById('achievementsSection').classList.remove('hidden');
-            const container = document.getElementById('achievementsList');
+
+            document.getElementById('achievementsSummaryCard').classList.remove('hidden');
+
+            // Calcola il conteggio e il valore totale
+            const count = achievements.length;
+            const totalValue = achievements.reduce((sum, ach) => sum + ach.amount, 0);
+
+            document.getElementById('achievementsCount').textContent = count;
+            document.getElementById('achievementsTotalValue').textContent = totalValue.toFixed(2);
+        }
+
+        function displayAchievementsInOverlay() {
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+            const container = document.getElementById('achievementsOverlayList');
             container.innerHTML = '';
             
             achievements.sort((a, b) => new Date(b.completedDate) - new Date(a.completedDate));
@@ -3234,6 +3403,15 @@
                     buttonsDiv.classList.remove('hidden');
                 });
             });
+        }
+
+        function displayAchievements() {
+            // Funzione wrapper che aggiorna sia la card riassuntiva che l'overlay (se aperto)
+            updateAchievementsSummary();
+            // Se l'overlay è aperto, aggiorna anche quello
+            if (document.getElementById('achievementsOverlay').classList.contains('active')) {
+                displayAchievementsInOverlay();
+            }
         }
 
         function showNewGoalForm() {
