@@ -2610,6 +2610,7 @@
             const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
             const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
             const seconds = totalSeconds % 60;
+            const milliseconds = Math.floor((diffMs % 1000));
 
             // OTTIMIZZAZIONE: Usa cache DOM invece di getElementById ripetuto
             domCache.daysCounter.textContent = days;
@@ -2617,9 +2618,11 @@
             domCache.minutesCounter.textContent = String(minutes).padStart(2, '0');
             domCache.secondsCounter.textContent = String(seconds).padStart(2, '0');
 
-            // OTTIMIZZAZIONE: Millisecondi rimossi dall'aggiornamento principale (non necessari ogni secondo)
-            // Possono essere aggiunti separatamente se necessario con requestAnimationFrame
-            
+            // Update millisecondi
+            if (domCache.millisecondsDisplay) {
+                domCache.millisecondsDisplay.textContent = '.' + String(milliseconds).padStart(3, '0');
+            }
+
             // Update progress bar verso prossimo giorno
             const dayProgress = ((diffMs % (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * 100;
             const nextDay = days + 1;
