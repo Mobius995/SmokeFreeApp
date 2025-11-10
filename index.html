@@ -2691,11 +2691,19 @@
                 domCache.savingsGoalSection.classList.remove('hidden');
                 domCache.goalNameDisplay.textContent = data.savingsGoalName;
                 domCache.goalTargetAmount.textContent = data.savingsGoalAmount.toFixed(2);
-                domCache.goalCurrentAmount.textContent = moneySaved.toFixed(2);
 
-                const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
+                // Calcola saldo disponibile (totale risparmiato - obiettivi riscattati)
+                const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+                const totalRedeemed = achievements
+                    .filter(ach => ach.redeemed === true)
+                    .reduce((sum, ach) => sum + ach.amount, 0);
+                const availableBalance = moneySaved - totalRedeemed;
 
-                const percentage = Math.min(150, (moneySaved / data.savingsGoalAmount) * 100);
+                domCache.goalCurrentAmount.textContent = availableBalance.toFixed(2);
+
+                const remaining = Math.max(0, data.savingsGoalAmount - availableBalance);
+
+                const percentage = Math.min(150, (availableBalance / data.savingsGoalAmount) * 100);
                 domCache.goalPercentage.textContent = percentage.toFixed(5);
                 domCache.goalProgressFill.style.width = Math.min(100, percentage) + '%';
 
@@ -2703,7 +2711,7 @@
                     domCache.achievementBadge.classList.remove('hidden');
                     domCache.newGoalBtn.classList.remove('hidden');
 
-                    const exceeded = moneySaved - data.savingsGoalAmount;
+                    const exceeded = availableBalance - data.savingsGoalAmount;
                     domCache.goalRemainingText.innerHTML =
                         `<span style="color: #10b981; font-weight: 600;">Superato di: €<span id="goalRemainingAmount">${exceeded.toFixed(2)}</span></span>`;
 
