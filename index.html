@@ -1499,6 +1499,240 @@
             overflow-y: auto;
         }
 
+        /* Health Benefits Summary Card */
+        .health-summary-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(16, 185, 129, 0.15));
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+
+        .health-summary-card:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(16, 185, 129, 0.25));
+            border-color: rgba(16, 185, 129, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .health-summary-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .health-summary-icon {
+            font-size: 2.5em;
+            animation: heart-beat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heart-beat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        .health-summary-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .health-summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .health-summary-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .health-summary-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .health-summary-value {
+            font-size: 1.3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .health-next-benefit {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+
+        .health-summary-footer {
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.7;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Health Benefits Overlay */
+        .health-modal-content {
+            max-height: 85vh;
+        }
+
+        .health-overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .health-overlay-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .health-regeneration-bar {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .health-regen-label {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .health-regen-progress {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            height: 30px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .health-regen-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .health-overlay-list {
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .health-benefit-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .health-benefit-item.achieved {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+            border: 2px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .health-benefit-item.upcoming {
+            border: 2px solid rgba(251, 191, 36, 0.5);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(251, 191, 36, 0.05));
+        }
+
+        .health-benefit-item.locked {
+            opacity: 0.4;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .health-benefit-icon {
+            font-size: 2.5em;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .health-benefit-content {
+            flex: 1;
+        }
+
+        .health-benefit-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .health-benefit-item.achieved .health-benefit-title {
+            color: #10b981;
+        }
+
+        .health-benefit-item.upcoming .health-benefit-title {
+            color: #fbbf24;
+        }
+
+        .health-benefit-description {
+            font-size: 0.9em;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .health-benefit-date {
+            font-size: 0.85em;
+            color: #10b981;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .health-benefit-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .health-benefit-locked-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            font-style: italic;
+        }
+
         .edit-name-form, .delete-confirm-section {
             margin-top: 15px;
             padding: 15px;
@@ -2553,10 +2787,28 @@
                 </div>
             </div>
 
-            <!-- Health Benefits -->
-            <div class="health-section">
-                <h2 style="margin-bottom: 15px;">💚 Benefici per la salute</h2>
-                <div id="healthBenefits"></div>
+            <!-- Health Benefits Summary Card -->
+            <div class="health-summary-card" id="healthSummaryCard" onclick="openHealthOverlay()">
+                <div class="health-summary-header">
+                    <div class="health-summary-icon">💚</div>
+                    <div class="health-summary-title">Rigenerazione del Corpo</div>
+                </div>
+                <div class="health-summary-stats">
+                    <div class="health-summary-stat">
+                        <div class="health-summary-label">Benefici Raggiunti</div>
+                        <div class="health-summary-value"><span id="healthBenefitsCount">0</span> di <span id="healthBenefitsTotal">10</span></div>
+                    </div>
+                    <div class="health-summary-stat">
+                        <div class="health-summary-label">Rigenerazione</div>
+                        <div class="health-summary-value"><span id="healthRegenerationPercent">0</span>%</div>
+                    </div>
+                </div>
+                <div class="health-next-benefit" id="healthNextBenefit">
+                    🎯 Prossimo: <span id="healthNextTitle">20 minuti</span> (<span id="healthNextTime">tra poco</span>)
+                </div>
+                <div class="health-summary-footer">
+                    👆 Tocca per vedere la timeline completa
+                </div>
             </div>
         </div>
     </div>
@@ -2606,6 +2858,25 @@
             </div>
             <div class="achievements-overlay-list" id="achievementsOverlayList">
                 <!-- Lista obiettivi popolata dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Health Benefits Overlay -->
+    <div class="modal-overlay" id="healthOverlay">
+        <div class="modal-content health-modal-content">
+            <div class="health-overlay-header">
+                <div class="health-overlay-title">💚 Timeline Rigenerazione Corpo</div>
+                <button class="close-overlay-btn" onclick="closeHealthOverlay()">✕ Chiudi</button>
+            </div>
+            <div class="health-regeneration-bar">
+                <div class="health-regen-label">Rigenerazione Totale: <span id="healthOverlayPercent">0</span>%</div>
+                <div class="health-regen-progress">
+                    <div class="health-regen-fill" id="healthRegenFill"></div>
+                </div>
+            </div>
+            <div class="health-overlay-list" id="healthOverlayList">
+                <!-- Timeline benefici popolata dinamicamente -->
             </div>
         </div>
     </div>
@@ -3140,39 +3411,155 @@
             }
         }
 
+        // ===== HEALTH BENEFITS SYSTEM =====
         function updateHealthBenefits(days) {
-            // OTTIMIZZAZIONE: Usa cache DOM
-            domCache.healthBenefits.innerHTML = '';
-            
-            const relevantBenefits = healthTimeline.filter(h => h.days <= days);
-            const upcoming = healthTimeline.find(h => h.days > days);
-            
-            relevantBenefits.slice(-3).reverse().forEach(benefit => {
-                const div = document.createElement('div');
-                div.className = 'health-item';
-                div.innerHTML = `
-                    <div class="health-icon">${benefit.icon}</div>
-                    <div class="health-text">
-                        <strong>${benefit.title}</strong>
-                        ${benefit.text}
-                    </div>
-                `;
-                domCache.healthBenefits.appendChild(div);
+            updateHealthSummaryCard(days);
+        }
+
+        function updateHealthSummaryCard(days) {
+            const achievedBenefits = healthTimeline.filter(h => h.days <= days);
+            const upcomingBenefit = healthTimeline.find(h => h.days > days);
+            const totalBenefits = healthTimeline.length;
+            const achievedCount = achievedBenefits.length;
+            const percentage = Math.round((achievedCount / totalBenefits) * 100);
+
+            document.getElementById('healthBenefitsCount').textContent = achievedCount;
+            document.getElementById('healthBenefitsTotal').textContent = totalBenefits;
+            document.getElementById('healthRegenerationPercent').textContent = percentage;
+
+            // Aggiorna prossimo beneficio
+            const nextBenefitDiv = document.getElementById('healthNextBenefit');
+            if (upcomingBenefit) {
+                const daysUntil = upcomingBenefit.days - days;
+                let timeText = '';
+
+                if (daysUntil < 0.01) {
+                    timeText = 'tra pochi minuti';
+                } else if (daysUntil < 1) {
+                    const hours = Math.round(daysUntil * 24);
+                    timeText = `tra ${hours} ${hours === 1 ? 'ora' : 'ore'}`;
+                } else if (daysUntil < 7) {
+                    const daysRound = Math.round(daysUntil);
+                    timeText = `tra ${daysRound} ${daysRound === 1 ? 'giorno' : 'giorni'}`;
+                } else if (daysUntil < 30) {
+                    const weeks = Math.round(daysUntil / 7);
+                    timeText = `tra ${weeks} ${weeks === 1 ? 'settimana' : 'settimane'}`;
+                } else if (daysUntil < 365) {
+                    const months = Math.round(daysUntil / 30);
+                    timeText = `tra ${months} ${months === 1 ? 'mese' : 'mesi'}`;
+                } else {
+                    const years = Math.round(daysUntil / 365);
+                    timeText = `tra ${years} ${years === 1 ? 'anno' : 'anni'}`;
+                }
+
+                document.getElementById('healthNextTitle').textContent = upcomingBenefit.title;
+                document.getElementById('healthNextTime').textContent = timeText;
+                nextBenefitDiv.style.display = 'block';
+            } else {
+                nextBenefitDiv.style.display = 'none';
+            }
+
+            // Salva benefici raggiunti in localStorage con date
+            saveHealthBenefitsAchieved(achievedBenefits);
+        }
+
+        function saveHealthBenefitsAchieved(achievedBenefits) {
+            let savedBenefits = JSON.parse(localStorage.getItem('healthBenefitsAchieved')) || [];
+
+            achievedBenefits.forEach(benefit => {
+                const exists = savedBenefits.find(b => b.title === benefit.title);
+                if (!exists) {
+                    savedBenefits.push({
+                        ...benefit,
+                        achievedDate: new Date().toISOString()
+                    });
+                }
             });
 
-            if (upcoming) {
+            localStorage.setItem('healthBenefitsAchieved', JSON.stringify(savedBenefits));
+        }
+
+        function openHealthOverlay() {
+            document.getElementById('healthOverlay').classList.add('active');
+            displayHealthBenefitsInOverlay();
+        }
+
+        function closeHealthOverlay() {
+            document.getElementById('healthOverlay').classList.remove('active');
+        }
+
+        function displayHealthBenefitsInOverlay() {
+            const data = getCachedData();
+            if (!data) return;
+
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+            const now = new Date();
+            const daysElapsed = (now - quitDate) / (1000 * 60 * 60 * 24);
+
+            const achievedBenefits = healthTimeline.filter(h => h.days <= daysElapsed);
+            const savedBenefits = JSON.parse(localStorage.getItem('healthBenefitsAchieved')) || [];
+
+            const percentage = Math.round((achievedBenefits.length / healthTimeline.length) * 100);
+            document.getElementById('healthOverlayPercent').textContent = percentage;
+            document.getElementById('healthRegenFill').style.width = percentage + '%';
+
+            const container = document.getElementById('healthOverlayList');
+            container.innerHTML = '';
+
+            // Ordine inverso (5 anni → 20 minuti)
+            const reversedTimeline = [...healthTimeline].reverse();
+
+            reversedTimeline.forEach(benefit => {
+                const isAchieved = benefit.days <= daysElapsed;
+                const isUpcoming = !isAchieved && benefit.days === healthTimeline.find(h => h.days > daysElapsed)?.days;
+
+                const savedBenefit = savedBenefits.find(b => b.title === benefit.title);
+
                 const div = document.createElement('div');
-                div.className = 'health-item';
-                div.style.opacity = '0.6';
+                div.className = 'health-benefit-item';
+
+                if (isAchieved) {
+                    div.classList.add('achieved');
+                } else if (isUpcoming) {
+                    div.classList.add('upcoming');
+                } else {
+                    div.classList.add('locked');
+                }
+
+                let badgeHTML = '';
+                let dateHTML = '';
+
+                if (isAchieved) {
+                    badgeHTML = '<div class="health-benefit-badge">✅ Raggiunto</div>';
+                    if (savedBenefit && savedBenefit.achievedDate) {
+                        const achievedDate = new Date(savedBenefit.achievedDate);
+                        const formattedDate = achievedDate.toLocaleDateString('it-IT', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        dateHTML = `<div class="health-benefit-date">📅 ${formattedDate}</div>`;
+                    }
+                } else if (isUpcoming) {
+                    badgeHTML = '<div class="health-benefit-badge" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">⏳ Prossimo</div>';
+                } else {
+                    badgeHTML = '<div class="health-benefit-locked-text">🔒 Bloccato</div>';
+                }
+
                 div.innerHTML = `
-                    <div class="health-icon">${upcoming.icon}</div>
-                    <div class="health-text">
-                        <strong>Prossimo: ${upcoming.title}</strong>
-                        ${upcoming.text}
+                    <div class="health-benefit-icon">${benefit.icon}</div>
+                    <div class="health-benefit-content">
+                        <div class="health-benefit-title">${benefit.title}</div>
+                        <div class="health-benefit-description">${benefit.text}</div>
+                        ${dateHTML}
                     </div>
+                    ${badgeHTML}
                 `;
-                domCache.healthBenefits.appendChild(div);
-            }
+
+                container.appendChild(div);
+            });
         }
 
         // ===== SALDO DISPONIBILE =====
