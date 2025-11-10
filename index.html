@@ -2797,8 +2797,8 @@
             const now = new Date();
             const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
             const daysElapsed = (now - quitDate) / (1000 * 60 * 60 * 24);
-            const packsPerDay = data.cigarettesPerDay / 20;
-            const totalSaved = packsPerDay * data.pricePerPack * daysElapsed;
+            const packsPerDay = data.cigarettesPerDay / data.cigarettesPerPack;
+            const totalSaved = packsPerDay * data.packCost * daysElapsed;
 
             // Calcola il totale riscattato (somma degli achievement con redeemed=true)
             const totalRedeemed = achievements
