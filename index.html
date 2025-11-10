@@ -1127,68 +1127,6 @@
             text-align: center;
         }
 
-        /* Savings Summary Section */
-        .savings-summary {
-            margin: 30px 0 20px 0;
-        }
-
-        .savings-summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .savings-summary-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
-            border: 2px solid rgba(16, 185, 129, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .savings-summary-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(16, 185, 129, 0.5);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.2);
-        }
-
-        .savings-summary-card.available {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .savings-summary-card.available:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.2);
-        }
-
-        .savings-summary-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .savings-summary-value {
-            font-size: 2.2em;
-            font-weight: 700;
-            color: #10b981;
-            margin: 10px 0;
-        }
-
-        .savings-summary-card.available .savings-summary-value {
-            color: #3b82f6;
-        }
-
-        .savings-summary-note {
-            font-size: 0.75em;
-            opacity: 0.6;
-            margin-top: 5px;
-            font-style: italic;
-        }
-
         .achievements-section {
             margin: 30px 0;
         }
@@ -2129,11 +2067,14 @@
             <div class="stat-card">
                 <div class="stat-label">💰 Denaro risparmiato <span class="live-indicator"></span></div>
                 <div class="stat-value">€<span id="moneySaved">0.00000</span></div>
+                <div class="stat-subtext" style="margin-top: 8px; color: #3b82f6; font-weight: 600;">
+                    💳 Saldo disponibile: €<span id="availableBalance">0.00</span>
+                </div>
                 <div class="stat-subtext">
                     Stai risparmiando:<br>
-                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> • 
-                    €<span id="savingsPerHour">0.00</span>/ora • 
-                    €<span id="savingsPerMinute">0.000</span>/min • 
+                    <strong>€<span id="savingsPerDay">0.00</span>/giorno</strong> •
+                    €<span id="savingsPerHour">0.00</span>/ora •
+                    €<span id="savingsPerMinute">0.000</span>/min •
                     €<span id="savingsPerSecond">0.00000</span>/sec
                 </div>
                 
@@ -2198,23 +2139,6 @@
             <div class="stat-card">
                 <div class="stat-label">❤️ Giorni di vita guadagnati <span class="live-indicator"></span></div>
                 <div class="stat-value"><span id="lifeDays">0.0000</span> <span class="stat-unit">giorni</span></div>
-            </div>
-
-            <!-- Savings Summary Section -->
-            <div class="savings-summary hidden" id="savingsSummarySection">
-                <div class="section-title">💰 Riepilogo Risparmi</div>
-                <div class="savings-summary-grid">
-                    <div class="savings-summary-card">
-                        <div class="savings-summary-label">💵 Totale Risparmiato</div>
-                        <div class="savings-summary-value" id="totalSavedDisplay">€0.00</div>
-                        <div class="savings-summary-note">Dal giorno in cui hai smesso</div>
-                    </div>
-                    <div class="savings-summary-card available">
-                        <div class="savings-summary-label">💳 Saldo Disponibile</div>
-                        <div class="savings-summary-value" id="availableBalanceDisplay">€0.00</div>
-                        <div class="savings-summary-note">Dopo obiettivi riscattati</div>
-                    </div>
-                </div>
             </div>
 
             <!-- Achievements Section -->
@@ -2884,15 +2808,10 @@
             // Calcola il saldo disponibile
             const availableBalance = totalSaved - totalRedeemed;
 
-            // Aggiorna i display
-            document.getElementById('totalSavedDisplay').textContent = `€${totalSaved.toFixed(2)}`;
-            document.getElementById('availableBalanceDisplay').textContent = `€${availableBalance.toFixed(2)}`;
-
-            // Mostra/nascondi la sezione in base agli achievement
-            if (achievements.length > 0) {
-                document.getElementById('savingsSummarySection').classList.remove('hidden');
-            } else {
-                document.getElementById('savingsSummarySection').classList.add('hidden');
+            // Aggiorna il saldo disponibile nella card del denaro risparmiato
+            const availableBalanceElement = document.getElementById('availableBalance');
+            if (availableBalanceElement) {
+                availableBalanceElement.textContent = availableBalance.toFixed(2);
             }
         }
 
