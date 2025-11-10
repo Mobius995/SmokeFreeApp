@@ -1601,21 +1601,34 @@
         }
 
         .health-overlay-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid rgba(16, 185, 129, 0.3);
         }
 
         .health-overlay-title {
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: 700;
             background: linear-gradient(135deg, #ef4444 0%, #10b981 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .health-overlay-header .close-overlay-btn {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.2));
+            border: 2px solid #10b981;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .health-overlay-header .close-overlay-btn:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.5), rgba(16, 185, 129, 0.3));
+            border-color: #10b981;
+            transform: scale(1.02);
         }
 
         .health-regeneration-bar {
@@ -3417,6 +3430,12 @@
         }
 
         function updateHealthSummaryCard(days) {
+            // Ottieni quitDate per calcolare date corrette di raggiungimento
+            const data = getCachedData();
+            if (!data) return;
+
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+
             const achievedBenefits = healthTimeline.filter(h => h.days <= days);
             const upcomingBenefit = healthTimeline.find(h => h.days > days);
             const totalBenefits = healthTimeline.length;
@@ -3459,19 +3478,22 @@
                 nextBenefitDiv.style.display = 'none';
             }
 
-            // Salva benefici raggiunti in localStorage con date
-            saveHealthBenefitsAchieved(achievedBenefits);
+            // Salva benefici raggiunti in localStorage con date CORRETTE basate su quitDate
+            saveHealthBenefitsAchieved(achievedBenefits, quitDate);
         }
 
-        function saveHealthBenefitsAchieved(achievedBenefits) {
+        function saveHealthBenefitsAchieved(achievedBenefits, quitDate) {
             let savedBenefits = JSON.parse(localStorage.getItem('healthBenefitsAchieved')) || [];
 
             achievedBenefits.forEach(benefit => {
                 const exists = savedBenefits.find(b => b.title === benefit.title);
                 if (!exists) {
+                    // Calcola la data ESATTA di raggiungimento: quitDate + benefit.days
+                    const achievedDate = new Date(quitDate.getTime() + (benefit.days * 24 * 60 * 60 * 1000));
+
                     savedBenefits.push({
                         ...benefit,
-                        achievedDate: new Date().toISOString()
+                        achievedDate: achievedDate.toISOString()
                     });
                 }
             });
