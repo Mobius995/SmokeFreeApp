@@ -1691,30 +1691,37 @@
         /* Breathing Particles */
         .particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--color);
             opacity: 0;
             pointer-events: none;
-            box-shadow: 0 0 10px var(--color);
+            box-shadow: 0 0 12px var(--color);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .particle.active {
-            animation: particle-fly 3s ease-out forwards;
+            animation: particle-explode 2.5s ease-out forwards;
         }
 
-        @keyframes particle-fly {
+        @keyframes particle-explode {
             0% {
-                opacity: 0.8;
-                transform: translate(0, 0) scale(1);
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            10% {
+                opacity: 0.9;
+                transform: translate(-50%, -50%) scale(1);
             }
             100% {
                 opacity: 0;
                 transform: translate(
-                    calc(cos(var(--angle)) * 80px),
-                    calc(sin(var(--angle)) * 80px)
-                ) scale(0.3);
+                    calc(-50% + var(--x) * 1px),
+                    calc(-50% + var(--y) * 1px)
+                ) scale(0.2);
             }
         }
 
@@ -2252,25 +2259,13 @@
         <div class="modal-content">
             <!-- Breathing Section -->
             <div class="breathing-section">
-                <div class="breathing-container">
+                <div class="breathing-container" id="breathingContainer">
                     <svg class="breathing-ring" viewBox="0 0 160 160">
                         <circle class="ring-background" cx="80" cy="80" r="70" />
                         <circle class="ring-progress" cx="80" cy="80" r="70" id="ringProgress" />
                     </svg>
                     <div class="breathing-circle"></div>
-                    <!-- Breathing Particles -->
-                    <div class="particle" style="--angle: 0deg; --color: #93c5fd;"></div>
-                    <div class="particle" style="--angle: 30deg; --color: #86efac;"></div>
-                    <div class="particle" style="--angle: 60deg; --color: #fef08a;"></div>
-                    <div class="particle" style="--angle: 90deg; --color: #fca5a1;"></div>
-                    <div class="particle" style="--angle: 120deg; --color: #c4b5fd;"></div>
-                    <div class="particle" style="--angle: 150deg; --color: #a5f3fc;"></div>
-                    <div class="particle" style="--angle: 180deg; --color: #fde68a;"></div>
-                    <div class="particle" style="--angle: 210deg; --color: #bae6fd;"></div>
-                    <div class="particle" style="--angle: 240deg; --color: #d8b4fe;"></div>
-                    <div class="particle" style="--angle: 270deg; --color: #99f6e4;"></div>
-                    <div class="particle" style="--angle: 300deg; --color: #fecaca;"></div>
-                    <div class="particle" style="--angle: 330deg; --color: #ddd6fe;"></div>
+                    <!-- Breathing Particles (generated dynamically) -->
                 </div>
                 <div class="breathing-text" id="breathingText">RESPIRA <span class="phase-countdown" id="phaseCountdown"></span></div>
                 <div class="timer-text" id="sosTimer">1:00</div>
@@ -2968,9 +2963,45 @@
         let breathingTimeouts = [];
         let breathingIntervals = [];
 
+        function generateParticles() {
+            const container = document.getElementById('breathingContainer');
+            const colors = [
+                '#93c5fd', '#86efac', '#fef08a', '#fca5a1', '#c4b5fd',
+                '#a5f3fc', '#fde68a', '#bae6fd', '#d8b4fe', '#99f6e4',
+                '#fecaca', '#ddd6fe', '#bbf7d0', '#fed7aa', '#e9d5ff',
+                '#a7f3d0', '#fde047', '#f9a8d4', '#cbd5e1', '#fdba74'
+            ];
+
+            // Rimuovi particelle esistenti
+            const existingParticles = container.querySelectorAll('.particle');
+            existingParticles.forEach(p => p.remove());
+
+            // Genera 50 nuove particelle
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                // Colore casuale
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                // Direzione casuale (angolo random)
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 60 + Math.random() * 60; // tra 60px e 120px
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                particle.style.setProperty('--color', color);
+                particle.style.setProperty('--x', x);
+                particle.style.setProperty('--y', y);
+
+                container.appendChild(particle);
+            }
+        }
+
         function openSOSModal() {
             cravingStartTime = Date.now();
             document.getElementById('sosModal').classList.add('active');
+            generateParticles();
             sosSecondsRemaining = 60;
             updateSOSTimer();
             startSOSTimer();
@@ -3007,6 +3038,12 @@
             if (ringProgress) {
                 ringProgress.style.strokeDashoffset = '440';
             }
+
+            // Reset particelle
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => {
+                particle.classList.remove('active');
+            });
         }
 
         function startSOSTimer() {
