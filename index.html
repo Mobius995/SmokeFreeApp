@@ -3124,6 +3124,9 @@
                 // Inizializza cache DOM prima di iniziare gli aggiornamenti
                 initDOMCache();
 
+                // Migra le date dei benefici salute se necessario
+                migrateHealthBenefitsDates();
+
                 updateStats();
                 displayAchievements();
 
@@ -3173,6 +3176,9 @@
 
             // Inizializza cache DOM prima di iniziare gli aggiornamenti
             initDOMCache();
+
+            // Migra le date dei benefici salute se necessario
+            migrateHealthBenefitsDates();
 
             updateStats();
             displayAchievements();
@@ -3501,6 +3507,47 @@
             localStorage.setItem('healthBenefitsAchieved', JSON.stringify(savedBenefits));
         }
 
+        function migrateHealthBenefitsDates() {
+            // Controlla se la migrazione è già stata fatta
+            const migrationDone = localStorage.getItem('healthBenefitsMigrated');
+            if (migrationDone === 'true') {
+                return; // Migrazione già completata
+            }
+
+            const data = getCachedData();
+            if (!data) return;
+
+            const quitDate = data.quitDateTime ? new Date(data.quitDateTime) : new Date(data.quitDate);
+            const savedBenefits = JSON.parse(localStorage.getItem('healthBenefitsAchieved')) || [];
+
+            if (savedBenefits.length === 0) {
+                // Nessun beneficio salvato, imposta flag e esci
+                localStorage.setItem('healthBenefitsMigrated', 'true');
+                return;
+            }
+
+            console.log('🔄 Migrazione date benefici salute in corso...');
+
+            // Ricalcola le date corrette per ogni beneficio
+            const migratedBenefits = savedBenefits.map(benefit => {
+                // Calcola la data ESATTA di raggiungimento: quitDate + benefit.days
+                const correctAchievedDate = new Date(quitDate.getTime() + (benefit.days * 24 * 60 * 60 * 1000));
+
+                return {
+                    ...benefit,
+                    achievedDate: correctAchievedDate.toISOString()
+                };
+            });
+
+            // Salva i benefici con date corrette
+            localStorage.setItem('healthBenefitsAchieved', JSON.stringify(migratedBenefits));
+
+            // Imposta flag di migrazione completata
+            localStorage.setItem('healthBenefitsMigrated', 'true');
+
+            console.log('✅ Migrazione date benefici completata!');
+        }
+
         function openHealthOverlay() {
             document.getElementById('healthOverlay').classList.add('active');
             displayHealthBenefitsInOverlay();
@@ -3705,6 +3752,10 @@
             
             localStorage.setItem('smokeFreeData', JSON.stringify(data));
             invalidateDataCache(); // OTTIMIZZAZIONE: Invalida cache dopo salvataggio
+
+            // IMPORTANTE: Resetta flag migrazione e ricalcola date benefici con nuova quitDate
+            localStorage.removeItem('healthBenefitsMigrated');
+            migrateHealthBenefitsDates();
 
             if (updateInterval) {
                 clearInterval(updateInterval);
