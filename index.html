@@ -25,7 +25,14 @@
             -webkit-animation-play-state: paused !important;
             animation-play-state: paused !important;
         }
-        
+
+        /* Blocca scroll pagina quando overlay è aperto */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -1497,6 +1504,11 @@
         .achievements-overlay-list {
             max-height: 60vh;
             overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scroll-behavior: smooth;
+            position: relative;
         }
 
         /* Health Benefits Summary Card */
@@ -1663,8 +1675,13 @@
         }
 
         .health-overlay-list {
-            max-height: 55vh;
+            max-height: 60vh;
             overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            scroll-behavior: smooth;
+            position: relative;
         }
 
         .health-benefit-item {
@@ -3550,11 +3567,13 @@
 
         function openHealthOverlay() {
             document.getElementById('healthOverlay').classList.add('active');
+            document.body.classList.add('modal-open');
             displayHealthBenefitsInOverlay();
         }
 
         function closeHealthOverlay() {
             document.getElementById('healthOverlay').classList.remove('active');
+            document.body.classList.remove('modal-open');
         }
 
         function displayHealthBenefitsInOverlay() {
@@ -3794,11 +3813,13 @@
         // ===== ACHIEVEMENTS OVERLAY FUNCTIONS =====
         function openAchievementsOverlay() {
             document.getElementById('achievementsOverlay').classList.add('active');
+            document.body.classList.add('modal-open');
             displayAchievementsInOverlay();
         }
 
         function closeAchievementsOverlay() {
             document.getElementById('achievementsOverlay').classList.remove('active');
+            document.body.classList.remove('modal-open');
         }
 
         function updateAchievementsSummary() {
@@ -4095,6 +4116,7 @@
         function openSOSModal() {
             cravingStartTime = Date.now();
             document.getElementById('sosModal').classList.add('active');
+            document.body.classList.add('modal-open');
             generateParticles();
             sosSecondsRemaining = 60;
             updateSOSTimer();
@@ -4105,6 +4127,7 @@
 
         function closeSOSModal() {
             document.getElementById('sosModal').classList.remove('active');
+            document.body.classList.remove('modal-open');
             if (sosTimerInterval) {
                 clearInterval(sosTimerInterval);
                 sosTimerInterval = null;
