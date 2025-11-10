@@ -2466,12 +2466,19 @@
             const cigarettesAvoidedPrecise = (diffMs / (1000 * 60 * 60 * 24)) * data.cigarettesPerDay;
             const moneySaved = cigarettesAvoidedPrecise * costPerCigarette;
             document.getElementById('moneySaved').textContent = moneySaved.toFixed(5);
-            
+
+            // Calcola il saldo disponibile (totale risparmiato - obiettivi riscattati)
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+            const totalRedeemed = achievements
+                .filter(ach => ach.redeemed === true)
+                .reduce((sum, ach) => sum + ach.amount, 0);
+            const availableBalance = moneySaved - totalRedeemed;
+
             const savingsPerDay = (data.cigarettesPerDay * costPerCigarette);
             const savingsPerHour = (savingsPerDay / 24);
             const savingsPerMinute = (savingsPerHour / 60);
             const savingsPerSecond = (savingsPerMinute / 60);
-            
+
             document.getElementById('savingsPerDay').textContent = savingsPerDay.toFixed(2);
             document.getElementById('savingsPerHour').textContent = savingsPerHour.toFixed(2);
             document.getElementById('savingsPerMinute').textContent = savingsPerMinute.toFixed(3);
@@ -2481,22 +2488,22 @@
                 document.getElementById('savingsGoalSection').classList.remove('hidden');
                 document.getElementById('goalNameDisplay').textContent = data.savingsGoalName;
                 document.getElementById('goalTargetAmount').textContent = data.savingsGoalAmount.toFixed(2);
-                document.getElementById('goalCurrentAmount').textContent = moneySaved.toFixed(2);
-                
-                const remaining = Math.max(0, data.savingsGoalAmount - moneySaved);
-                
-                const percentage = Math.min(150, (moneySaved / data.savingsGoalAmount) * 100);
+                document.getElementById('goalCurrentAmount').textContent = availableBalance.toFixed(2);
+
+                const remaining = Math.max(0, data.savingsGoalAmount - availableBalance);
+
+                const percentage = Math.min(150, (availableBalance / data.savingsGoalAmount) * 100);
                 document.getElementById('goalPercentage').textContent = percentage.toFixed(5);
                 document.getElementById('goalProgressFill').style.width = Math.min(100, percentage) + '%';
-                
+
                 if (percentage >= 100) {
                     document.getElementById('achievementBadge').classList.remove('hidden');
                     document.getElementById('newGoalBtn').classList.remove('hidden');
-                    
-                    const exceeded = moneySaved - data.savingsGoalAmount;
-                    document.getElementById('goalRemainingText').innerHTML = 
+
+                    const exceeded = availableBalance - data.savingsGoalAmount;
+                    document.getElementById('goalRemainingText').innerHTML =
                         `<span style="color: #10b981; font-weight: 600;">Superato di: €<span id="goalRemainingAmount">${exceeded.toFixed(2)}</span></span>`;
-                    
+
                     saveAchievement(data, moneySaved, diffDays);
                 } else {
                     document.getElementById('achievementBadge').classList.add('hidden');
