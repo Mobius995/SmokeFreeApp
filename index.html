@@ -1609,13 +1609,27 @@
 
         /* Health Benefits Overlay */
         .health-modal-content {
-            max-height: 85vh;
+            max-height: 90vh;
+            overflow-y: visible;
+            display: flex;
+            flex-direction: column;
         }
 
         .health-overlay-header {
-            margin-bottom: 20px;
+            flex-shrink: 0;
+            margin-bottom: 0;
             padding-bottom: 15px;
             border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, #1f2f1f 0%, #2d4a2d 100%);
+            position: sticky;
+            top: -25px;
+            z-index: 10;
+            padding-top: 5px;
+            margin-top: -25px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-left: -20px;
+            margin-right: -20px;
         }
 
         .health-overlay-title {
@@ -1644,11 +1658,19 @@
         }
 
         .health-regeneration-bar {
-            margin-bottom: 25px;
+            flex-shrink: 0;
+            margin-bottom: 15px;
             padding: 15px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 70px;
+            z-index: 9;
+            margin-left: -20px;
+            margin-right: -20px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .health-regen-label {
@@ -1675,13 +1697,14 @@
         }
 
         .health-overlay-list {
-            max-height: 60vh;
+            flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
             scroll-behavior: smooth;
             position: relative;
+            min-height: 0;
         }
 
         .health-benefit-item {
