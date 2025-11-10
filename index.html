@@ -1126,7 +1126,69 @@
         .new-goal-form h3 {
             text-align: center;
         }
-        
+
+        /* Savings Summary Section */
+        .savings-summary {
+            margin: 30px 0 20px 0;
+        }
+
+        .savings-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .savings-summary-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .savings-summary-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .savings-summary-card.available {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.05));
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .savings-summary-card.available:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .savings-summary-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .savings-summary-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #10b981;
+            margin: 10px 0;
+        }
+
+        .savings-summary-card.available .savings-summary-value {
+            color: #3b82f6;
+        }
+
+        .savings-summary-note {
+            font-size: 0.75em;
+            opacity: 0.6;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
         .achievements-section {
             margin: 30px 0;
         }
@@ -1209,11 +1271,35 @@
             background: rgba(239, 68, 68, 0.3);
             border: 2px solid #ef4444;
         }
-        
+
         .delete-btn:hover {
             background: rgba(239, 68, 68, 0.5);
         }
-        
+
+        .redeem-btn {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(5, 150, 105, 0.3));
+            border: 2px solid #10b981;
+            font-weight: 700;
+        }
+
+        .redeem-btn:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.6), rgba(5, 150, 105, 0.5));
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .redeemed-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+        }
+
         .edit-name-form, .delete-confirm-section {
             margin-top: 15px;
             padding: 15px;
@@ -2114,6 +2200,23 @@
                 <div class="stat-value"><span id="lifeDays">0.0000</span> <span class="stat-unit">giorni</span></div>
             </div>
 
+            <!-- Savings Summary Section -->
+            <div class="savings-summary hidden" id="savingsSummarySection">
+                <div class="section-title">💰 Riepilogo Risparmi</div>
+                <div class="savings-summary-grid">
+                    <div class="savings-summary-card">
+                        <div class="savings-summary-label">💵 Totale Risparmiato</div>
+                        <div class="savings-summary-value" id="totalSavedDisplay">€0.00</div>
+                        <div class="savings-summary-note">Dal giorno in cui hai smesso</div>
+                    </div>
+                    <div class="savings-summary-card available">
+                        <div class="savings-summary-label">💳 Saldo Disponibile</div>
+                        <div class="savings-summary-value" id="availableBalanceDisplay">€0.00</div>
+                        <div class="savings-summary-note">Dopo obiettivi riscattati</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Achievements Section -->
             <div class="achievements-section hidden" id="achievementsSection">
                 <div class="section-title">🏆 Obiettivi Raggiunti</div>
@@ -2347,6 +2450,7 @@
                 document.getElementById('mainScreen').classList.remove('hidden');
                 updateStats();
                 displayAchievements();
+                updateSavingsSummary();
                 updateInterval = setInterval(() => updateStats(), 100);
             } else {
                 const now = new Date();
@@ -2388,9 +2492,10 @@
             
             document.getElementById('setupScreen').classList.add('hidden');
             document.getElementById('mainScreen').classList.remove('hidden');
-            
+
             updateStats();
             displayAchievements();
+            updateSavingsSummary();
             updateInterval = setInterval(() => updateStats(), 100);
         }
 
@@ -2726,7 +2831,8 @@
             document.getElementById('editForm').classList.add('hidden');
             updateStats();
             displayAchievements();
-            
+            updateSavingsSummary();
+
             updateInterval = setInterval(() => updateStats(), 100);
             
             alert('✅ Dati aggiornati con successo!');
@@ -2734,21 +2840,59 @@
 
         function saveAchievement(data, moneySaved, daysElapsed) {
             const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
-            
-            const alreadyExists = achievements.some(ach => 
+
+            const alreadyExists = achievements.some(ach =>
                 ach.name === data.savingsGoalName && ach.amount === data.savingsGoalAmount
             );
-            
+
             if (!alreadyExists) {
                 const achievement = {
                     name: data.savingsGoalName,
                     amount: data.savingsGoalAmount,
                     completedDate: new Date().toISOString(),
-                    daysToComplete: Math.floor(daysElapsed)
+                    daysToComplete: Math.floor(daysElapsed),
+                    redeemed: false  // Nuovo achievement non ancora riscattato
                 };
-                
+
                 achievements.push(achievement);
                 localStorage.setItem('achievements', JSON.stringify(achievements));
+
+                // Aggiorna UI quando viene aggiunto un nuovo achievement
+                displayAchievements();
+                updateSavingsSummary();
+            }
+        }
+
+        function updateSavingsSummary() {
+            const data = JSON.parse(localStorage.getItem('smokeFreeData'));
+            if (!data) return;
+
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+
+            // Calcola il totale risparmiato
+            const now = new Date();
+            const quitDate = new Date(data.quitDate);
+            const daysElapsed = (now - quitDate) / (1000 * 60 * 60 * 24);
+            const packsPerDay = data.cigarettesPerDay / 20;
+            const totalSaved = packsPerDay * data.pricePerPack * daysElapsed;
+
+            // Calcola il totale riscattato (somma degli achievement con redeemed=true)
+            const totalRedeemed = achievements
+                .filter(ach => ach.redeemed === true)
+                .reduce((sum, ach) => sum + ach.amount, 0);
+
+            // Calcola il saldo disponibile
+            const availableBalance = totalSaved - totalRedeemed;
+
+            // Aggiorna i display
+            document.getElementById('totalSavedDisplay').textContent = `€${totalSaved.toFixed(2)}`;
+            document.getElementById('availableBalanceDisplay').textContent = `€${availableBalance.toFixed(2)}`;
+
+            // Mostra/nascondi la sezione in base agli achievement
+            if (achievements.length > 0) {
+                document.getElementById('savingsSummarySection').classList.remove('hidden');
+            } else {
+                document.getElementById('savingsSummarySection').classList.add('hidden');
             }
         }
 
@@ -2777,6 +2921,11 @@
                 const div = document.createElement('div');
                 div.className = 'achievement-item';
                 div.id = `ach-${index}`;
+
+                const isRedeemed = ach.redeemed === true;
+                const redeemedBadge = isRedeemed ? '<div class="redeemed-badge">✅ Riscattato</div>' : '';
+                const redeemButton = !isRedeemed ? `<button class="redeem-btn" id="redeem-btn-${index}">✓ Riscatta</button>` : '';
+
                 div.innerHTML = `
                     <div class="achievement-content">
                         <div class="achievement-icon">🏆</div>
@@ -2785,11 +2934,13 @@
                             <div class="achievement-info">
                                 💰 €${ach.amount.toFixed(2)} risparmiati<br>
                                 📅 Raggiunto il ${formattedDate} (dopo ${ach.daysToComplete} giorni)
+                                ${redeemedBadge}
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="achievement-buttons hidden" id="buttons-${index}">
+                        ${redeemButton}
                         <button class="edit-btn" id="edit-btn-${index}">✏️ Modifica nome</button>
                         <button class="delete-btn" id="delete-btn-${index}">🗑️ Elimina</button>
                     </div>
@@ -2850,7 +3001,16 @@
                     deleteConfirm.classList.add('hidden');
                     editForm.classList.remove('hidden');
                 });
-                
+
+                // Event listener per il bottone Riscatta (solo se esiste)
+                const redeemBtn = document.getElementById(`redeem-btn-${index}`);
+                if (redeemBtn) {
+                    redeemBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        redeemAchievement(index);
+                    });
+                }
+
                 document.getElementById(`delete-btn-${index}`).addEventListener('click', function(e) {
                     e.stopPropagation();
                     buttonsDiv.classList.add('hidden');
@@ -2870,8 +3030,9 @@
                     const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
                     achievements[index].name = newName;
                     localStorage.setItem('achievements', JSON.stringify(achievements));
-                    
+
                     displayAchievements();
+                    updateSavingsSummary();
                 });
                 
                 document.getElementById(`cancel-edit-${index}`).addEventListener('click', function(e) {
@@ -2887,6 +3048,7 @@
                     achievements.splice(index, 1);
                     localStorage.setItem('achievements', JSON.stringify(achievements));
                     displayAchievements();
+                    updateSavingsSummary();
                 });
                 
                 document.getElementById(`cancel-delete-${index}`).addEventListener('click', function(e) {
@@ -2895,6 +3057,41 @@
                     buttonsDiv.classList.remove('hidden');
                 });
             });
+        }
+
+        function redeemAchievement(index) {
+            const achievements = JSON.parse(localStorage.getItem('achievements')) || [];
+
+            if (index < 0 || index >= achievements.length) {
+                alert('⚠️ Errore: achievement non trovato');
+                return;
+            }
+
+            const achievement = achievements[index];
+
+            if (achievement.redeemed === true) {
+                alert('⚠️ Questo obiettivo è già stato riscattato');
+                return;
+            }
+
+            // Conferma prima di riscattare
+            const confirmMsg = `✅ Vuoi riscattare "${achievement.name}"?\n\n💰 Verrà scalato €${achievement.amount.toFixed(2)} dal saldo disponibile.`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            // Marca come riscattato
+            achievement.redeemed = true;
+            achievement.redeemedDate = new Date().toISOString();
+            achievements[index] = achievement;
+
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+
+            // Aggiorna UI
+            displayAchievements();
+            updateSavingsSummary();
+
+            alert('🎉 Obiettivo riscattato con successo!\n\nIl saldo disponibile è stato aggiornato.');
         }
 
         function showNewGoalForm() {
@@ -2934,10 +3131,11 @@
             
             document.getElementById('newGoalName').value = '';
             document.getElementById('newGoalAmount').value = '';
-            
+
             updateStats();
             displayAchievements();
-            
+            updateSavingsSummary();
+
             alert('✅ Nuovo obiettivo impostato con successo!');
         }
 
