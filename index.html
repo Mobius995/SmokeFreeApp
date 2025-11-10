@@ -2528,12 +2528,8 @@
                 updateStats();
                 displayAchievements();
 
-                // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms (90% meno aggiornamenti!)
-                updateInterval = setInterval(() => {
-                    if (isPageVisible) {
-                        updateStats();
-                    }
-                }, 1000);
+                // Aggiornamento fluido ogni 100ms per mostrare cambiamenti in tempo reale
+                updateInterval = setInterval(() => updateStats(), 100);
             } else {
                 const now = new Date();
                 document.getElementById('quitDate').valueAsDate = now;
@@ -2582,12 +2578,8 @@
             updateStats();
             displayAchievements();
 
-            // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms (90% meno aggiornamenti!)
-            updateInterval = setInterval(() => {
-                if (isPageVisible) {
-                    updateStats();
-                }
-            }, 1000);
+            // Aggiornamento fluido ogni 100ms per mostrare cambiamenti in tempo reale
+            updateInterval = setInterval(() => updateStats(), 100);
         }
 
         function updateStats() {
@@ -2922,13 +2914,9 @@
             updateStats();
             displayAchievements();
 
-            // OTTIMIZZAZIONE: Ridotto da 100ms a 1000ms
-            updateInterval = setInterval(() => {
-                if (isPageVisible) {
-                    updateStats();
-                }
-            }, 1000);
-            
+            // Aggiornamento fluido ogni 100ms per mostrare cambiamenti in tempo reale
+            updateInterval = setInterval(() => updateStats(), 100);
+
             alert('✅ Dati aggiornati con successo!');
         }
 
