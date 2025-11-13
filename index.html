@@ -971,13 +971,14 @@
 
         .next-day-bar {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(20, 20, 20, 0.5) 100%);
-            border-radius: 15px;
-            height: 50px;
+            border-radius: 18px;
+            height: 70px;
             overflow: hidden;
             box-shadow:
-                inset 0 2px 12px rgba(0, 0, 0, 0.6),
-                0 0 20px rgba(16, 185, 129, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+                inset 0 3px 15px rgba(0, 0, 0, 0.6),
+                0 0 25px rgba(16, 185, 129, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.25);
             position: relative;
         }
 
@@ -1000,12 +1001,13 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 15px;
+            padding: 0 18px;
             box-shadow:
-                0 0 20px rgba(16, 185, 129, 0.6),
-                0 0 40px rgba(59, 130, 246, 0.4),
-                inset 0 -2px 15px rgba(0, 0, 0, 0.3),
-                inset 0 2px 15px rgba(255, 255, 255, 0.3);
+                0 0 25px rgba(16, 185, 129, 0.6),
+                0 0 45px rgba(59, 130, 246, 0.4),
+                inset 0 -3px 18px rgba(0, 0, 0, 0.3),
+                inset 0 3px 18px rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
         }
 
         .next-day-fill::before {
@@ -1021,20 +1023,23 @@
                 transparent 100%
             );
             pointer-events: none;
+            border-radius: 16px 16px 0 0;
         }
 
         .next-day-percentage-inside {
-            font-size: 1.1em;
+            font-size: 1.6em;
             font-weight: 800;
             color: #ffffff;
             text-shadow:
-                0 1px 3px rgba(0, 0, 0, 0.9),
-                0 0 8px rgba(0, 0, 0, 0.7);
+                0 2px 4px rgba(0, 0, 0, 1),
+                0 0 12px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(16, 185, 129, 0.5);
             z-index: 2;
             position: relative;
-            min-width: 40px;
+            min-width: 50px;
             text-align: right;
             font-variant-numeric: tabular-nums;
+            line-height: 1;
         }
 
         @keyframes aurora-flow {
